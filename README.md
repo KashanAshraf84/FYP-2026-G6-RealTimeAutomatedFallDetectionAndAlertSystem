@@ -9,9 +9,9 @@ FYP-2026-G6
 ## Team Members
 |       Name       |   Roll No   |              Role                |
 |      ------      |  ---------  |             ------               |
-| Kashan M. Ashraf | BSCS-01007  | Video Processing + Documentation |
+| Kashan M. Ashraf | BSCS-01007  |   Video Processing + Testing     |
 |     Umer Ahmed   | BSCS-01011  |    AI Model + Development        |
-|       Imran      | BSCS-01014  |          UI Design + Testing     |
+|       Imran      | BSCS-01014  |    UI Design + Documentation     |
 
 ---
 
