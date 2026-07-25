@@ -147,7 +147,15 @@ matches the real system.
 YOLO emits estimated hip positions even when hips are out of frame; those feed
 the angle calculation unchecked, causing false `warning` at close camera range.
 
-**3. Other gaps:** multi-person not wired into the live dashboard; inference-time
+**3. No measured accuracy — never quote a figure.**
+`models/fall_detector_best.pth` was trained on **generated (synthetic) sequences**,
+not real fall video: the checkpoint reads `epoch=1, val_f1=1.0`, and `dataset/`
+contains only a `.gitkeep`. That number means the synthetic data is trivially
+separable, **not** that the model is perfect. There is no evaluation on a public
+corpus yet. SDS §12.2 phase 2 schedules URFD / Le2i training for FYP-2. Any
+document, slide or answer must say accuracy is unmeasured.
+
+**4. Other gaps:** multi-person not wired into the live dashboard; inference-time
 feature normalisation not applied (train/serve skew); no automated tests; Flask
 binds `0.0.0.0` with no authentication.
 
@@ -195,8 +203,9 @@ for both local and cloud rather than a fork.
 
 ## 9. Documents
 
-All written as HTML and rendered to PDF with headless Chrome; the `.html` is the
-editable source, so **edit the HTML and regenerate — never hand-edit a PDF.**
+The formal documents are written as HTML and rendered to PDF with headless
+Chrome; the `.html` is the editable source, so **edit the HTML and regenerate —
+never hand-edit a PDF.**
 
 | Document | Path |
 |---|---|
@@ -204,6 +213,16 @@ editable source, so **edit the HTML and regenerate — never hand-edit a PDF.**
 | SRS v2 (superseded, kept for audit) | `docs/SRS_document_V2.docx` |
 | Software Design Document v1.0 | `docs/SDS_GuardianAI_v1.0.pdf` / `.html` |
 | Updated Architecture v1.0 | `architecture/Updated_Architecture_v1.0.pdf` / `.html` |
+| Checkpoint-2 deck (10 slides) | `presentations/GuardianAI_Checkpoint2_Presentation.pptx` |
+| Demo Q&A prep sheet (43 Qs) | `presentations/GuardianAI_Demo_Questions_and_Answers.docx` |
+
+The last two are **not** HTML. They are built by `python-pptx` / `python-docx`
+scripts. Deliberate constraints, requested by the user and worth preserving on
+any edit: plain non-academic wording that a non-technical presenter can deliver,
+**no em dashes anywhere**, and nothing on a slide that invites a question the
+team cannot answer. Verify with a dash scan after regenerating. Slides can be
+proofed by exporting PNGs through PowerPoint COM (`$pres.Export($dir,"PNG")`);
+Chrome's `--screenshot` needs `--no-sandbox` here or it silently writes nothing.
 
 ```powershell
 & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless --disable-gpu `
