@@ -3,6 +3,17 @@
 
 ---
 
+## 🔴 Live Demo
+
+**https://kashan84-guardianai.static.hf.space**
+
+Open it on any PC, press **Start Camera** and allow access. Pose estimation and
+fall classification both run **entirely inside your browser** via ONNX Runtime
+Web — no video is uploaded and there is no server, which preserves the same
+privacy property as the on-premises system. See [`deploy/`](deploy/) for details.
+
+---
+
 ## Group ID
 FYP-2026-G6
 
@@ -105,6 +116,7 @@ documented and scheduled as the first FYP-2 task.
 /docs           → SRS, SDD and other technical documentation
 /architecture   → Architecture diagrams and the Checkpoint-2 update document
 /src            → Application source code (Python + web dashboard)
+/deploy         → Live browser demo and server-side deployment variants
 /test           → Test cases and scenarios
 /presentations  → Proposal and defence slides
 /reports        → Progress and final reports
