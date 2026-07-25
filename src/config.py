@@ -135,6 +135,12 @@ class AlertConfig:
     # Visual popup
     popup_duration_ms: int = 3000          # How long the on-screen alert popup stays visible
 
+    # Deployment profile.
+    # True on machines with no desktop session or audio device (e.g. a cloud
+    # container). Suppresses the buzzer, the OpenCV popup and the OS
+    # notification; console output and JSON logging are unaffected.
+    headless: bool = False
+
 
 @dataclass
 class SystemConfig:

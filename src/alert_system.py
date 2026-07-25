@@ -120,8 +120,12 @@ class AlertSystem:
         # --- Console Alert ---
         self._console_alert(status, confidence, timestamp, person_id)
 
+        # Desktop-bound channels are unavailable on a headless host (no display,
+        # no audio device), so they are skipped entirely in that profile.
+        desktop_alerts = not self._muted and not self.config.headless
+
         # --- Visual Alert (Popup) ---
-        if status in ["warning", "fall"] and not self._muted:
+        if status in ["warning", "fall"] and desktop_alerts:
             # Run visual alert in a separate thread to avoid blocking main loop
             threading.Thread(
                 target=self._visual_alert,
@@ -130,7 +134,7 @@ class AlertSystem:
             ).start()
 
         # --- Desktop Notification (visible even if the dashboard isn't open) ---
-        if status in ["warning", "fall"] and not self._muted:
+        if status in ["warning", "fall"] and desktop_alerts:
             threading.Thread(
                 target=self._desktop_notification,
                 args=(status, confidence),
@@ -138,7 +142,7 @@ class AlertSystem:
             ).start()
 
         # --- Sound Alert ---
-        if self.config.enable_sound and status == "fall" and not self._muted:
+        if self.config.enable_sound and status == "fall" and desktop_alerts:
             # Run in a separate thread — winsound.Beep() blocks the calling
             # thread, which would otherwise stall the frame-processing loop.
             threading.Thread(target=self._sound_alert, daemon=True).start()

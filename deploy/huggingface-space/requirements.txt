@@ -1,0 +1,9 @@
+# GuardianAI - Cloud demonstration dependencies
+# NOTE: torch and torchvision are installed separately in the Dockerfile from
+# the CPU-only index, so they are deliberately absent from this file.
+
+ultralytics>=8.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+flask>=3.0.0
+Pillow>=10.0.0

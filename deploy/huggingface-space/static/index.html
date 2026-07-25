@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GuardianAI — Live Fall Detection Demo</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="dashboard-container">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🚨</div>
+      <h1>Guardian<span>AI</span></h1>
+    </div>
+
+    <div class="sidebar-note">
+      <strong>Cloud Demonstration</strong>
+      <p>This runs the same detection pipeline as the local system, but frames come from
+         <em>your</em> browser camera and are processed on the server.</p>
+      <p class="privacy">Frames are analysed in memory and are not recorded. In production
+         GuardianAI runs entirely on-premises with no video leaving the building.</p>
+    </div>
+
+    <div class="system-status">
+      <div class="status-item">
+        <span class="label">Server</span>
+        <span class="value" id="server-status">Connecting…</span>
+      </div>
+      <div class="status-item">
+        <span class="label">Camera</span>
+        <span class="value" id="camera-status">Not started</span>
+      </div>
+      <div class="status-item">
+        <span class="label">Throughput</span>
+        <span class="value" id="fps-status">—</span>
+      </div>
+    </div>
+
+    <div class="credit">
+      FYP-2026-G6 · BSCS<br>
+      Real-Time Automated Fall<br>Detection &amp; Alert System
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-bar">
+      <div class="header-info">
+        <h2>Live Monitoring Dashboard</h2>
+        <p>Browser-camera demonstration · YOLOv8-Pose + CNN-LSTM hybrid detection</p>
+      </div>
+      <div class="user-profile">
+        <div class="datetime" id="current-time">--:--</div>
+        <div class="avatar">👨‍⚕️</div>
+      </div>
+    </header>
+
+    <div class="dashboard-grid">
+
+      <section class="video-section">
+        <div class="card video-card">
+          <div class="card-header">
+            <h3>Camera Feed</h3>
+            <div class="header-actions">
+              <div class="badge live" id="live-badge" style="display:none">LIVE</div>
+              <button class="feed-toggle-btn" id="mute-btn" title="Mute the alarm tone">
+                <span id="mute-icon">🔔</span> <span id="mute-label">Mute</span>
+              </button>
+              <button class="feed-toggle-btn" id="start-btn">
+                <span>▶</span> <span id="start-label">Start Camera</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="feed-container">
+            <img id="output" alt="Processed video feed">
+            <div class="feed-placeholder" id="placeholder">
+              <span class="placeholder-icon">📷</span>
+              <h4>Camera not started</h4>
+              <p>Press <strong>Start Camera</strong> and allow access when your browser asks.</p>
+              <p class="hint">Stand back so your head, torso and hips are all visible, then
+                 lower yourself toward the floor to simulate a fall.</p>
+            </div>
+            <div class="overlay" id="fall-overlay">
+              <div class="alert-box">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-text">
+                  <h4>FALL DETECTED</h4>
+                  <p>Immediate action required</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="error-bar" id="error-bar"></div>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <div class="card status-card" id="main-status-card">
+          <div class="card-body">
+            <span class="card-label">CURRENT STATUS</span>
+            <h2 id="status-text">STANDBY</h2>
+            <div class="confidence-bar">
+              <div class="fill" id="confidence-fill" style="width: 0%"></div>
+            </div>
+            <span class="confidence-text">Confidence: <span id="confidence-val">—</span></span>
+          </div>
+        </div>
+
+        <div class="stats-bento">
+          <div class="card stat-item">
+            <span class="stat-icon">👤</span>
+            <div class="stat-info">
+              <span class="stat-label">Persons</span>
+              <span class="stat-value" id="person-count">0</span>
+            </div>
+          </div>
+          <div class="card stat-item">
+            <span class="stat-icon">📐</span>
+            <div class="stat-info">
+              <span class="stat-label">Body Angle</span>
+              <span class="stat-value" id="body-angle">—</span>
+            </div>
+          </div>
+          <div class="card stat-item">
+            <span class="stat-icon">⚡</span>
+            <div class="stat-info">
+              <span class="stat-label">Drop Speed</span>
+              <span class="stat-value" id="drop-speed">—</span>
+            </div>
+          </div>
+          <div class="card stat-item danger">
+            <span class="stat-icon">🚨</span>
+            <div class="stat-info">
+              <span class="stat-label">Falls</span>
+              <span class="stat-value" id="total-falls">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card log-card">
+          <div class="card-header"><h3>Significant Events</h3></div>
+          <div class="log-list" id="event-log">
+            <div class="log-placeholder">No events yet</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<video id="camera" autoplay playsinline muted style="display:none"></video>
+<canvas id="capture" style="display:none"></canvas>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
