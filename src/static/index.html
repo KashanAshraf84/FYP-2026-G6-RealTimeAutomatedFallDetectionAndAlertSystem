@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fall Detection | FYP 1 Demo</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🚨</div>
+                <h1>Guardian<span>AI</span></h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <span class="icon">📊</span> Monitoring
+                </a>
+                <a href="#" class="nav-item disabled" title="🚧 Coming in FYP-2 — hang tight!">
+                    <span class="icon">📜</span> Event Log
+                </a>
+                <a href="#" class="nav-item disabled" title="🚧 Coming in FYP-2 — hang tight!">
+                    <span class="icon">⚙️</span> Settings
+                </a>
+            </nav>
+
+            <div class="system-status">
+                <div class="status-item">
+                    <span class="label">System</span>
+                    <span class="value online" id="system-status-value">Online</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Detection</span>
+                    <span class="value active" id="detection-status-value">Active</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="header-info">
+                    <h2>Live Monitoring Dashboard</h2>
+                    <p>FYP 1 Demonstration Mode • Multi-Person Tracking</p>
+                </div>
+                <div class="user-profile">
+                    <div class="datetime" id="current-time">10:24 AM</div>
+                    <div class="avatar">👨‍⚕️</div>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Video Feed Section -->
+                <section class="video-section">
+                    <div class="card video-card">
+                        <div class="card-header">
+                            <h3>Real-Time Camera Feed</h3>
+                            <div class="header-actions">
+                                <div class="badge live" id="live-badge">LIVE</div>
+                                <button class="feed-toggle-btn" id="mute-toggle-btn" title="Mute buzzer and popup alerts (events still logged)">
+                                    <span id="mute-toggle-icon">🔔</span> <span id="mute-toggle-label">Mute</span>
+                                </button>
+                                <button class="feed-toggle-btn" id="feed-toggle-btn" title="Pause feed and stop detection">
+                                    <span id="feed-toggle-icon">⏸</span> <span id="feed-toggle-label">Pause</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="feed-container">
+                            <img id="video-feed" src="/video_feed" alt="Video Stream">
+                            <div class="feed-paused-overlay" id="feed-paused-overlay">
+                                <span class="paused-icon">⏸️</span>
+                                <p>Feed Paused &mdash; Alerts Muted</p>
+                            </div>
+                            <div class="overlay" id="fall-overlay">
+                                <div class="alert-box">
+                                    <span class="alert-icon">⚠️</span>
+                                    <div class="alert-text">
+                                        <h4>FALL DETECTED</h4>
+                                        <p>Immediate action required in Zone A</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats & Alerts Section -->
+                <section class="info-section">
+                    <!-- Status Card -->
+                    <div class="card status-card" id="main-status-card">
+                        <div class="card-body">
+                            <span class="card-label">CURRENT STATUS</span>
+                            <h2 id="current-status-text">NORMAL</h2>
+                            <div class="confidence-bar">
+                                <div class="fill" id="status-confidence-fill" style="width: 100%"></div>
+                            </div>
+                            <span class="confidence-text">Confidence: <span id="status-confidence-val">99%</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Bento -->
+                    <div class="stats-bento">
+                        <div class="card stat-item">
+                            <span class="stat-icon">👤</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Persons</span>
+                                <span class="stat-value" id="person-count">0</span>
+                            </div>
+                        </div>
+                        <div class="card stat-item">
+                            <span class="stat-icon">📐</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Body Angle</span>
+                                <span class="stat-value" id="body-angle">90°</span>
+                            </div>
+                        </div>
+                        <div class="card stat-item">
+                            <span class="stat-icon">⚡</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Drop Speed</span>
+                                <span class="stat-value" id="drop-speed">0.0</span>
+                            </div>
+                        </div>
+                        <div class="card stat-item danger">
+                            <span class="stat-icon">🚨</span>
+                            <div class="stat-info">
+                                <span class="stat-label">Falls</span>
+                                <span class="stat-value" id="total-falls">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Alerts -->
+                    <div class="card log-card">
+                        <div class="card-header">
+                            <h3>Significant Events</h3>
+                        </div>
+                        <div class="log-list" id="event-log">
+                            <!-- Events will be injected here -->
+                            <div class="log-placeholder">Monitoring starting...</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <audio id="alert-sound" src="/static/alarm.wav" preload="auto"></audio>
+    <script src="static/app.js"></script>
+</body>
+</html>

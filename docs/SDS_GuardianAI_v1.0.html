@@ -1,0 +1,1870 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Software Design Document — GuardianAI</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Segoe UI", "Calibri", Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4 { color: #0f172a; font-weight: 600; margin: 0 0 8px 0; }
+  h2 {
+    font-size: 15pt;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 5px;
+    margin-top: 22px;
+    page-break-after: avoid;
+  }
+  h3 { font-size: 12pt; margin-top: 16px; color: #1e40af; page-break-after: avoid; }
+  h4 { font-size: 10.5pt; margin-top: 12px; color: #334155; page-break-after: avoid; }
+
+  p { margin: 6px 0; text-align: justify; }
+  ul, ol { margin: 6px 0 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 9pt;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+  }
+
+  pre {
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 8.5pt;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #2563eb;
+    padding: 8px 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    line-height: 1.4;
+    page-break-inside: avoid;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #1e40af;
+    color: #ffffff;
+    text-align: left;
+    padding: 6px 8px;
+    font-weight: 600;
+    border: 1px solid #1e3a8a;
+  }
+  td { padding: 5px 8px; border: 1px solid #cbd5e1; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+
+  .cover {
+    height: 250mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+  }
+  .cover .badge {
+    font-size: 10pt;
+    letter-spacing: 2px;
+    color: #2563eb;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .cover h1 {
+    font-size: 30pt;
+    line-height: 1.15;
+    margin: 6px 0;
+    color: #0f172a;
+  }
+  .cover .subtitle {
+    font-size: 14pt;
+    color: #475569;
+    margin: 8px 0 4px 0;
+    font-weight: 400;
+  }
+  .cover .project {
+    font-size: 12pt;
+    color: #64748b;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+  .cover .rule {
+    width: 120px; height: 4px;
+    background: #2563eb;
+    margin: 18px auto 26px auto;
+    border-radius: 2px;
+  }
+  .cover table { width: 78%; font-size: 10.5pt; }
+  .cover .footer-note {
+    margin-top: 34px;
+    font-size: 9.5pt;
+    color: #94a3b8;
+  }
+
+  .page-break { page-break-before: always; }
+
+  .fig {
+    margin: 14px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .fig svg { max-width: 100%; height: auto; }
+  .fig-cap {
+    font-size: 9pt;
+    color: #64748b;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .note {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+  .warn {
+    background: #fffbeb;
+    border-left: 4px solid #d97706;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9.5pt;
+    page-break-inside: avoid;
+  }
+
+  .toc { font-size: 10.5pt; }
+  .toc-item { display: flex; padding: 3px 0; border-bottom: 1px dotted #cbd5e1; }
+  .toc-num { width: 34px; color: #2563eb; font-weight: 600; }
+  .toc-l2 { padding-left: 34px; font-size: 10pt; color: #475569; }
+
+  .status-done { color: #059669; font-weight: 600; }
+  .status-partial { color: #d97706; font-weight: 600; }
+  .status-planned { color: #64748b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER PAGE ============ -->
+<div class="cover">
+  <div class="badge">SOFTWARE DESIGN DOCUMENT</div>
+  <h1>GuardianAI</h1>
+  <div class="subtitle">Real-Time Automated Fall Detection<br>and Alert System</div>
+  <div class="rule"></div>
+  <div class="project">For Elderly and Patient Safety in Low-Resource Environments</div>
+
+  <table>
+    <tr><th style="width:38%">Group ID</th><td>FYP-2026-G6</td></tr>
+    <tr><th>Document</th><td>Software Design Document (SDD / SDS)</td></tr>
+    <tr><th>Version</th><td>1.0</td></tr>
+    <tr><th>Deliverable</th><td>FYP-I Checkpoint-2</td></tr>
+    <tr><th>Programme</th><td>BS Computer Science</td></tr>
+  </table>
+
+  <table style="margin-top:18px">
+    <tr><th style="width:38%">Team Member</th><th style="width:24%">Roll No</th><th>Role</th></tr>
+    <tr><td>Kashan M. Ashraf</td><td>BSCS-01007</td><td>Video Processing + Testing</td></tr>
+    <tr><td>Umer Ahmed</td><td>BSCS-01011</td><td>AI Model + Development</td></tr>
+    <tr><td>Imran</td><td>BSCS-01014</td><td>UI Design + Documentation</td></tr>
+  </table>
+
+  <div class="footer-note">
+    Repository: FYP-2026-G6-RealTimeAutomatedFallDetectionAndAlertSystem<br>
+    Prepared for review and approval by the Faculty Supervisor
+  </div>
+</div>
+
+<!-- ============ DOCUMENT CONTROL ============ -->
+<h2>Document Control</h2>
+
+<h3>Revision History</h3>
+<table>
+  <tr><th style="width:12%">Version</th><th style="width:18%">Date</th><th style="width:26%">Author</th><th>Description of Change</th></tr>
+  <tr><td>0.1</td><td>Checkpoint-1</td><td>FYP-2026-G6</td><td>Initial architecture sketch submitted as part of the SRS (Section 2.1).</td></tr>
+  <tr><td>1.0</td><td>Checkpoint-2</td><td>FYP-2026-G6</td><td>First complete Software Design Document. Documents the as-built design of the working MVP: layered architecture, component decomposition, class model, data design, interface contracts, behavioural models, and algorithm specifications. Records the migration from MediaPipe to YOLOv8-Pose and the addition of the hybrid decision engine.</td></tr>
+</table>
+
+<h3>Document Approval</h3>
+<table>
+  <tr><th style="width:30%">Role</th><th style="width:35%">Name</th><th>Signature / Date</th></tr>
+  <tr><td>Group Lead</td><td>Kashan M. Ashraf</td><td>&nbsp;<br>&nbsp;</td></tr>
+  <tr><td>Faculty Supervisor</td><td>&nbsp;</td><td>&nbsp;<br>&nbsp;</td></tr>
+</table>
+
+<h3>Related Documents</h3>
+<table>
+  <tr><th style="width:34%">Document</th><th style="width:22%">Location</th><th>Relationship</th></tr>
+  <tr><td>Software Requirements Specification (SRS) v2</td><td><code>/docs</code></td><td>Parent document. This SDD realises the functional requirements FR-1 to FR-5 defined in the SRS (see Traceability Matrix, Section 11).</td></tr>
+  <tr><td>FYP Proposal</td><td><code>/reports</code>, <code>/presentations</code></td><td>Defines the original problem statement and project objectives.</td></tr>
+  <tr><td>Source Code</td><td><code>/src</code></td><td>The implementation described by this design.</td></tr>
+</table>
+
+<!-- ============ TABLE OF CONTENTS ============ -->
+<div class="page-break"></div>
+<h2>Table of Contents</h2>
+<div class="toc">
+  <div class="toc-item"><span class="toc-num">1</span><span>Introduction</span></div>
+  <div class="toc-item toc-l2"><span>1.1 Purpose &nbsp;·&nbsp; 1.2 Scope &nbsp;·&nbsp; 1.3 Intended Audience &nbsp;·&nbsp; 1.4 Definitions and Acronyms &nbsp;·&nbsp; 1.5 References</span></div>
+
+  <div class="toc-item"><span class="toc-num">2</span><span>Design Considerations</span></div>
+  <div class="toc-item toc-l2"><span>2.1 Assumptions and Dependencies &nbsp;·&nbsp; 2.2 Design Constraints &nbsp;·&nbsp; 2.3 Design Goals and Guiding Principles</span></div>
+
+  <div class="toc-item"><span class="toc-num">3</span><span>System Architecture</span></div>
+  <div class="toc-item toc-l2"><span>3.1 Architectural Style &nbsp;·&nbsp; 3.2 Layered Architecture &nbsp;·&nbsp; 3.3 Component Decomposition &nbsp;·&nbsp; 3.4 Deployment Architecture &nbsp;·&nbsp; 3.5 Technology Stack</span></div>
+
+  <div class="toc-item"><span class="toc-num">4</span><span>Data Flow and Processing Pipeline</span></div>
+  <div class="toc-item toc-l2"><span>4.1 Data Flow Diagram &nbsp;·&nbsp; 4.2 Per-Frame Processing Walkthrough</span></div>
+
+  <div class="toc-item"><span class="toc-num">5</span><span>Detailed Component Design</span></div>
+  <div class="toc-item toc-l2"><span>5.1 Configuration &nbsp;·&nbsp; 5.2 Pose Estimation &nbsp;·&nbsp; 5.3 Feature Extraction &nbsp;·&nbsp; 5.4 Temporal Classification Models &nbsp;·&nbsp; 5.5 Hybrid Decision Engine &nbsp;·&nbsp; 5.6 Alert Subsystem &nbsp;·&nbsp; 5.7 Web API and Dashboard &nbsp;·&nbsp; 5.8 Training Subsystem &nbsp;·&nbsp; 5.9 Class Model</span></div>
+
+  <div class="toc-item"><span class="toc-num">6</span><span>Data Design</span></div>
+  <div class="toc-item toc-l2"><span>6.1 Keypoint Representation &nbsp;·&nbsp; 6.2 Feature Vector Composition &nbsp;·&nbsp; 6.3 Temporal Sequence Buffer &nbsp;·&nbsp; 6.4 Event Log Schema &nbsp;·&nbsp; 6.5 Persistent Artefacts</span></div>
+
+  <div class="toc-item"><span class="toc-num">7</span><span>Interface Design</span></div>
+  <div class="toc-item toc-l2"><span>7.1 REST API Contract &nbsp;·&nbsp; 7.2 User Interface Design &nbsp;·&nbsp; 7.3 Hardware Interface</span></div>
+
+  <div class="toc-item"><span class="toc-num">8</span><span>Behavioural Design</span></div>
+  <div class="toc-item toc-l2"><span>8.1 Detection State Machine &nbsp;·&nbsp; 8.2 Fall Detection Sequence &nbsp;·&nbsp; 8.3 Alert Governance</span></div>
+
+  <div class="toc-item"><span class="toc-num">9</span><span>Algorithm Design</span></div>
+  <div class="toc-item toc-l2"><span>9.1 Body Orientation Angle &nbsp;·&nbsp; 9.2 Head Drop Speed &nbsp;·&nbsp; 9.3 Ground Proximity &nbsp;·&nbsp; 9.4 Rule-Based State Machine &nbsp;·&nbsp; 9.5 Decision Fusion &nbsp;·&nbsp; 9.6 Temporal Smoothing</span></div>
+
+  <div class="toc-item"><span class="toc-num">10</span><span>Non-Functional Design</span></div>
+  <div class="toc-item toc-l2"><span>10.1 Performance &nbsp;·&nbsp; 10.2 Reliability and Fault Tolerance &nbsp;·&nbsp; 10.3 Privacy and Security &nbsp;·&nbsp; 10.4 Maintainability</span></div>
+
+  <div class="toc-item"><span class="toc-num">11</span><span>Requirements Traceability Matrix</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span>Implementation Status and FYP-2 Roadmap</span></div>
+  <div class="toc-item"><span class="toc-num">13</span><span>Appendix A — Configuration Parameter Reference</span></div>
+</div>
+
+<!-- ============ 1. INTRODUCTION ============ -->
+<div class="page-break"></div>
+<h2>1. Introduction</h2>
+
+<h3>1.1 Purpose</h3>
+<p>
+This Software Design Document (SDD) describes the software architecture and detailed design of
+<strong>GuardianAI</strong>, a real-time automated fall detection and alert system. Where the Software
+Requirements Specification (SRS) states <em>what</em> the system must do, this document specifies
+<em>how</em> the system is constructed to satisfy those requirements: how responsibility is divided
+across modules, how data is represented and transformed as it moves through the pipeline, how
+components interact at runtime, and which algorithms implement the detection logic.
+</p>
+<p>
+The design presented here is <strong>as-built</strong> rather than aspirational. Every component,
+interface, and algorithm documented in Sections 3 to 9 corresponds to working code in the project
+repository and was verified against a running instance of the system during the preparation of this
+document. Features that remain planned for FYP-2 are explicitly separated in Section 12 so that the
+boundary between delivered and future work is unambiguous.
+</p>
+
+<h3>1.2 Scope</h3>
+<p>
+This document covers the complete GuardianAI edge application, comprising:
+</p>
+<ul>
+  <li><strong>Video ingestion and pose estimation</strong> — acquiring frames from a webcam or video file and extracting human skeletal keypoints using YOLOv8-Pose.</li>
+  <li><strong>Biomechanical feature engineering</strong> — deriving interpretable physical quantities (body orientation angle, head drop speed, ground proximity, aspect ratio) from raw keypoints.</li>
+  <li><strong>Hybrid decision engine</strong> — fusing an explainable rule-based state machine with a temporal deep learning classifier (CNN-LSTM) to classify activity as <code>normal</code>, <code>warning</code>, or <code>fall</code>.</li>
+  <li><strong>Multi-channel alerting</strong> — console output, an on-screen popup, an audible buzzer, native operating-system notifications, optional SMTP email, and persistent JSON event logging with JPEG frame captures.</li>
+  <li><strong>Web monitoring dashboard</strong> — a Flask-served single-page interface streaming annotated MJPEG video alongside live telemetry and an incident history.</li>
+  <li><strong>Offline training subsystem</strong> — dataset preprocessing, synthetic data generation, model training, and ONNX export.</li>
+</ul>
+<p>
+Out of scope for this document: clinical validation methodology, hospital network integration, mobile
+application design, and cloud deployment topology. These are addressed in the FYP-2 planning
+material referenced in Section 12.
+</p>
+
+<h3>1.3 Intended Audience</h3>
+<table>
+  <tr><th style="width:30%">Reader</th><th>How to use this document</th></tr>
+  <tr><td>Faculty Supervisor / Evaluator</td><td>Sections 3, 8 and 9 give the architectural rationale and algorithmic detail. Section 11 traces each SRS requirement to its implementing component. Section 12 states honestly what is complete and what is not.</td></tr>
+  <tr><td>Project Team Members</td><td>Sections 5 and 6 are the working reference for module responsibilities, class interfaces, and data structures when extending the system.</td></tr>
+  <tr><td>External Developer / Maintainer</td><td>Sections 3.5, 7 and 13 provide the technology stack, the public API contract, and every tunable configuration parameter.</td></tr>
+</table>
+
+<h3>1.4 Definitions and Acronyms</h3>
+<table>
+  <tr><th style="width:22%">Term</th><th>Definition</th></tr>
+  <tr><td>YOLOv8-Pose</td><td>A single-stage convolutional neural network from Ultralytics that simultaneously detects persons and regresses 17 skeletal keypoints per person.</td></tr>
+  <tr><td>Keypoint</td><td>A detected body joint, represented as a triple <code>(x, y, confidence)</code>.</td></tr>
+  <tr><td>CNN-LSTM</td><td>A hybrid architecture in which a 1-D convolutional front-end extracts local spatial-temporal patterns and an LSTM models longer-range temporal dependencies.</td></tr>
+  <tr><td>Sequence buffer</td><td>A fixed-length sliding window (30 frames) of feature vectors forming one input sample to the temporal classifier.</td></tr>
+  <tr><td>Decision fusion</td><td>The weighted combination of a rule-based verdict and a neural network verdict into a single classification.</td></tr>
+  <tr><td>Temporal smoothing</td><td>A majority-vote filter over recent frame classifications that suppresses single-frame flicker.</td></tr>
+  <tr><td>XAI</td><td>Explainable Artificial Intelligence — design practice ensuring an automated decision can be traced to human-interpretable evidence.</td></tr>
+  <tr><td>MJPEG</td><td>Motion JPEG; a streaming format delivering a sequence of independent JPEG images over one HTTP response.</td></tr>
+  <tr><td>HUD</td><td>Heads-Up Display — the telemetry overlay drawn onto the annotated video frame.</td></tr>
+  <tr><td>Edge deployment</td><td>Running inference locally on the machine attached to the camera, rather than transmitting video to a remote server.</td></tr>
+</table>
+
+<h3>1.5 References</h3>
+<ol>
+  <li>Software Requirements Specification (SRS) v2 — GuardianAI, FYP-2026-G6, <code>/docs/SRS_document_V2.docx</code>.</li>
+  <li>IEEE Std 1016-2009, <em>IEEE Standard for Information Technology — Systems Design — Software Design Descriptions</em>.</li>
+  <li>IEEE Std 830-1998, <em>IEEE Recommended Practice for Software Requirements Specifications</em>.</li>
+  <li>Ultralytics YOLOv8 Documentation — <code>https://docs.ultralytics.com</code>.</li>
+  <li>PyTorch Documentation — <code>https://pytorch.org/docs</code>.</li>
+  <li>Flask Documentation — <code>https://flask.palletsprojects.com</code>.</li>
+</ol>
+
+<!-- ============ 2. DESIGN CONSIDERATIONS ============ -->
+
+<h2>2. Design Considerations</h2>
+
+<h3>2.1 Assumptions and Dependencies</h3>
+<table>
+  <tr><th style="width:26%">Assumption / Dependency</th><th>Design Implication</th></tr>
+  <tr><td>Single fixed camera with an unobstructed view of the monitored area</td><td>The design uses a monocular 2-D pipeline. No depth sensing or multi-camera fusion is required, which keeps hardware cost low — a core project objective.</td></tr>
+  <tr><td>Adequate ambient lighting for body-outline detection</td><td>No infrared or low-light enhancement stage is included. Detection confidence thresholds (0.5) assume normally lit indoor scenes.</td></tr>
+  <tr><td>Commodity PC hardware, GPU optional</td><td>The <code>yolov8n</code> (nano) variant is selected over larger models, and the device is resolved at runtime (<code>"auto"</code> → CUDA if available, otherwise CPU).</td></tr>
+  <tr><td>Python ≥ 3.8 runtime with PyTorch, OpenCV, Ultralytics and Flask available</td><td>Dependencies are pinned by lower bound in <code>requirements.txt</code>; no compiled extensions are authored by the team.</td></tr>
+  <tr><td>Operator is present at the monitoring station or on the same machine</td><td>Alerting is designed for local delivery first (buzzer, popup, OS notification). Remote channels (email, SMS) are secondary and optional.</td></tr>
+</table>
+
+<h3>2.2 Design Constraints</h3>
+<table>
+  <tr><th style="width:26%">Constraint</th><th>Consequence for the Design</th></tr>
+  <tr><td><strong>Real-time latency.</strong> A fall must be recognised within 1–2 seconds.</td><td>The pipeline is strictly per-frame and single-pass. The temporal window is bounded at 30 frames, and all blocking side-effects (buzzer, popup, e-mail, OS notification) are dispatched on daemon threads so they can never stall frame processing.</td></tr>
+  <tr><td><strong>Explainability.</strong> Clinical settings require an auditable reason for every alert.</td><td>Rule-based biomechanics are retained as a first-class decision path rather than being replaced by the neural network. Raw angle and speed values are surfaced on the HUD, in the <code>/status</code> API and on the dashboard.</td></tr>
+  <tr><td><strong>Privacy.</strong> Continuous video of vulnerable people is highly sensitive.</td><td>Video is processed in memory and never recorded. Only a single JPEG frame is persisted per confirmed alert, into a local log directory.</td></tr>
+  <tr><td><strong>Graceful degradation.</strong> The system must not fail hard.</td><td>A missing model checkpoint downgrades to pure rule-based operation instead of raising; a camera read failure triggers reconnection rather than terminating the stream.</td></tr>
+  <tr><td><strong>Academic scope.</strong> FYP-1 targets a demonstrable MVP.</td><td>Persistence uses flat JSON files rather than a database server; authentication and multi-tenant concerns are deferred to FYP-2.</td></tr>
+</table>
+
+<h3>2.3 Design Goals and Guiding Principles</h3>
+<table>
+  <tr><th style="width:24%">Principle</th><th>How it is applied</th></tr>
+  <tr><td>Separation of concerns</td><td>Each pipeline stage is an independent module with a single responsibility: perception (<code>pose_estimator</code>), representation (<code>feature_extractor</code>), inference (<code>fall_detector_model</code>), orchestration (<code>inference</code>), notification (<code>alert_system</code>), and delivery (<code>api_server</code>).</td></tr>
+  <tr><td>Centralised configuration</td><td>Every tunable threshold, path and hyper-parameter lives in typed dataclasses in <code>config.py</code>. No magic numbers are embedded in algorithm code, so behaviour can be retuned without touching logic.</td></tr>
+  <tr><td>Substitutability</td><td>Three interchangeable temporal architectures (LSTM, CNN-LSTM, Transformer) are produced by a single factory function selected by a configuration string, enabling comparative evaluation without code changes.</td></tr>
+  <tr><td>Fail-safe defaults</td><td>Absent model weights, an unavailable sound device, a missing SMTP configuration, and a disconnected camera all degrade to a reduced but functioning system.</td></tr>
+  <tr><td>Observability</td><td>The system continuously exposes its internal biomechanical state — not merely its verdict — through the HUD, the REST API, and structured event logs.</td></tr>
+</table>
+
+<!-- ============ 3. SYSTEM ARCHITECTURE ============ -->
+
+<h2>3. System Architecture</h2>
+
+<h3>3.1 Architectural Style</h3>
+<p>
+GuardianAI combines two complementary architectural styles:
+</p>
+<ul>
+  <li>A <strong>layered pipe-and-filter pipeline</strong> governs the detection path. Each video frame flows
+  unidirectionally through a fixed sequence of transformations — capture → pose estimation → feature
+  extraction → classification → decision fusion → alerting — where every stage consumes the output of
+  its predecessor and has no knowledge of stages further downstream. This style suits continuous
+  stream processing and makes each stage independently testable and replaceable.</li>
+  <li>A <strong>client–server</strong> layer wraps the pipeline for delivery. A Flask application exposes the
+  live annotated stream and the system state over HTTP, allowing any browser on the network to act as
+  a thin monitoring client with no installation.</li>
+</ul>
+<p>
+The composite is deployed as a single <strong>edge application</strong>: capture, inference and alerting all
+execute on the machine physically attached to the camera, so no video ever leaves the premises.
+</p>
+
+<h3>3.2 Layered Architecture</h3>
+<p>
+The system is organised into five horizontal layers. Dependencies point strictly downward: a layer may
+use the services of the layer beneath it, but never the reverse. The Configuration module is a
+cross-cutting concern consumed by every layer.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 470" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Layer 1: Presentation -->
+  <rect x="20" y="16" width="580" height="66" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text x="32" y="36" font-size="12" font-weight="600" fill="#1e40af">1 · Presentation Layer</text>
+  <rect x="250" y="44" width="150" height="28" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="325" y="62" font-size="10" text-anchor="middle" fill="#1e293b">index.html</text>
+  <rect x="410" y="44" width="80" height="28" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="450" y="62" font-size="10" text-anchor="middle" fill="#1e293b">app.js</text>
+  <rect x="500" y="44" width="86" height="28" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="543" y="62" font-size="10" text-anchor="middle" fill="#1e293b">style.css</text>
+  <text x="34" y="62" font-size="9" fill="#64748b">Browser dashboard</text>
+
+  <!-- Layer 2: Application / API -->
+  <rect x="20" y="98" width="580" height="66" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <text x="32" y="118" font-size="12" font-weight="600" fill="#075985">2 · Application / Service Layer</text>
+  <rect x="250" y="126" width="150" height="28" rx="4" fill="#ffffff" stroke="#7dd3fc"/>
+  <text x="325" y="144" font-size="10" text-anchor="middle" fill="#1e293b">api_server.py</text>
+  <rect x="410" y="126" width="176" height="28" rx="4" fill="#ffffff" stroke="#7dd3fc"/>
+  <text x="498" y="144" font-size="10" text-anchor="middle" fill="#1e293b">REST + MJPEG endpoints</text>
+  <text x="34" y="144" font-size="9" fill="#64748b">Flask host</text>
+
+  <!-- Layer 3: Processing -->
+  <rect x="20" y="180" width="580" height="104" rx="6" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.6"/>
+  <text x="32" y="200" font-size="12" font-weight="600" fill="#5b21b6">3 · Processing / Domain Layer</text>
+  <rect x="40" y="212" width="126" height="30" rx="4" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="103" y="231" font-size="9.5" text-anchor="middle" fill="#1e293b">pose_estimator</text>
+  <rect x="176" y="212" width="132" height="30" rx="4" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="242" y="231" font-size="9.5" text-anchor="middle" fill="#1e293b">feature_extractor</text>
+  <rect x="318" y="212" width="126" height="30" rx="4" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="381" y="231" font-size="9.5" text-anchor="middle" fill="#1e293b">inference engine</text>
+  <rect x="454" y="212" width="126" height="30" rx="4" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="517" y="231" font-size="9.5" text-anchor="middle" fill="#1e293b">alert_system</text>
+  <rect x="176" y="248" width="268" height="26" rx="4" fill="#ede9fe" stroke="#a78bfa"/>
+  <text x="310" y="265" font-size="9.5" text-anchor="middle" fill="#4c1d95">Hybrid Decision Engine (rules ⊕ neural network)</text>
+
+  <!-- Layer 4: Model -->
+  <rect x="20" y="300" width="580" height="66" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text x="32" y="320" font-size="12" font-weight="600" fill="#065f46">4 · Model Layer</text>
+  <rect x="250" y="328" width="150" height="28" rx="4" fill="#ffffff" stroke="#6ee7b7"/>
+  <text x="325" y="346" font-size="10" text-anchor="middle" fill="#1e293b">fall_detector_model.py</text>
+  <rect x="410" y="328" width="88" height="28" rx="4" fill="#ffffff" stroke="#6ee7b7"/>
+  <text x="454" y="346" font-size="10" text-anchor="middle" fill="#1e293b">train.py</text>
+  <rect x="508" y="328" width="78" height="28" rx="4" fill="#ffffff" stroke="#6ee7b7"/>
+  <text x="547" y="346" font-size="10" text-anchor="middle" fill="#1e293b">dataset.py</text>
+  <text x="34" y="346" font-size="9" fill="#64748b">Training + nets</text>
+
+  <!-- Layer 5: Data / Resource -->
+  <rect x="20" y="382" width="580" height="72" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.6"/>
+  <text x="32" y="402" font-size="12" font-weight="600" fill="#92400e">5 · Data / Resource Layer</text>
+  <rect x="180" y="412" width="112" height="28" rx="4" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="236" y="430" font-size="9" text-anchor="middle" fill="#1e293b">yolov8n-pose.pt</text>
+  <rect x="300" y="412" width="126" height="28" rx="4" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="363" y="430" font-size="9" text-anchor="middle" fill="#1e293b">fall_detector_best.pth</text>
+  <rect x="434" y="412" width="152" height="28" rx="4" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="510" y="430" font-size="9" text-anchor="middle" fill="#1e293b">logs/ (JSON + captures)</text>
+
+  <!-- Cross-cutting config -->
+  <rect x="616" y="16" width="104" height="438" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.6" stroke-dasharray="5,3"/>
+  <text x="668" y="220" font-size="11.5" font-weight="600" fill="#334155" text-anchor="middle">config.py</text>
+  <text x="668" y="238" font-size="9" fill="#64748b" text-anchor="middle">Cross-cutting</text>
+  <text x="668" y="252" font-size="9" fill="#64748b" text-anchor="middle">configuration</text>
+
+  <!-- Downward arrows -->
+  <line x1="310" y1="82" x2="310" y2="96" stroke="#475569" stroke-width="1.4" marker-end="url(#ar)"/>
+  <line x1="310" y1="164" x2="310" y2="178" stroke="#475569" stroke-width="1.4" marker-end="url(#ar)"/>
+  <line x1="310" y1="284" x2="310" y2="298" stroke="#475569" stroke-width="1.4" marker-end="url(#ar)"/>
+  <line x1="310" y1="366" x2="310" y2="380" stroke="#475569" stroke-width="1.4" marker-end="url(#ar)"/>
+</svg>
+<div class="fig-cap">Figure 3.1 — Layered architecture. Dependencies flow downward only; <code>config.py</code> is consumed by all layers.</div>
+</div>
+
+<h3>3.3 Component Decomposition</h3>
+<p>
+Figure 3.2 shows the runtime components and the direction of their dependencies. The
+<code>FallDetectionInference</code> class is the orchestrator: it owns one instance each of the pose
+estimator, feature extractor, neural model and alert system, and is the only component that knows the
+full pipeline order.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 400" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Camera -->
+  <rect x="16" y="168" width="92" height="46" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="62" y="188" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">Camera /</text>
+  <text x="62" y="202" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">Video file</text>
+
+  <!-- api_server -->
+  <rect x="146" y="20" width="146" height="60" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.6"/>
+  <text x="219" y="42" font-size="11" text-anchor="middle" font-weight="600" fill="#075985">api_server.py</text>
+  <text x="219" y="58" font-size="8.5" text-anchor="middle" fill="#475569">Flask routes,</text>
+  <text x="219" y="70" font-size="8.5" text-anchor="middle" fill="#475569">MJPEG generator</text>
+
+  <!-- Browser -->
+  <rect x="330" y="20" width="130" height="60" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text x="395" y="42" font-size="11" text-anchor="middle" font-weight="600" fill="#1e40af">Web Dashboard</text>
+  <text x="395" y="58" font-size="8.5" text-anchor="middle" fill="#475569">index.html + app.js</text>
+  <text x="395" y="70" font-size="8.5" text-anchor="middle" fill="#475569">polls /status @ 500 ms</text>
+
+  <!-- inference orchestrator -->
+  <rect x="146" y="160" width="146" height="62" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="219" y="182" font-size="11" text-anchor="middle" font-weight="600" fill="#5b21b6">inference.py</text>
+  <text x="219" y="197" font-size="8.5" text-anchor="middle" fill="#4c1d95">FallDetectionInference</text>
+  <text x="219" y="211" font-size="8.5" text-anchor="middle" fill="#6d28d9">(orchestrator)</text>
+
+  <!-- pose estimator -->
+  <rect x="336" y="112" width="140" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="406" y="132" font-size="10.5" text-anchor="middle" font-weight="600" fill="#5b21b6">pose_estimator.py</text>
+  <text x="406" y="148" font-size="8.5" text-anchor="middle" fill="#475569">YOLOv8-Pose wrapper</text>
+
+  <!-- feature extractor -->
+  <rect x="336" y="176" width="140" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="406" y="196" font-size="10.5" text-anchor="middle" font-weight="600" fill="#5b21b6">feature_extractor.py</text>
+  <text x="406" y="212" font-size="8.5" text-anchor="middle" fill="#475569">biomechanics + buffer</text>
+
+  <!-- model -->
+  <rect x="336" y="240" width="140" height="52" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="406" y="260" font-size="10.5" text-anchor="middle" font-weight="600" fill="#065f46">fall_detector_model</text>
+  <text x="406" y="276" font-size="8.5" text-anchor="middle" fill="#475569">CNN-LSTM classifier</text>
+
+  <!-- alert system -->
+  <rect x="336" y="304" width="140" height="52" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="406" y="324" font-size="10.5" text-anchor="middle" font-weight="600" fill="#991b1b">alert_system.py</text>
+  <text x="406" y="340" font-size="8.5" text-anchor="middle" fill="#475569">multi-channel alerts</text>
+
+  <!-- alert outputs -->
+  <rect x="524" y="286" width="96" height="26" rx="4" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="572" y="303" font-size="8.5" text-anchor="middle" fill="#1e293b">Buzzer / Popup</text>
+  <rect x="524" y="318" width="96" height="26" rx="4" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="572" y="335" font-size="8.5" text-anchor="middle" fill="#1e293b">OS notification</text>
+  <rect x="524" y="350" width="96" height="26" rx="4" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="572" y="367" font-size="8.5" text-anchor="middle" fill="#1e293b">SMTP e-mail</text>
+  <rect x="644" y="318" width="80" height="26" rx="4" fill="#fffbeb" stroke="#d97706"/>
+  <text x="684" y="335" font-size="8.5" text-anchor="middle" fill="#1e293b">JSON logs</text>
+
+  <!-- config -->
+  <rect x="146" y="304" width="146" height="52" rx="6" fill="#f1f5f9" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="219" y="325" font-size="10.5" text-anchor="middle" font-weight="600" fill="#334155">config.py</text>
+  <text x="219" y="341" font-size="8.5" text-anchor="middle" fill="#64748b">typed dataclasses</text>
+
+  <!-- Arrows -->
+  <line x1="108" y1="191" x2="144" y2="191" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="219" y1="158" x2="219" y2="82" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="292" y1="50" x2="328" y2="50" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="292" y1="178" x2="334" y2="142" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="292" y1="191" x2="334" y2="199" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="292" y1="204" x2="334" y2="258" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="292" y1="216" x2="334" y2="322" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar2)"/>
+  <line x1="476" y1="322" x2="522" y2="300" stroke="#64748b" stroke-width="1.2" marker-end="url(#ar2)"/>
+  <line x1="476" y1="330" x2="522" y2="331" stroke="#64748b" stroke-width="1.2" marker-end="url(#ar2)"/>
+  <line x1="476" y1="338" x2="522" y2="360" stroke="#64748b" stroke-width="1.2" marker-end="url(#ar2)"/>
+  <line x1="620" y1="331" x2="642" y2="331" stroke="#64748b" stroke-width="1.2" marker-end="url(#ar2)"/>
+  <line x1="219" y1="302" x2="219" y2="226" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#ar2)"/>
+
+  <text x="240" y="120" font-size="8" fill="#64748b">serves</text>
+  <text x="300" y="42" font-size="8" fill="#64748b">HTTP</text>
+</svg>
+<div class="fig-cap">Figure 3.2 — Component decomposition and dependency directions. Solid arrows denote runtime invocation; the dashed arrow denotes configuration injection.</div>
+</div>
+
+<h3>3.4 Deployment Architecture</h3>
+<p>
+GuardianAI deploys as a single process on one physical node. Figure 3.3 shows the deployment view,
+including the trust boundary that keeps raw video inside the premises.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 330" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Trust boundary -->
+  <rect x="14" y="14" width="452" height="300" rx="10" fill="#f8fafc" stroke="#059669" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="26" y="34" font-size="10" font-weight="600" fill="#065f46">Local Premises — Trust Boundary (no video egress)</text>
+
+  <!-- Camera device -->
+  <rect x="34" y="52" width="112" height="56" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="90" y="74" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">USB / IP Camera</text>
+  <text x="90" y="90" font-size="8.5" text-anchor="middle" fill="#475569">640 × 480 @ 30 fps</text>
+
+  <!-- Edge node -->
+  <rect x="34" y="132" width="410" height="160" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="48" y="153" font-size="11" font-weight="600" fill="#1e40af">« device » Edge Inference Node — Windows 10/11 PC</text>
+
+  <rect x="50" y="166" width="180" height="52" rx="5" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="140" y="186" font-size="10" text-anchor="middle" font-weight="600" fill="#5b21b6">« process »</text>
+  <text x="140" y="202" font-size="9.5" text-anchor="middle" fill="#4c1d95">Python 3 — Flask + PyTorch</text>
+
+  <rect x="246" y="166" width="180" height="52" rx="5" fill="#ecfdf5" stroke="#059669" stroke-width="1.4"/>
+  <text x="336" y="186" font-size="10" text-anchor="middle" font-weight="600" fill="#065f46">« artifact »</text>
+  <text x="336" y="202" font-size="9" text-anchor="middle" fill="#065f46">yolov8n-pose.pt · *.pth</text>
+
+  <rect x="50" y="230" width="180" height="46" rx="5" fill="#fffbeb" stroke="#d97706" stroke-width="1.4"/>
+  <text x="140" y="248" font-size="9.5" text-anchor="middle" font-weight="600" fill="#92400e">« filesystem »</text>
+  <text x="140" y="263" font-size="8.5" text-anchor="middle" fill="#78350f">logs/ · captures/</text>
+
+  <rect x="246" y="230" width="180" height="46" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="336" y="248" font-size="9.5" text-anchor="middle" font-weight="600" fill="#991b1b">« hardware »</text>
+  <text x="336" y="263" font-size="8.5" text-anchor="middle" fill="#7f1d1d">Speaker · Notification centre</text>
+
+  <!-- Client -->
+  <rect x="510" y="60" width="200" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="610" y="84" font-size="10.5" text-anchor="middle" font-weight="600" fill="#1e40af">« device » Monitoring Client</text>
+  <text x="610" y="102" font-size="9" text-anchor="middle" fill="#475569">Any modern web browser</text>
+  <text x="610" y="118" font-size="8.5" text-anchor="middle" fill="#64748b">Same LAN — no install required</text>
+
+  <!-- Mail -->
+  <rect x="510" y="196" width="200" height="66" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5,3"/>
+  <text x="610" y="220" font-size="10.5" text-anchor="middle" font-weight="600" fill="#475569">« external » SMTP Gateway</text>
+  <text x="610" y="238" font-size="8.5" text-anchor="middle" fill="#64748b">Optional — disabled by default</text>
+  <text x="610" y="252" font-size="8.5" text-anchor="middle" fill="#64748b">Metadata + 1 JPEG only</text>
+
+  <!-- arrows -->
+  <line x1="90" y1="108" x2="90" y2="164" stroke="#475569" stroke-width="1.5" marker-end="url(#ar3)"/>
+  <text x="96" y="140" font-size="8" fill="#64748b">USB / RTSP</text>
+
+  <line x1="444" y1="192" x2="508" y2="106" stroke="#475569" stroke-width="1.5" marker-end="url(#ar3)"/>
+  <text x="446" y="150" font-size="8" fill="#64748b">HTTP :5000</text>
+  <text x="446" y="162" font-size="8" fill="#64748b">MJPEG + JSON</text>
+
+  <line x1="444" y1="248" x2="508" y2="228" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#ar3)"/>
+  <text x="452" y="268" font-size="8" fill="#94a3b8">TLS :587</text>
+</svg>
+<div class="fig-cap">Figure 3.3 — Deployment view. Raw video never crosses the trust boundary; only alert metadata and a single JPEG may leave via the optional SMTP path.</div>
+</div>
+
+<h3>3.5 Technology Stack</h3>
+<table>
+  <tr><th style="width:22%">Layer</th><th style="width:26%">Technology</th><th>Design Justification</th></tr>
+  <tr><td>Pose estimation</td><td>Ultralytics YOLOv8-Pose (nano)</td><td>Single-stage detection and keypoint regression in one pass. The nano variant runs acceptably on CPU, and unlike the originally planned MediaPipe it natively supports multi-person scenes and is more robust to partial occlusion.</td></tr>
+  <tr><td>Numerical / CV</td><td>OpenCV, NumPy</td><td>Industry-standard frame capture, JPEG encoding and drawing primitives; vectorised array maths for feature computation.</td></tr>
+  <tr><td>Deep learning</td><td>PyTorch</td><td>Dynamic graphs simplify experimentation across the three temporal architectures; mature ONNX export path for future edge optimisation.</td></tr>
+  <tr><td>Web service</td><td>Flask</td><td>Minimal footprint appropriate for an edge device. Native support for streaming responses, which the MJPEG feed depends on.</td></tr>
+  <tr><td>Front-end</td><td>HTML5, CSS3, vanilla JavaScript</td><td>Deliberately framework-free: no build step, no <code>node_modules</code>, and the dashboard is directly inspectable by evaluators.</td></tr>
+  <tr><td>Notifications</td><td><code>winsound</code>, <code>plyer</code>, <code>smtplib</code></td><td>Layered channels: an immediate local buzzer, a native OS toast that is visible when the dashboard is closed, and optional remote e-mail.</td></tr>
+  <tr><td>Persistence</td><td>JSON files + JPEG captures</td><td>Zero-configuration, human-readable and directly reviewable during a demonstration — sufficient for FYP-1 scope. A relational store is deferred to FYP-2.</td></tr>
+</table>
+
+<!-- ============ 4. DATA FLOW ============ -->
+
+<h2>4. Data Flow and Processing Pipeline</h2>
+
+<h3>4.1 Data Flow Diagram</h3>
+<p>
+Figure 4.1 traces a single video frame through the complete pipeline, annotating the data
+representation at every hand-off point. This transformation chain executes once per frame, at
+approximately 25–30 frames per second.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 430" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar4" markerWidth="10" markerHeight="10" refX="9" refY="3.2" orient="auto">
+      <path d="M0,0 L0,6.4 L9,3.2 z" fill="#2563eb"/>
+    </marker>
+    <marker id="ar4g" markerWidth="10" markerHeight="10" refX="9" refY="3.2" orient="auto">
+      <path d="M0,0 L0,6.4 L9,3.2 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Row 1 -->
+  <rect x="14" y="20" width="118" height="52" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="73" y="42" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">1. Frame Capture</text>
+  <text x="73" y="58" font-size="8" text-anchor="middle" fill="#475569">cv2.VideoCapture</text>
+
+  <rect x="176" y="20" width="118" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="235" y="42" font-size="10" text-anchor="middle" font-weight="600" fill="#5b21b6">2. Pose Estimation</text>
+  <text x="235" y="58" font-size="8" text-anchor="middle" fill="#475569">YOLOv8-Pose</text>
+
+  <rect x="338" y="20" width="126" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="401" y="42" font-size="10" text-anchor="middle" font-weight="600" fill="#5b21b6">3. Keypoint Select</text>
+  <text x="401" y="58" font-size="8" text-anchor="middle" fill="#475569">17 → 13 critical, norm.</text>
+
+  <rect x="508" y="20" width="126" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="571" y="42" font-size="10" text-anchor="middle" font-weight="600" fill="#5b21b6">4. Feature Engineering</text>
+  <text x="571" y="58" font-size="8" text-anchor="middle" fill="#475569">angle · speed · ratio</text>
+
+  <!-- data labels row1 -->
+  <text x="154" y="36" font-size="7.5" text-anchor="middle" fill="#2563eb">BGR</text>
+  <text x="154" y="46" font-size="7.5" text-anchor="middle" fill="#2563eb">array</text>
+  <text x="316" y="36" font-size="7.5" text-anchor="middle" fill="#2563eb">(17,3)</text>
+  <text x="316" y="46" font-size="7.5" text-anchor="middle" fill="#2563eb">px</text>
+  <text x="486" y="36" font-size="7.5" text-anchor="middle" fill="#2563eb">(13,3)</text>
+  <text x="486" y="46" font-size="7.5" text-anchor="middle" fill="#2563eb">norm</text>
+
+  <!-- Row 2 -->
+  <rect x="508" y="130" width="126" height="52" rx="6" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="571" y="152" font-size="10" text-anchor="middle" font-weight="600" fill="#5b21b6">5. Sequence Buffer</text>
+  <text x="571" y="168" font-size="8" text-anchor="middle" fill="#475569">deque, 30 × 51</text>
+
+  <rect x="338" y="130" width="126" height="52" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="401" y="148" font-size="10" text-anchor="middle" font-weight="600" fill="#065f46">6b. CNN-LSTM</text>
+  <text x="401" y="163" font-size="8" text-anchor="middle" fill="#475569">temporal classifier</text>
+  <text x="401" y="175" font-size="7.5" text-anchor="middle" fill="#94a3b8">(skipped if no weights)</text>
+
+  <rect x="176" y="130" width="118" height="52" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="235" y="148" font-size="10" text-anchor="middle" font-weight="600" fill="#92400e">6a. Rule Engine</text>
+  <text x="235" y="163" font-size="8" text-anchor="middle" fill="#78350f">heuristic state</text>
+  <text x="235" y="175" font-size="7.5" text-anchor="middle" fill="#a16207">machine (XAI)</text>
+
+  <!-- Row 3 -->
+  <rect x="266" y="228" width="180" height="54" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="356" y="249" font-size="10.5" text-anchor="middle" font-weight="600" fill="#4c1d95">7. Decision Fusion</text>
+  <text x="356" y="265" font-size="8" text-anchor="middle" fill="#5b21b6">0.7 · NN ⊕ 0.3 · rules</text>
+  <text x="356" y="277" font-size="7.5" text-anchor="middle" fill="#7c3aed">severity-priority override</text>
+
+  <rect x="266" y="308" width="180" height="48" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6"/>
+  <text x="356" y="328" font-size="10" text-anchor="middle" font-weight="600" fill="#4c1d95">8. Temporal Smoothing</text>
+  <text x="356" y="344" font-size="8" text-anchor="middle" fill="#5b21b6">majority vote, last 5 frames</text>
+
+  <!-- Outputs -->
+  <rect x="30" y="300" width="130" height="46" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="95" y="319" font-size="9.5" text-anchor="middle" font-weight="600" fill="#991b1b">9a. Alert System</text>
+  <text x="95" y="334" font-size="8" text-anchor="middle" fill="#7f1d1d">if fall &amp; conf &gt; 0.7</text>
+
+  <rect x="30" y="366" width="130" height="46" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.4"/>
+  <text x="95" y="385" font-size="9" text-anchor="middle" font-weight="600" fill="#92400e">JSON log +</text>
+  <text x="95" y="399" font-size="8" text-anchor="middle" fill="#78350f">JPEG capture</text>
+
+  <rect x="552" y="300" width="130" height="46" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="617" y="319" font-size="9.5" text-anchor="middle" font-weight="600" fill="#075985">9b. HUD Overlay</text>
+  <text x="617" y="334" font-size="8" text-anchor="middle" fill="#475569">annotated frame</text>
+
+  <rect x="552" y="366" width="130" height="46" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="617" y="385" font-size="9" text-anchor="middle" font-weight="600" fill="#1e40af">MJPEG stream +</text>
+  <text x="617" y="399" font-size="8" text-anchor="middle" fill="#475569">/status JSON</text>
+
+  <!-- arrows row1 -->
+  <line x1="132" y1="46" x2="174" y2="46" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <line x1="294" y1="46" x2="336" y2="46" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <line x1="464" y1="46" x2="506" y2="46" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+
+  <!-- down from 4 to 5 -->
+  <line x1="571" y1="72" x2="571" y2="128" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <text x="578" y="104" font-size="7.5" fill="#2563eb">51-dim vector</text>
+
+  <!-- 5 to 6b -->
+  <line x1="506" y1="156" x2="466" y2="156" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <text x="486" y="148" font-size="7.5" text-anchor="middle" fill="#2563eb">(30,51)</text>
+
+  <!-- 3 to 6a : long path -->
+  <path d="M 401 72 L 401 96 L 235 96 L 235 128" fill="none" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <text x="300" y="92" font-size="7.5" text-anchor="middle" fill="#2563eb">current keypoints</text>
+
+  <!-- 6a and 6b to fusion -->
+  <line x1="248" y1="182" x2="300" y2="226" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <line x1="401" y1="182" x2="380" y2="226" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <text x="252" y="212" font-size="7.5" fill="#2563eb">status, conf</text>
+  <text x="404" y="212" font-size="7.5" fill="#2563eb">softmax</text>
+
+  <!-- fusion to smoothing -->
+  <line x1="356" y1="282" x2="356" y2="306" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+
+  <!-- smoothing to outputs -->
+  <line x1="266" y1="330" x2="162" y2="326" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <line x1="446" y1="330" x2="550" y2="326" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar4)"/>
+  <line x1="95" y1="346" x2="95" y2="364" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar4g)"/>
+  <line x1="617" y1="346" x2="617" y2="364" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#ar4g)"/>
+</svg>
+<div class="fig-cap">Figure 4.1 — Per-frame data flow. Note the two parallel decision paths (6a rules, 6b neural network) converging at the fusion stage; the rule path operates on the current frame while the neural path requires a full 30-frame window.</div>
+</div>
+
+<h3>4.2 Per-Frame Processing Walkthrough</h3>
+<table>
+  <tr><th style="width:5%">#</th><th style="width:24%">Stage</th><th style="width:26%">Input → Output</th><th>Behaviour</th></tr>
+  <tr><td>1</td><td>Frame capture</td><td>Camera → BGR <code>ndarray</code></td><td>OpenCV reads one frame. On failure the reconnection strategy of Section 10.2 is invoked.</td></tr>
+  <tr><td>2</td><td>Pose estimation</td><td>BGR frame → <code>(N,17,3)</code></td><td>YOLOv8-Pose infers person instances and keypoints. Detections below confidence 0.5 are discarded. The single-person estimator takes the first (highest-scoring) instance.</td></tr>
+  <tr><td>3</td><td>Keypoint selection and normalisation</td><td><code>(17,3)</code> px → <code>(13,3)</code> normalised</td><td>The 13 keypoints listed in <code>CRITICAL_KEYPOINTS</code> are retained; <code>x</code> and <code>y</code> are divided by frame width and height so downstream logic is resolution-independent.</td></tr>
+  <tr><td>4</td><td>Feature engineering</td><td><code>(13,3)</code> → 51-dim vector</td><td>39 flattened raw values are concatenated with 12 engineered features (Section 6.2).</td></tr>
+  <tr><td>5</td><td>Sequence buffering</td><td>51-dim → <code>(30,51)</code> or <code>None</code></td><td>A bounded <code>deque</code> accumulates vectors. Until 30 frames are present the neural path is skipped and the system operates on rules alone.</td></tr>
+  <tr><td>6a</td><td>Rule engine</td><td><code>(13,3)</code> → (status, confidence)</td><td>Deterministic biomechanical state machine (Section 9.4). Always available, including at start-up.</td></tr>
+  <tr><td>6b</td><td>Neural inference</td><td><code>(30,51)</code> → 3-class softmax</td><td>Executed under <code>torch.no_grad()</code>. Skipped entirely when no checkpoint is loaded.</td></tr>
+  <tr><td>7</td><td>Decision fusion</td><td>two verdicts → one verdict</td><td>Weighted blend with a severity-priority override (Section 9.5).</td></tr>
+  <tr><td>8</td><td>Temporal smoothing</td><td>verdict → stabilised verdict</td><td>Majority vote across the last five frames suppresses single-frame flicker.</td></tr>
+  <tr><td>9a</td><td>Alerting</td><td>verdict → side effects</td><td>Triggered only when status is <code>fall</code> <em>and</em> confidence exceeds 0.7, then further gated by the cooldown.</td></tr>
+  <tr><td>9b</td><td>Presentation</td><td>verdict → annotated frame</td><td>HUD overlay drawn, frame JPEG-encoded and yielded to the MJPEG stream; telemetry cached for <code>/status</code>.</td></tr>
+</table>
+
+<!-- ============ 5. DETAILED COMPONENT DESIGN ============ -->
+
+<h2>5. Detailed Component Design</h2>
+
+<h3>5.1 Configuration Subsystem — <code>config.py</code></h3>
+<p>
+All system parameters are declared as typed Python dataclasses aggregated by a single
+<code>SystemConfig</code> root object. A module-level singleton <code>CONFIG</code> is instantiated at import
+time and shared by default, while every component also accepts an injected configuration instance —
+a design that supports unit testing and per-experiment overrides without global mutation.
+</p>
+<table>
+  <tr><th style="width:24%">Dataclass</th><th>Responsibility</th></tr>
+  <tr><td><code>PoseConfig</code></td><td>Detection and tracking confidence thresholds; the <code>CRITICAL_KEYPOINTS</code> index list selecting 13 of the 17 YOLO joints.</td></tr>
+  <tr><td><code>FeatureConfig</code></td><td>Sequence length, stride, feature dimensionality, and the rule-based thresholds for speed, angle, aspect ratio and stillness.</td></tr>
+  <tr><td><code>ModelConfig</code></td><td>Architecture selector, layer sizes, dropout, and all training hyper-parameters including class weights for the imbalanced fall class.</td></tr>
+  <tr><td><code>CameraConfig</code></td><td>Capture source index or path, resolution and target frame rate.</td></tr>
+  <tr><td><code>AlertConfig</code></td><td>Per-channel enable flags, SMTP settings, cooldown period, popup duration and log directory.</td></tr>
+  <tr><td><code>SystemConfig</code></td><td>Root aggregate. Its <code>__post_init__</code> hook rewrites every relative path to an absolute path anchored at the project directory, so the application behaves identically regardless of the working directory from which it is launched. <code>get_device()</code> resolves <code>"auto"</code> to CUDA or CPU at runtime.</td></tr>
+</table>
+
+<h3>5.2 Pose Estimation Module — <code>pose_estimator.py</code></h3>
+<p>
+This module encapsulates all coupling to the Ultralytics library, presenting the rest of the system
+with a stable interface that returns plain NumPy arrays. Two classes are provided.
+</p>
+<h4>5.2.1 <code>PoseEstimator</code> (single subject)</h4>
+<ul>
+  <li><code>process_frame(frame) → (keypoints | None, annotated_frame)</code> — runs inference, draws the
+  skeleton overlay, and returns the 13 selected keypoints in normalised coordinates.</li>
+  <li><strong>Occlusion resilience.</strong> When no person is detected, <code>_handle_lost_tracking()</code>
+  returns the last known keypoints for up to <code>_max_lost_frames = 10</code> consecutive frames before
+  reporting loss. This prevents momentary detection dropouts — common when a subject turns or is
+  briefly obscured — from resetting the temporal buffer and discarding an in-progress fall sequence.</li>
+  <li><strong>Visualisation.</strong> <code>_draw_custom_skeleton()</code> renders a 14-edge skeleton using a
+  two-pass stroke (a dark outer line beneath a light inner line) that remains legible against both
+  bright and dark backgrounds. Joints below confidence 0.4 are not drawn.</li>
+</ul>
+<h4>5.2.2 <code>MultiPersonPoseEstimator</code></h4>
+<p>
+Returns a list of keypoint arrays for up to <code>max_persons</code> (default 5) detected subjects, with
+per-person colour cycling in the overlay. The class is implemented and exercised by the
+<code>fyp2_multi_demo.py</code> demonstration script; integrating it into the main dashboard pipeline —
+which requires per-person feature buffers and independent state machines — is scheduled for FYP-2
+(Section 12).
+</p>
+
+<h3>5.3 Feature Extraction Module — <code>feature_extractor.py</code></h3>
+<p>
+Converts geometric keypoints into biomechanically meaningful quantities and maintains the temporal
+window. Two public entry points serve the two decision paths:
+</p>
+<ul>
+  <li><code>update(keypoints) → sequence | None</code> — appends the 51-dimensional vector for the current
+  frame to the bounded buffer and returns the full <code>(30, 51)</code> window once it is saturated. When
+  <code>keypoints</code> is <code>None</code> a zero vector is appended, so the temporal spacing of the buffer
+  remains physically correct across detection gaps.</li>
+  <li><code>get_rule_based_status(keypoints) → (status, confidence)</code> — evaluates the explainable state
+  machine on the current frame and updates the persistent fall and lying counters.</li>
+</ul>
+<p>
+The module maintains two <em>independent</em> previous-head-position variables,
+<code>_prev_head_y</code> (used for the neural feature vector) and <code>_prev_head_y_rule</code> (used by the
+rule engine). Keeping them separate ensures the rule path remains deterministic and auditable even
+though both derive from the same underlying measurement. The most recent angle and speed are cached
+in <code>_last_angle</code> and <code>_last_speed</code> for telemetry display.
+</p>
+<div class="note">
+<strong>Coordinate convention.</strong> Rule thresholds are expressed in pixels against a fixed
+<em>virtual</em> 640 × 480 frame. Normalised keypoints are multiplied back into this virtual space
+before the rules are applied, so a single set of thresholds behaves consistently across cameras of
+differing native resolution.
+</div>
+<p>
+A companion class, <code>TemporalFeatureProcessor</code>, supports the offline training path: it builds
+overlapping sequences with a stride of 5 frames, assigns each sequence a label by majority vote, and
+computes the mean and standard deviation used for feature standardisation.
+</p>
+
+<h3>5.4 Temporal Classification Models — <code>fall_detector_model.py</code></h3>
+<p>
+Three interchangeable PyTorch architectures share the identical tensor contract
+<code>(batch, 30, 51) → (batch, 3)</code> and are produced by the <code>create_model()</code> factory, which
+dispatches on <code>ModelConfig.architecture</code>. All three terminate in an attention or CLS-token
+pooling stage rather than naive last-hidden-state extraction, so the classifier can weight the frames
+that actually carry the fall signature.
+</p>
+<table>
+  <tr><th style="width:20%">Architecture</th><th style="width:38%">Structure</th><th>Design trade-off</th></tr>
+  <tr><td><code>FallDetectorLSTM</code></td><td>2-layer bidirectional LSTM (hidden 128) → additive attention pooling → 3-layer MLP head.</td><td>Baseline. Models temporal order well but treats the 51 input dimensions as an unstructured vector, ignoring spatial relationships between joints.</td></tr>
+  <tr><td><code>FallDetectorCNNLSTM</code><br><strong>(default)</strong></td><td>1-D CNN stack (64 then 128 channels, kernel 3, each with BatchNorm + ReLU + dropout) applied across the temporal axis → bidirectional LSTM → attention pooling → MLP head with BatchNorm.</td><td><strong>Selected.</strong> The convolutional front-end learns local joint-motion patterns before the LSTM models longer-range progression, giving the best accuracy-per-millisecond balance for edge hardware.</td></tr>
+  <tr><td><code>FallDetectorTransformer</code></td><td>Linear projection + LayerNorm → sinusoidal positional encoding → 2 encoder layers (4 heads, GELU) with a prepended CLS token → classification head.</td><td>Strongest long-range modelling via self-attention, but higher compute cost and a greater tendency to overfit the modest keypoint dataset available at FYP-1 scale.</td></tr>
+</table>
+<p>
+The module additionally provides <code>count_parameters()</code> for model-size reporting and
+<code>export_to_onnx()</code>, which traces the network with a dummy <code>(1, 30, 51)</code> input and a dynamic
+batch axis, producing an opset-13 graph for future runtime-optimised deployment.
+</p>
+
+<h3>5.5 Hybrid Decision Engine — <code>inference.py</code></h3>
+<p>
+<code>FallDetectionInference</code> is the pipeline orchestrator and the only class aware of the end-to-end
+sequence. It composes the pose estimator, feature extractor, neural model and alert system, and owns
+the smoothing history.
+</p>
+<h4>Model loading with graceful fallback</h4>
+<p>
+<code>_load_model()</code> implements a deliberate resolution order: it first probes for
+<code>fall_detector_best.pth</code> — the checkpoint written by the training loop at its best validation
+epoch — in the directory of the configured model path, falling back to the configured filename
+itself. If no checkpoint exists, or if loading raises for any reason (architecture mismatch, corrupt
+file), the method logs a warning and returns <code>None</code>. The system then runs in pure rule-based mode.
+This satisfies the reliability requirement that a missing model must never produce an uncaught
+exception, and it is what allows the MVP to be demonstrated on a machine that has never run training.
+</p>
+<h4>Frame processing</h4>
+<p>
+<code>process_frame()</code> executes stages 2–9 of Figure 4.1 and returns a dictionary containing the
+status, confidence percentage, person count and the annotated frame. It also refreshes
+<code>_current_summary</code>, the telemetry snapshot served by the <code>/status</code> endpoint. The alert
+system is invoked only when the smoothed status is <code>fall</code> <em>and</em> confidence exceeds
+<code>SystemConfig.confidence_threshold</code> (0.7), providing a final gate above the fusion logic.
+</p>
+<h4>Heads-up display</h4>
+<p>
+<code>_draw_hud()</code> composites three overlay groups onto the frame: a status box (colour-coded green,
+amber or red), a telemetry panel showing body angle, drop speed and a derived stability bar, and a
+rolling FPS counter computed from a 30-sample timestamp window. Rendering the raw biomechanical
+values — not merely the verdict — directly onto the video is the primary Explainable-AI affordance of
+the system.
+</p>
+
+<h3>5.6 Alert and Notification Subsystem — <code>alert_system.py</code></h3>
+<p>
+<code>AlertSystem</code> centralises all outbound notification. A single public method,
+<code>trigger_alert(status, confidence, frame, person_id)</code>, fans out to every enabled channel and
+returns a boolean indicating whether the alert fired or was suppressed by the cooldown.
+</p>
+<table>
+  <tr><th style="width:20%">Channel</th><th style="width:14%">Execution</th><th>Design notes</th></tr>
+  <tr><td>Console</td><td>Synchronous</td><td>ANSI colour-coded banner. Negligible cost; kept inline so it is guaranteed to appear before any threaded channel.</td></tr>
+  <tr><td>On-screen popup</td><td>Daemon thread</td><td>A full-colour OpenCV window displayed for <code>popup_duration_ms</code> (default 3000 ms) then destroyed. Threaded because <code>cv2.waitKey()</code> blocks for the full duration.</td></tr>
+  <tr><td>Audible buzzer</td><td>Daemon thread</td><td>A three-tone pattern (1000 Hz, 1500 Hz, 1000 Hz at 200 ms each) via <code>winsound</code> on Windows, degrading to terminal bells elsewhere. Threaded because <code>winsound.Beep()</code> blocks for roughly 600 ms — long enough to visibly stall the video pipeline if executed inline.</td></tr>
+  <tr><td>OS notification</td><td>Daemon thread</td><td>A native desktop toast raised through <code>plyer</code>, ensuring an alert is seen even when the browser dashboard is closed or the operator is working in another application. Failures are caught and logged rather than propagated.</td></tr>
+  <tr><td>E-mail (optional)</td><td>Daemon thread</td><td>HTML message with the captured JPEG attached, sent over SMTP with STARTTLS. Disabled by default; silently skipped when no sender or recipient is configured.</td></tr>
+  <tr><td>JSON event log</td><td>Synchronous</td><td>Appends a structured record to the current day's log file and rewrites it atomically. Kept synchronous so the audit trail cannot lose an event to a race.</td></tr>
+</table>
+<h4>Alert governance</h4>
+<ul>
+  <li><strong>Cooldown.</strong> A single <code>_last_alert_time</code> gate enforces <code>alert_cooldown_seconds</code>
+  (default 30 s) across <em>all</em> channels collectively, preventing a sustained fall state from
+  generating a continuous stream of notifications.</li>
+  <li><strong>Mute.</strong> <code>set_muted()</code> suppresses the buzzer, popup and OS notification while
+  deliberately leaving console output and JSON logging active — so muting the demonstration
+  environment never compromises the evidentiary record.</li>
+  <li><strong>Frame capture.</strong> When a frame is supplied, a JPEG is written to
+  <code>logs/captures/fall_&lt;id&gt;_&lt;HHMMSS&gt;.jpg</code> and its path is recorded in the event.</li>
+  <li><strong>Log continuity.</strong> On construction the system reloads the current day's log file, so
+  restarting the application preserves rather than truncates the day's event history.</li>
+</ul>
+
+<h3>5.7 Web API and Dashboard — <code>api_server.py</code>, <code>static/</code></h3>
+<p>
+The Flask application exposes the pipeline over HTTP. The detector is created lazily by
+<code>get_detector()</code> on first use, so process start-up is fast and model loading is deferred until a
+client actually connects.
+</p>
+<ul>
+  <li><strong>Streaming.</strong> <code>generate_frames()</code> is a Python generator yielding
+  <code>multipart/x-mixed-replace</code> JPEG parts. Each iteration performs one full detection cycle, so the
+  stream and the detection loop are the same loop — there is no duplicated inference.</li>
+  <li><strong>Camera resilience.</strong> Read failures increment a counter and retry briefly; after 15
+  consecutive failures the capture handle is released, the process pauses one second, and the device
+  is reopened. A <code>finally</code> block guarantees the handle is released when a client disconnects, so a
+  paused-then-resumed feed can always reacquire the device.</li>
+  <li><strong>Concurrency.</strong> The server runs with <code>threaded=True</code> so that the long-lived MJPEG
+  response cannot starve the concurrent <code>/status</code> polling requests. The Werkzeug auto-reloader is
+  explicitly disabled (<code>use_reloader=False</code>) because reloader restarts tear down the camera handle
+  and model mid-stream.</li>
+  <li><strong>Front-end.</strong> <code>app.js</code> polls <code>/status</code> every 500 ms and updates the status card,
+  telemetry tiles, event list and connection indicators. The video element consumes the MJPEG endpoint
+  directly, so no frame data passes through JavaScript.</li>
+</ul>
+
+<h3>5.8 Training and Dataset Subsystem — <code>train.py</code>, <code>dataset.py</code></h3>
+<p>
+This subsystem is offline: it produces the checkpoint the inference path consumes, and does not
+execute during live monitoring.
+</p>
+<ul>
+  <li><code>dataset.py</code> defines the canonical label mapping (<code>normal</code>=0, <code>warning</code>=1,
+  <code>fall</code>=2), extracts frames from source videos at a target frame rate, runs them through the same
+  <code>PoseEstimator</code> and <code>FeatureExtractor</code> used at inference time — guaranteeing train/serve
+  feature parity — and emits PyTorch <code>Dataset</code> objects. A <code>WeightedRandomSampler</code> compensates
+  for the natural scarcity of fall examples.</li>
+  <li><code>train.py</code> implements the training loop with class-weighted cross-entropy
+  (<code>[1.0, 2.0, 3.0]</code>, penalising missed falls most heavily), learning-rate scheduling on plateau,
+  early stopping with patience 15, best-checkpoint retention, and ONNX export.</li>
+  <li>A synthetic data generator allows the full pipeline to be exercised end-to-end without a labelled
+  video corpus, which is what makes <code>python main.py demo</code> runnable on any machine.</li>
+</ul>
+
+<h3>5.9 Class Model</h3>
+<p>
+Figure 5.1 shows the principal classes, their key members, and their composition relationships.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 740 468" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="diamond" markerWidth="14" markerHeight="10" refX="1" refY="5" orient="auto">
+      <path d="M1,5 L6,2 L11,5 L6,8 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="ar5" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- FallDetectionInference (center-left) -->
+  <rect x="14" y="150" width="200" height="150" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <rect x="14" y="150" width="200" height="24" rx="4" fill="#7c3aed"/>
+  <text x="114" y="167" font-size="10.5" text-anchor="middle" font-weight="600" fill="#ffffff">FallDetectionInference</text>
+  <line x1="14" y1="174" x2="214" y2="174" stroke="#7c3aed"/>
+  <text x="22" y="188" font-size="8" fill="#334155">− config : SystemConfig</text>
+  <text x="22" y="200" font-size="8" fill="#334155">− device : torch.device</text>
+  <text x="22" y="212" font-size="8" fill="#334155">− model : nn.Module | None</text>
+  <text x="22" y="224" font-size="8" fill="#334155">− _status_history : deque(10)</text>
+  <line x1="14" y1="232" x2="214" y2="232" stroke="#c4b5fd"/>
+  <text x="22" y="246" font-size="8" fill="#0f172a">+ process_frame(frame) : dict</text>
+  <text x="22" y="258" font-size="8" fill="#0f172a">+ run_on_video(source)</text>
+  <text x="22" y="270" font-size="8" fill="#0f172a">+ get_detection_result() : dict</text>
+  <text x="22" y="282" font-size="8" fill="#64748b">− _fuse_predictions(...)</text>
+  <text x="22" y="294" font-size="8" fill="#64748b">− _smooth_predictions(...)</text>
+
+  <!-- PoseEstimator -->
+  <rect x="286" y="20" width="196" height="96" rx="4" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.6"/>
+  <rect x="286" y="20" width="196" height="22" rx="4" fill="#8b5cf6"/>
+  <text x="384" y="36" font-size="10" text-anchor="middle" font-weight="600" fill="#ffffff">PoseEstimator</text>
+  <line x1="286" y1="42" x2="482" y2="42" stroke="#8b5cf6"/>
+  <text x="294" y="56" font-size="8" fill="#334155">− model : YOLO</text>
+  <text x="294" y="68" font-size="8" fill="#334155">− _prev_landmarks</text>
+  <text x="294" y="80" font-size="8" fill="#334155">− _max_lost_frames = 10</text>
+  <line x1="286" y1="86" x2="482" y2="86" stroke="#ddd6fe"/>
+  <text x="294" y="100" font-size="8" fill="#0f172a">+ process_frame(f) : (kp, img)</text>
+  <text x="294" y="111" font-size="8" fill="#0f172a">+ get_bounding_box(...)</text>
+
+  <!-- FeatureExtractor -->
+  <rect x="286" y="132" width="196" height="106" rx="4" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.6"/>
+  <rect x="286" y="132" width="196" height="22" rx="4" fill="#8b5cf6"/>
+  <text x="384" y="148" font-size="10" text-anchor="middle" font-weight="600" fill="#ffffff">FeatureExtractor</text>
+  <line x1="286" y1="154" x2="482" y2="154" stroke="#8b5cf6"/>
+  <text x="294" y="168" font-size="8" fill="#334155">− keypoint_buffer : deque(30)</text>
+  <text x="294" y="180" font-size="8" fill="#334155">− _fall_counter, _lying_counter</text>
+  <text x="294" y="192" font-size="8" fill="#334155">− _last_angle, _last_speed</text>
+  <line x1="286" y1="198" x2="482" y2="198" stroke="#ddd6fe"/>
+  <text x="294" y="212" font-size="8" fill="#0f172a">+ update(kp) : ndarray | None</text>
+  <text x="294" y="224" font-size="8" fill="#0f172a">+ get_rule_based_status(kp)</text>
+  <text x="294" y="235" font-size="8" fill="#0f172a">+ reset()</text>
+
+  <!-- Model -->
+  <rect x="286" y="254" width="196" height="86" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <rect x="286" y="254" width="196" height="22" rx="4" fill="#059669"/>
+  <text x="384" y="270" font-size="10" text-anchor="middle" font-weight="600" fill="#ffffff">FallDetectorCNNLSTM</text>
+  <line x1="286" y1="276" x2="482" y2="276" stroke="#059669"/>
+  <text x="294" y="290" font-size="8" fill="#334155">− cnn : Sequential(64→128)</text>
+  <text x="294" y="302" font-size="8" fill="#334155">− lstm : BiLSTM(128 × 2)</text>
+  <text x="294" y="314" font-size="8" fill="#334155">− attention, classifier</text>
+  <line x1="286" y1="320" x2="482" y2="320" stroke="#a7f3d0"/>
+  <text x="294" y="334" font-size="8" fill="#0f172a">+ forward(x) : logits</text>
+
+  <!-- AlertSystem -->
+  <rect x="286" y="356" width="196" height="102" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <rect x="286" y="356" width="196" height="22" rx="4" fill="#dc2626"/>
+  <text x="384" y="372" font-size="10" text-anchor="middle" font-weight="600" fill="#ffffff">AlertSystem</text>
+  <line x1="286" y1="378" x2="482" y2="378" stroke="#dc2626"/>
+  <text x="294" y="392" font-size="8" fill="#334155">− _last_alert_time, _alert_count</text>
+  <text x="294" y="404" font-size="8" fill="#334155">− _muted : bool</text>
+  <text x="294" y="416" font-size="8" fill="#334155">− _events : list[dict]</text>
+  <line x1="286" y1="422" x2="482" y2="422" stroke="#fecaca"/>
+  <text x="294" y="436" font-size="8" fill="#0f172a">+ trigger_alert(...) : bool</text>
+  <text x="294" y="448" font-size="8" fill="#0f172a">+ set_muted(b) · get_event_summary()</text>
+
+  <!-- SystemConfig -->
+  <rect x="536" y="150" width="190" height="150" rx="4" fill="#f1f5f9" stroke="#475569" stroke-width="1.6"/>
+  <rect x="536" y="150" width="190" height="22" rx="4" fill="#475569"/>
+  <text x="631" y="166" font-size="10" text-anchor="middle" font-weight="600" fill="#ffffff">SystemConfig</text>
+  <line x1="536" y1="172" x2="726" y2="172" stroke="#475569"/>
+  <text x="544" y="186" font-size="8" fill="#334155">+ pose : PoseConfig</text>
+  <text x="544" y="198" font-size="8" fill="#334155">+ features : FeatureConfig</text>
+  <text x="544" y="210" font-size="8" fill="#334155">+ model : ModelConfig</text>
+  <text x="544" y="222" font-size="8" fill="#334155">+ camera : CameraConfig</text>
+  <text x="544" y="234" font-size="8" fill="#334155">+ alert : AlertConfig</text>
+  <text x="544" y="246" font-size="8" fill="#334155">+ device = "auto"</text>
+  <text x="544" y="258" font-size="8" fill="#334155">+ confidence_threshold = 0.7</text>
+  <line x1="536" y1="264" x2="726" y2="264" stroke="#cbd5e1"/>
+  <text x="544" y="278" font-size="8" fill="#0f172a">+ get_device() : str</text>
+  <text x="544" y="290" font-size="8" fill="#64748b">− __post_init__() → abs paths</text>
+
+  <!-- composition arrows -->
+  <line x1="214" y1="200" x2="284" y2="80" stroke="#7c3aed" stroke-width="1.5" marker-start="url(#diamond)"/>
+  <line x1="214" y1="212" x2="284" y2="186" stroke="#7c3aed" stroke-width="1.5" marker-start="url(#diamond)"/>
+  <line x1="214" y1="240" x2="284" y2="292" stroke="#7c3aed" stroke-width="1.5" marker-start="url(#diamond)"/>
+  <line x1="214" y1="262" x2="284" y2="400" stroke="#7c3aed" stroke-width="1.5" marker-start="url(#diamond)"/>
+
+  <!-- config dependency -->
+  <line x1="534" y1="225" x2="216" y2="225" stroke="#64748b" stroke-width="1.3" stroke-dasharray="4,3" marker-end="url(#ar5)"/>
+  <text x="360" y="220" font-size="8" text-anchor="middle" fill="#64748b">« injects »</text>
+
+  <text x="238" y="130" font-size="8" fill="#7c3aed">1</text>
+  <text x="238" y="198" font-size="8" fill="#7c3aed">1</text>
+  <text x="238" y="266" font-size="8" fill="#7c3aed">0..1</text>
+  <text x="238" y="292" font-size="8" fill="#7c3aed">1</text>
+</svg>
+<div class="fig-cap">Figure 5.1 — Class model. Filled diamonds denote composition: <code>FallDetectionInference</code> owns the lifecycle of each collaborator. The neural model has multiplicity 0..1, reflecting the rule-only fallback mode.</div>
+</div>
+
+<!-- ============ 6. DATA DESIGN ============ -->
+
+<h2>6. Data Design</h2>
+
+<h3>6.1 Keypoint Representation</h3>
+<p>
+YOLOv8-Pose emits 17 COCO-format keypoints per detected person. GuardianAI retains the 13 that carry
+fall-relevant information, discarding the four facial landmarks (eyes and ears) which add noise
+without contributing to postural analysis.
+</p>
+<table>
+  <tr><th style="width:14%">Array index</th><th style="width:16%">YOLO index</th><th style="width:26%">Joint</th><th>Role in detection</th></tr>
+  <tr><td>0</td><td>0</td><td>Nose</td><td>Head reference point for orientation angle, drop speed and ground proximity.</td></tr>
+  <tr><td>1–2</td><td>5, 6</td><td>Left / right shoulder</td><td>Upper-torso extent; contributes to bounding-box aspect ratio.</td></tr>
+  <tr><td>3–4</td><td>7, 8</td><td>Left / right elbow</td><td>Limb extent.</td></tr>
+  <tr><td>5–6</td><td>9, 10</td><td>Left / right wrist</td><td>Limb extent; bracing gestures.</td></tr>
+  <tr><td>7–8</td><td>11, 12</td><td>Left / right hip</td><td><strong>Torso centre.</strong> The midpoint of these two joints is the lower anchor of the body-orientation vector (Section 9.1).</td></tr>
+  <tr><td>9–10</td><td>13, 14</td><td>Left / right knee</td><td>Lower-body posture.</td></tr>
+  <tr><td>11–12</td><td>15, 16</td><td>Left / right ankle</td><td>Ground contact reference; vertical extent.</td></tr>
+</table>
+<p>
+Each keypoint is stored as <code>[x, y, confidence]</code> with <code>x</code> and <code>y</code> normalised to
+<code>[0, 1]</code> against frame width and height, giving a <code>(13, 3)</code> <code>float32</code> array per person
+per frame.
+</p>
+
+<h3>6.2 Feature Vector Composition</h3>
+<p>
+Each frame is encoded as a 51-dimensional vector formed by concatenating the flattened raw keypoints
+with the engineered biomechanical features.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 720 208" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <!-- raw block -->
+  <rect x="20" y="46" width="340" height="46" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.6"/>
+  <text x="190" y="66" font-size="10.5" text-anchor="middle" font-weight="600" fill="#1e40af">Raw keypoints — 39 dimensions</text>
+  <text x="190" y="82" font-size="8.5" text-anchor="middle" fill="#475569">13 joints × (x, y, confidence), flattened</text>
+  <text x="26" y="40" font-size="8" fill="#64748b">index 0</text>
+  <text x="336" y="40" font-size="8" fill="#64748b">38</text>
+
+  <!-- engineered block -->
+  <rect x="366" y="46" width="150" height="46" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6"/>
+  <text x="441" y="66" font-size="10.5" text-anchor="middle" font-weight="600" fill="#5b21b6">Engineered — 5</text>
+  <text x="441" y="82" font-size="8.5" text-anchor="middle" fill="#475569">biomechanical</text>
+  <text x="370" y="40" font-size="8" fill="#64748b">39</text>
+  <text x="504" y="40" font-size="8" fill="#64748b">43</text>
+
+  <!-- reserved block -->
+  <rect x="522" y="46" width="178" height="46" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5,3"/>
+  <text x="611" y="66" font-size="10.5" text-anchor="middle" font-weight="600" fill="#475569">Reserved — 7</text>
+  <text x="611" y="82" font-size="8.5" text-anchor="middle" fill="#64748b">zero-padded, FYP-2</text>
+  <text x="526" y="40" font-size="8" fill="#64748b">44</text>
+  <text x="686" y="40" font-size="8" fill="#64748b">50</text>
+
+  <!-- brace -->
+  <path d="M 20 100 L 20 108 L 700 108 L 700 100" fill="none" stroke="#334155" stroke-width="1.2"/>
+  <text x="360" y="124" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">51-dimensional frame feature vector → ModelConfig.input_size</text>
+
+  <!-- engineered detail -->
+  <rect x="180" y="146" width="372" height="50" rx="4" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.2"/>
+  <text x="366" y="162" font-size="9" text-anchor="middle" font-weight="600" fill="#5b21b6">Engineered features (indices 39–43)</text>
+  <text x="192" y="177" font-size="8" fill="#334155">39 · body angle ÷ 180 &nbsp;&nbsp; 40 · head y (norm) &nbsp;&nbsp; 41 · head velocity ÷ 100</text>
+  <text x="192" y="189" font-size="8" fill="#334155">42 · aspect ratio (clipped) &nbsp;&nbsp; 43 · normalised body height</text>
+  <line x1="441" y1="92" x2="400" y2="144" stroke="#a78bfa" stroke-width="1.1" stroke-dasharray="3,2"/>
+</svg>
+<div class="fig-cap">Figure 6.1 — Feature vector layout. Seven dimensions are intentionally reserved and zero-filled so additional engineered features can be introduced in FYP-2 without altering the network input shape or invalidating existing checkpoints.</div>
+</div>
+
+<h3>6.3 Temporal Sequence Buffer</h3>
+<p>
+Frame vectors accumulate in a <code>collections.deque</code> bounded at <code>sequence_length = 30</code>,
+representing roughly one second of motion at 30 fps. The bounded deque provides O(1) append with
+automatic eviction of the oldest frame, which is exactly the sliding-window semantics required and
+avoids any explicit array shifting.
+</p>
+<ul>
+  <li><strong>Warm-up.</strong> Until 30 frames are buffered, <code>update()</code> returns <code>None</code> and the
+  neural path is bypassed; the rule engine carries detection alone.</li>
+  <li><strong>Gap handling.</strong> Frames with no detected person contribute a zero vector rather than being
+  skipped, preserving the real-time spacing of the window.</li>
+  <li><strong>Training stride.</strong> Offline sequence generation advances by <code>stride = 5</code> frames,
+  producing overlapping windows that multiply the effective dataset size while retaining temporal
+  diversity.</li>
+</ul>
+
+<h3>6.4 Event Log Schema</h3>
+<p>
+Events are appended to a per-day file <code>logs/fall_events_YYYYMMDD.json</code> containing a JSON array
+of records. Daily partitioning keeps files small enough to open and review during a demonstration and
+gives a natural retention boundary.
+</p>
+<pre>[
+  {
+    "status":     "fall",              // "warning" | "fall"
+    "confidence": 94.3,                // percentage, 2 dp
+    "timestamp":  "2026-07-26T00:32:33.915502",   // ISO-8601, local
+    "person_id":  0                    // reserved for multi-person (FYP-2)
+  }
+]</pre>
+<p>
+The richer in-memory event record additionally carries <code>event_id</code> and
+<code>frame_capture</code> (the JPEG path). The persisted schema is deliberately narrower — a stable,
+minimal, machine-readable contract for downstream analysis.
+</p>
+
+<h3>6.5 Persistent Artefacts</h3>
+<table>
+  <tr><th style="width:28%">Artefact</th><th style="width:20%">Format</th><th>Purpose and lifecycle</th></tr>
+  <tr><td><code>yolov8n-pose.pt</code></td><td>PyTorch weights</td><td>Pre-trained pose model, read-only, shipped with the project.</td></tr>
+  <tr><td><code>models/fall_detector_best.pth</code></td><td>PyTorch checkpoint</td><td>Best-validation-epoch weights written by training; auto-discovered at inference.</td></tr>
+  <tr><td><code>models/fall_detector.onnx</code></td><td>ONNX graph</td><td>Optional export for optimised runtimes. Not required by the live pipeline.</td></tr>
+  <tr><td><code>logs/fall_events_*.json</code></td><td>JSON array</td><td>Append-only audit trail, one file per day.</td></tr>
+  <tr><td><code>logs/captures/*.jpg</code></td><td>JPEG</td><td>One frame per confirmed alert — the only video-derived data written to disk.</td></tr>
+  <tr><td><code>data/processed/*.npz</code></td><td>NumPy archive</td><td>Preprocessed training sequences and normalisation statistics.</td></tr>
+</table>
+<div class="note">
+<strong>Privacy by design.</strong> No continuous video is recorded at any point. The only imagery that
+reaches persistent storage is a single JPEG per alert event, retained locally so that a caregiver can
+verify the incident.
+</div>
+
+<!-- ============ 7. INTERFACE DESIGN ============ -->
+
+<h2>7. Interface Design</h2>
+
+<h3>7.1 REST API Contract</h3>
+<p>
+The Flask application exposes the following HTTP interface on port 5000. All JSON responses use
+<code>application/json</code>; error conditions return an <code>{"error": "..."}</code> body with an
+appropriate status code.
+</p>
+<table>
+  <tr><th style="width:9%">Method</th><th style="width:20%">Route</th><th style="width:30%">Purpose</th><th>Response</th></tr>
+  <tr><td>GET</td><td><code>/</code></td><td>Serve the dashboard single-page application.</td><td><code>text/html</code></td></tr>
+  <tr><td>GET</td><td><code>/static/&lt;path&gt;</code></td><td>Serve CSS and JavaScript assets.</td><td>Static file</td></tr>
+  <tr><td>GET</td><td><code>/video_feed</code></td><td>Continuous annotated video stream. Each part is a fully processed frame with skeleton and HUD.</td><td><code>multipart/x-mixed-replace; boundary=frame</code></td></tr>
+  <tr><td>GET</td><td><code>/health</code></td><td>Liveness probe; reports whether the neural checkpoint loaded.</td><td><code>{status, model_loaded, timestamp}</code></td></tr>
+  <tr><td>GET</td><td><code>/status</code></td><td>Primary telemetry endpoint, polled by the dashboard every 500 ms.</td><td><code>{current_status, event_summary, camera_connected, alerts_muted}</code></td></tr>
+  <tr><td>POST</td><td><code>/detect</code></td><td>Stateless single-frame inference. Accepts <code>multipart/form-data</code> with an <code>image</code> file, or JSON with a base64 <code>image</code> field.</td><td><code>{status, confidence, keypoints_detected, processing_time_ms}</code></td></tr>
+  <tr><td>POST</td><td><code>/detect/batch</code></td><td>Sequence inference over an ordered list of base64 frames, enabling true temporal classification on uploaded clips.</td><td><code>{results[], final_status, final_confidence, num_frames, processing_time_ms}</code></td></tr>
+  <tr><td>POST</td><td><code>/alerts/mute</code></td><td>Toggle or explicitly set alert muting. Body <code>{}</code> toggles; <code>{"muted": bool}</code> sets.</td><td><code>{muted}</code></td></tr>
+  <tr><td>POST</td><td><code>/reset</code></td><td>Clear the feature buffer and smoothing history without restarting the process.</td><td><code>{message}</code></td></tr>
+</table>
+
+<h4>Representative <code>/status</code> payload</h4>
+<pre>{
+  "current_status": {
+    "status":       "normal",     // normal | warning | fall
+    "confidence":   100.0,        // percentage
+    "person_count": 1,
+    "angle":        87.5,         // degrees — XAI evidence
+    "speed":        0.0           // px/frame — XAI evidence
+  },
+  "event_summary": {
+    "total_events": 3,
+    "falls":        1,
+    "warnings":     2,
+    "log_file":     "logs/fall_events_20260726.json"
+  },
+  "camera_connected": true,
+  "alerts_muted":     false
+}</pre>
+<p>
+The <code>angle</code> and <code>speed</code> fields are the explainability contract: any client can display the
+physical evidence behind a verdict without re-deriving it. The <code>camera_connected</code> and
+<code>alerts_muted</code> fields let the dashboard reflect true system state rather than optimistic
+hard-coded indicators.
+</p>
+
+<h3>7.2 User Interface Design</h3>
+<p>
+The dashboard is a single responsive page using a two-column layout: a primary video region and a
+secondary telemetry column, over a persistent left navigation rail.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <rect x="10" y="10" width="680" height="310" rx="8" fill="#0c0e14" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- sidebar -->
+  <rect x="10" y="10" width="128" height="310" rx="8" fill="#151821"/>
+  <circle cx="34" cy="40" r="11" fill="#4e7cfe"/>
+  <text x="52" y="45" font-size="11" font-weight="600" fill="#f5f6fa">GuardianAI</text>
+  <rect x="22" y="70" width="104" height="24" rx="5" fill="#1e3a8a"/>
+  <text x="34" y="86" font-size="9" fill="#93c5fd">▣ Monitoring</text>
+  <text x="34" y="112" font-size="9" fill="#475569">▤ Event Log</text>
+  <text x="34" y="134" font-size="9" fill="#475569">⚙ Settings</text>
+  <text x="34" y="148" font-size="6.5" fill="#64748b">(disabled — FYP-2)</text>
+  <rect x="22" y="252" width="104" height="52" rx="6" fill="#0f172a"/>
+  <text x="32" y="270" font-size="7.5" fill="#a4b0be">System</text>
+  <text x="104" y="270" font-size="7.5" text-anchor="end" fill="#2ed573">Online</text>
+  <text x="32" y="290" font-size="7.5" fill="#a4b0be">Detection</text>
+  <text x="112" y="290" font-size="7.5" text-anchor="end" fill="#4e7cfe">Active</text>
+
+  <!-- header -->
+  <text x="154" y="38" font-size="13" font-weight="600" fill="#f5f6fa">Live Monitoring Dashboard</text>
+  <text x="154" y="52" font-size="7.5" fill="#a4b0be">FYP-1 Demonstration Mode</text>
+
+  <!-- video card -->
+  <rect x="154" y="66" width="330" height="240" rx="8" fill="#191d29" stroke="#2d3748"/>
+  <text x="166" y="86" font-size="9" font-weight="600" fill="#f5f6fa">Real-Time Camera Feed</text>
+  <rect x="374" y="76" width="30" height="13" rx="3" fill="#ff4757"/>
+  <text x="389" y="86" font-size="6.5" text-anchor="middle" fill="#ffffff">LIVE</text>
+  <rect x="408" y="76" width="32" height="13" rx="3" fill="#252b3b" stroke="#3d4457"/>
+  <text x="424" y="86" font-size="6" text-anchor="middle" fill="#e2e8f0">🔔 Mute</text>
+  <rect x="444" y="76" width="32" height="13" rx="3" fill="#252b3b" stroke="#3d4457"/>
+  <text x="460" y="86" font-size="6" text-anchor="middle" fill="#e2e8f0">⏸ Pause</text>
+
+  <rect x="166" y="96" width="306" height="198" rx="6" fill="#000000"/>
+  <!-- mock skeleton -->
+  <circle cx="300" cy="150" r="9" fill="none" stroke="#4e7cfe" stroke-width="1.4"/>
+  <line x1="300" y1="159" x2="300" y2="200" stroke="#e2e8f0" stroke-width="1.4"/>
+  <line x1="300" y1="170" x2="278" y2="188" stroke="#e2e8f0" stroke-width="1.4"/>
+  <line x1="300" y1="170" x2="322" y2="188" stroke="#e2e8f0" stroke-width="1.4"/>
+  <line x1="300" y1="200" x2="284" y2="234" stroke="#e2e8f0" stroke-width="1.4"/>
+  <line x1="300" y1="200" x2="316" y2="234" stroke="#e2e8f0" stroke-width="1.4"/>
+  <!-- HUD status box -->
+  <rect x="174" y="104" width="104" height="30" rx="3" fill="#000000" stroke="#1f2937"/>
+  <text x="181" y="117" font-size="7.5" font-weight="600" fill="#2ed573">STATUS: NORMAL</text>
+  <text x="181" y="129" font-size="6.5" fill="#e2e8f0">CONF: 99.0%</text>
+  <!-- telemetry panel -->
+  <rect x="374" y="140" width="88" height="66" rx="3" fill="#14161f" stroke="#374151"/>
+  <text x="418" y="153" font-size="6.5" text-anchor="middle" fill="#cbd5e1">TELEMETRY</text>
+  <text x="382" y="170" font-size="6.5" fill="#f5f6fa">ANGLE: 87.5°</text>
+  <text x="382" y="184" font-size="6.5" fill="#f5f6fa">SPEED: 0.0 px/f</text>
+  <rect x="382" y="192" width="72" height="5" rx="2" fill="#252b3b"/>
+  <rect x="382" y="192" width="60" height="5" rx="2" fill="#ff9600"/>
+  <text x="440" y="116" font-size="7" fill="#2ed573">FPS: 27</text>
+
+  <!-- right column -->
+  <rect x="496" y="66" width="184" height="72" rx="8" fill="#16203a" stroke="#1e3a8a"/>
+  <text x="508" y="84" font-size="6.5" fill="#a4b0be">CURRENT STATUS</text>
+  <text x="508" y="106" font-size="17" font-weight="700" fill="#f5f6fa">NORMAL</text>
+  <rect x="508" y="114" width="160" height="5" rx="2" fill="#252b3b"/>
+  <rect x="508" y="114" width="158" height="5" rx="2" fill="#4e7cfe"/>
+  <text x="508" y="131" font-size="6.5" fill="#a4b0be">Confidence: 99%</text>
+
+  <rect x="496" y="148" width="88" height="46" rx="6" fill="#191d29" stroke="#2d3748"/>
+  <text x="508" y="165" font-size="6.5" fill="#a4b0be">Persons</text>
+  <text x="508" y="183" font-size="13" font-weight="700" fill="#f5f6fa">1</text>
+  <rect x="592" y="148" width="88" height="46" rx="6" fill="#191d29" stroke="#2d3748"/>
+  <text x="604" y="165" font-size="6.5" fill="#a4b0be">Body Angle</text>
+  <text x="604" y="183" font-size="13" font-weight="700" fill="#f5f6fa">87.5°</text>
+  <rect x="496" y="202" width="88" height="46" rx="6" fill="#191d29" stroke="#2d3748"/>
+  <text x="508" y="219" font-size="6.5" fill="#a4b0be">Drop Speed</text>
+  <text x="508" y="237" font-size="13" font-weight="700" fill="#f5f6fa">0.0</text>
+  <rect x="592" y="202" width="88" height="46" rx="6" fill="#241a1d" stroke="#7f1d1d"/>
+  <text x="604" y="219" font-size="6.5" fill="#a4b0be">Falls</text>
+  <text x="604" y="237" font-size="13" font-weight="700" fill="#ff4757">0</text>
+
+  <rect x="496" y="256" width="184" height="50" rx="8" fill="#191d29" stroke="#2d3748"/>
+  <text x="508" y="273" font-size="8" font-weight="600" fill="#f5f6fa">Significant Events</text>
+  <rect x="506" y="280" width="164" height="18" rx="3" fill="#1f2430"/>
+  <rect x="506" y="280" width="2.5" height="18" fill="#ffa502"/>
+  <text x="514" y="292" font-size="6.5" fill="#e2e8f0">WARNING</text>
+  <text x="664" y="292" font-size="6" text-anchor="end" fill="#a4b0be">10:24:31 · 82%</text>
+</svg>
+<div class="fig-cap">Figure 7.1 — Dashboard layout (Monitoring view). Telemetry appears twice by design: burned into the video frame as the HUD, and as DOM elements driven by <code>/status</code> polling.</div>
+</div>
+
+<table>
+  <tr><th style="width:26%">UI element</th><th>Behaviour and design rationale</th></tr>
+  <tr><td>Status card</td><td>Displays the smoothed verdict with a confidence bar. Background gradient shifts blue → amber → red with severity, giving a pre-attentive signal readable across a room.</td></tr>
+  <tr><td>Telemetry tiles</td><td>Persons, body angle, drop speed and cumulative falls, refreshed twice per second from <code>/status</code>.</td></tr>
+  <tr><td>Pause / Resume</td><td>Detaches the <code>&lt;img&gt;</code> source, closing the MJPEG connection. Because detection runs inside the streaming generator, this halts processing and therefore all alerts — the mechanism by which a demonstration can be silenced instantly.</td></tr>
+  <tr><td>Mute / Unmute</td><td>Calls <code>/alerts/mute</code>. Suppresses buzzer, popup and OS notification server-side while video and logging continue, so the operator can observe detection without audible disruption.</td></tr>
+  <tr><td>System / Detection indicators</td><td>Bound to real state: <em>System</em> reflects reachability of the API; <em>Detection</em> shows Active, Paused or No Camera derived from <code>camera_connected</code>.</td></tr>
+  <tr><td>Significant Events</td><td>Client-side rolling list (capped at 20) appended on every transition away from <code>normal</code>.</td></tr>
+  <tr><td>Event Log / Settings</td><td>Presented but disabled, with a tooltip marking them as FYP-2 scope — an intentional signal of planned scope rather than a broken control.</td></tr>
+</table>
+
+<h3>7.3 Hardware Interface</h3>
+<table>
+  <tr><th style="width:24%">Interface</th><th>Specification</th></tr>
+  <tr><td>Camera</td><td>Any device enumerable by OpenCV — integrated webcam, USB camera, or IP/RTSP stream addressed by URL. Default source index 0, requested at 640 × 480 @ 30 fps.</td></tr>
+  <tr><td>Audio output</td><td>System default device, driven through <code>winsound.Beep()</code> on Windows. No dedicated sound hardware or audio file is required.</td></tr>
+  <tr><td>Compute</td><td>x86-64 CPU minimum. A CUDA-capable GPU is detected and used automatically when present, but is not required.</td></tr>
+  <tr><td>Network</td><td>Standard TCP/IP. Port 5000 for the dashboard; outbound 587 only if e-mail alerting is enabled.</td></tr>
+</table>
+
+<!-- ============ 8. BEHAVIOURAL DESIGN ============ -->
+
+<h2>8. Behavioural Design</h2>
+
+<h3>8.1 Detection State Machine</h3>
+<p>
+The rule engine maintains an explicit three-state model with hysteresis provided by two persistent
+counters. Counters — rather than instantaneous thresholds — are what prevent a single noisy frame
+from producing an alert.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar6" markerWidth="10" markerHeight="10" refX="9" refY="3.2" orient="auto">
+      <path d="M0,0 L0,6.4 L9,3.2 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- start -->
+  <circle cx="52" cy="140" r="9" fill="#0f172a"/>
+  <line x1="61" y1="140" x2="94" y2="140" stroke="#475569" stroke-width="1.5" marker-end="url(#ar6)"/>
+
+  <!-- NORMAL -->
+  <ellipse cx="164" cy="140" rx="68" ry="38" fill="#dcfce7" stroke="#059669" stroke-width="2"/>
+  <text x="164" y="136" font-size="12" text-anchor="middle" font-weight="600" fill="#065f46">NORMAL</text>
+  <text x="164" y="152" font-size="7.5" text-anchor="middle" fill="#047857">angle ≥ 70°</text>
+
+  <!-- WARNING -->
+  <ellipse cx="380" cy="140" rx="68" ry="38" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="380" y="136" font-size="12" text-anchor="middle" font-weight="600" fill="#92400e">WARNING</text>
+  <text x="380" y="152" font-size="7.5" text-anchor="middle" fill="#a16207">unstable / lying</text>
+
+  <!-- FALL -->
+  <ellipse cx="598" cy="140" rx="68" ry="38" fill="#fee2e2" stroke="#dc2626" stroke-width="2.4"/>
+  <text x="598" y="136" font-size="12" text-anchor="middle" font-weight="600" fill="#991b1b">FALL</text>
+  <text x="598" y="152" font-size="7.5" text-anchor="middle" fill="#b91c1c">alert dispatched</text>
+
+  <!-- normal -> warning -->
+  <path d="M 232 130 Q 306 114 312 124" fill="none" stroke="#475569" stroke-width="1.5" marker-end="url(#ar6)"/>
+  <text x="286" y="96" font-size="8" text-anchor="middle" fill="#334155">angle &lt; 70°</text>
+  <text x="286" y="107" font-size="8" text-anchor="middle" fill="#334155">or lying ≥ 5 frames</text>
+
+  <!-- warning -> normal -->
+  <path d="M 312 160 Q 250 190 232 158" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#ar6)"/>
+  <text x="272" y="196" font-size="8" text-anchor="middle" fill="#334155">upright regained</text>
+
+  <!-- warning -> fall -->
+  <path d="M 448 130 Q 522 114 530 124" fill="none" stroke="#dc2626" stroke-width="1.8" marker-end="url(#ar6)"/>
+  <text x="500" y="96" font-size="8" text-anchor="middle" fill="#991b1b">fall counter ≥ 2</text>
+  <text x="500" y="107" font-size="8" text-anchor="middle" fill="#991b1b">(drop speed &gt; 20 px/f)</text>
+
+  <!-- normal -> fall direct -->
+  <path d="M 176 102 Q 380 20 588 102" fill="none" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="6,3" marker-end="url(#ar6)"/>
+  <text x="380" y="38" font-size="8" text-anchor="middle" fill="#991b1b">rapid collapse — direct transition</text>
+
+  <!-- fall -> warning recovery -->
+  <path d="M 530 160 Q 470 194 448 160" fill="none" stroke="#475569" stroke-width="1.4" marker-end="url(#ar6)"/>
+  <text x="490" y="200" font-size="8" text-anchor="middle" fill="#334155">counter decays</text>
+
+  <!-- self loops -->
+  <path d="M 140 178 Q 164 214 188 178" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#ar6)"/>
+  <text x="164" y="226" font-size="7.5" text-anchor="middle" fill="#64748b">stable</text>
+  <path d="M 574 178 Q 598 214 622 178" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#ar6)"/>
+  <text x="598" y="226" font-size="7.5" text-anchor="middle" fill="#64748b">cooldown active</text>
+
+  <!-- notes -->
+  <rect x="60" y="248" width="580" height="42" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="72" y="264" font-size="8" fill="#334155"><tspan font-weight="600">Hysteresis:</tspan> _fall_counter increments on each qualifying frame and decrements (never resets) otherwise, so brief noise decays gradually;</text>
+  <text x="72" y="278" font-size="8" fill="#334155">_lying_counter resets immediately once the subject is no longer near the ground. Emitted status is further smoothed by a 5-frame majority vote (§9.6).</text>
+</svg>
+<div class="fig-cap">Figure 8.1 — Rule-engine state machine. The dashed edge shows that a sufficiently rapid collapse can transition directly from NORMAL to FALL without passing through WARNING.</div>
+</div>
+
+<h3>8.2 Fall Detection and Alert Sequence</h3>
+<p>
+Figure 8.2 traces the interaction between components for a single frame in which a fall is confirmed.
+</p>
+
+<div class="fig">
+<svg viewBox="0 0 720 452" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="ar7" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1e293b"/>
+    </marker>
+    <marker id="ar7d" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- lifelines -->
+  <rect x="14" y="14" width="86" height="30" rx="4" fill="#e2e8f0" stroke="#475569" stroke-width="1.3"/>
+  <text x="57" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#0f172a">Flask stream</text>
+  <line x1="57" y1="44" x2="57" y2="440" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="118" y="14" width="96" height="30" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.3"/>
+  <text x="166" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#5b21b6">Inference</text>
+  <line x1="166" y1="44" x2="166" y2="440" stroke="#c4b5fd" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="232" y="14" width="88" height="30" rx="4" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.3"/>
+  <text x="276" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#5b21b6">PoseEstim.</text>
+  <line x1="276" y1="44" x2="276" y2="440" stroke="#ddd6fe" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="338" y="14" width="92" height="30" rx="4" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.3"/>
+  <text x="384" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#5b21b6">FeatureExt.</text>
+  <line x1="384" y1="44" x2="384" y2="440" stroke="#ddd6fe" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="448" y="14" width="86" height="30" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.3"/>
+  <text x="491" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#065f46">CNN-LSTM</text>
+  <line x1="491" y1="44" x2="491" y2="440" stroke="#a7f3d0" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="552" y="14" width="86" height="30" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.3"/>
+  <text x="595" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#991b1b">AlertSystem</text>
+  <line x1="595" y1="44" x2="595" y2="440" stroke="#fecaca" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <rect x="654" y="14" width="60" height="30" rx="4" fill="#eff6ff" stroke="#2563eb" stroke-width="1.3"/>
+  <text x="684" y="33" font-size="8.5" text-anchor="middle" font-weight="600" fill="#1e40af">Browser</text>
+  <line x1="684" y1="44" x2="684" y2="440" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- messages -->
+  <line x1="57" y1="66" x2="164" y2="66" stroke="#1e293b" stroke-width="1.3" marker-end="url(#ar7)"/>
+  <text x="110" y="62" font-size="7.5" text-anchor="middle" fill="#1e293b">process_frame(frame)</text>
+
+  <line x1="166" y1="90" x2="274" y2="90" stroke="#1e293b" stroke-width="1.3" marker-end="url(#ar7)"/>
+  <text x="220" y="86" font-size="7.5" text-anchor="middle" fill="#1e293b">process_frame()</text>
+  <line x1="274" y1="110" x2="168" y2="110" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7d)"/>
+  <text x="220" y="106" font-size="7.5" text-anchor="middle" fill="#64748b">(13,3) keypoints</text>
+
+  <line x1="166" y1="134" x2="382" y2="134" stroke="#1e293b" stroke-width="1.3" marker-end="url(#ar7)"/>
+  <text x="274" y="130" font-size="7.5" text-anchor="middle" fill="#1e293b">update(keypoints)</text>
+  <line x1="382" y1="154" x2="168" y2="154" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7d)"/>
+  <text x="274" y="150" font-size="7.5" text-anchor="middle" fill="#64748b">(30,51) sequence</text>
+
+  <line x1="166" y1="178" x2="382" y2="178" stroke="#1e293b" stroke-width="1.3" marker-end="url(#ar7)"/>
+  <text x="274" y="174" font-size="7.5" text-anchor="middle" fill="#1e293b">get_rule_based_status()</text>
+  <line x1="382" y1="198" x2="168" y2="198" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7d)"/>
+  <text x="274" y="194" font-size="7.5" text-anchor="middle" fill="#64748b">("fall", 0.80)</text>
+
+  <line x1="166" y1="222" x2="489" y2="222" stroke="#1e293b" stroke-width="1.3" marker-end="url(#ar7)"/>
+  <text x="330" y="218" font-size="7.5" text-anchor="middle" fill="#1e293b">forward(sequence)</text>
+  <line x1="489" y1="242" x2="168" y2="242" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7d)"/>
+  <text x="330" y="238" font-size="7.5" text-anchor="middle" fill="#64748b">softmax → ("fall", 0.94)</text>
+
+  <!-- self calls -->
+  <path d="M 166 260 L 214 260 L 214 278 L 168 278" fill="none" stroke="#7c3aed" stroke-width="1.2" marker-end="url(#ar7)"/>
+  <text x="222" y="266" font-size="7.5" fill="#5b21b6">_fuse_predictions()</text>
+  <path d="M 166 292 L 214 292 L 214 310 L 168 310" fill="none" stroke="#7c3aed" stroke-width="1.2" marker-end="url(#ar7)"/>
+  <text x="222" y="298" font-size="7.5" fill="#5b21b6">_smooth_predictions()</text>
+
+  <!-- guard -->
+  <rect x="150" y="322" width="330" height="18" rx="3" fill="#fffbeb" stroke="#d97706" stroke-dasharray="3,2"/>
+  <text x="158" y="335" font-size="7.5" fill="#92400e">[ status == "fall" AND confidence &gt; 0.7 AND cooldown elapsed ]</text>
+
+  <line x1="166" y1="356" x2="593" y2="356" stroke="#dc2626" stroke-width="1.5" marker-end="url(#ar7)"/>
+  <text x="380" y="352" font-size="7.5" text-anchor="middle" fill="#991b1b">trigger_alert("fall", 0.94, frame)</text>
+
+  <!-- async fanout -->
+  <path d="M 595 372 L 646 372 L 646 388 L 597 388" fill="none" stroke="#dc2626" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7)"/>
+  <text x="600" y="404" font-size="7" fill="#991b1b">async: buzzer · popup ·</text>
+  <text x="600" y="414" font-size="7" fill="#991b1b">OS toast · e-mail</text>
+  <text x="600" y="424" font-size="7" fill="#92400e">sync: JSON log + JPEG</text>
+
+  <!-- back to stream and browser -->
+  <line x1="164" y1="434" x2="59" y2="434" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="3,2" marker-end="url(#ar7d)"/>
+  <text x="110" y="430" font-size="7.5" text-anchor="middle" fill="#64748b">annotated frame</text>
+  <line x1="57" y1="410" x2="682" y2="410" stroke="#2563eb" stroke-width="1.2" marker-end="url(#ar7)"/>
+  <text x="330" y="406" font-size="7.5" text-anchor="middle" fill="#1e40af">MJPEG part · /status poll reflects new state within 500 ms</text>
+</svg>
+<div class="fig-cap">Figure 8.2 — Fall detection sequence. Solid arrows are synchronous calls; dashed arrows are returns. All blocking alert channels are dispatched asynchronously so the frame loop is never stalled.</div>
+</div>
+
+<h3>8.3 Alert Governance</h3>
+<table>
+  <tr><th style="width:24%">Mechanism</th><th style="width:16%">Parameter</th><th>Behaviour</th></tr>
+  <tr><td>Confidence gate</td><td><code>0.7</code></td><td>Applied in <code>inference.py</code> before the alert system is called at all.</td></tr>
+  <tr><td>Cooldown</td><td><code>30 s</code></td><td>Applied inside <code>trigger_alert()</code>, collectively across all channels. Returns <code>False</code> when suppressed.</td></tr>
+  <tr><td>Mute</td><td>runtime flag</td><td>Suppresses buzzer, popup and OS notification only. Console and JSON logging remain active.</td></tr>
+  <tr><td>Popup lifetime</td><td><code>3000 ms</code></td><td>Auto-dismissed; requires no operator interaction, so an unattended station is never left with a modal window.</td></tr>
+  <tr><td>Temporal smoothing</td><td>3 of last 5</td><td>Upstream of all the above — a fall must persist across a majority of a 5-frame window before it is even a candidate.</td></tr>
+</table>
+
+<!-- ============ 9. ALGORITHM DESIGN ============ -->
+
+<h2>9. Algorithm Design</h2>
+
+<h3>9.1 Body Orientation Angle</h3>
+<p>
+The primary postural indicator is the angle of the vector running from the head to the torso centre.
+The torso centre is the midpoint of the left and right hip keypoints, which is markedly more stable
+than either hip alone.
+</p>
+<pre>head   = keypoints[0][:2]                                  # nose
+hip    = (keypoints[7][:2] + keypoints[8][:2]) / 2         # midpoint of L/R hips
+dx, dy = hip[0] - head[0],  hip[1] - head[1]
+angle  = abs( degrees( arctan2(dy, dx) ) )                 # degrees</pre>
+<p>
+Interpretation: a value near <strong>90°</strong> indicates an upright subject (the head-to-hip vector is
+vertical); values approaching <strong>0°</strong> or <strong>180°</strong> indicate a horizontal — that is,
+lying — posture. The absolute value collapses left-facing and right-facing orientations onto the same
+scale, so the measure is independent of which way the subject faces the camera.
+</p>
+
+<h3>9.2 Head Drop Speed</h3>
+<p>
+Vertical velocity of the head between consecutive frames, expressed in pixels per frame against the
+virtual 640 × 480 reference frame:
+</p>
+<pre>drop_speed = head_y(t) - head_y(t-1)        # positive = downward motion</pre>
+<p>
+A threshold of 20 px/frame corresponds to roughly 600 px/second at 30 fps — substantially faster than
+controlled voluntary movements such as sitting or bending, which is the discriminating property the
+rule exploits.
+</p>
+
+<h3>9.3 Ground Proximity</h3>
+<pre>near_ground = head_y &gt; 0.6 × virtual_height        # &gt; 288 px of 480</pre>
+<p>
+When the head occupies the lower 40% of the frame, the subject is likely at or near floor level. This
+predicate is a necessary condition for the <em>lying</em> classification, distinguishing a genuine
+post-fall position from a merely stooped posture higher in the frame.
+</p>
+
+<h3>9.4 Rule-Based State Machine</h3>
+<pre>is_lying     = (angle &lt; 50) AND near_ground
+fall_trigger = (drop_speed &gt; 20)
+
+_fall_counter  = _fall_counter + 1  if fall_trigger  else max(0, _fall_counter - 1)
+_lying_counter = _lying_counter + 1 if is_lying      else 0
+
+if   _fall_counter  &gt;= 2 :  status = "fall",    confidence = min(0.6 + 0.1 × _fall_counter, 1.0)
+elif _lying_counter &gt;= 5 :  status = "warning", confidence = 0.8
+elif angle &lt; 70          :  status = "warning", confidence = 0.6
+else                     :  status = "normal",  confidence = 1.0</pre>
+<p>
+The asymmetric counter treatment is deliberate: <code>_fall_counter</code> <em>decays</em> rather than
+resetting, so a fall spread across intermittently detected frames still accumulates, whereas
+<code>_lying_counter</code> resets immediately because standing up is unambiguous evidence that the subject
+is no longer down.
+</p>
+
+<h3>9.5 Decision Fusion</h3>
+<p>
+Rule and neural verdicts are combined with a default neural weight of 0.7, subject to a
+severity-priority override:
+</p>
+<pre>if nn_confidence == 0:                       # no model loaded / buffer not yet full
+    return rule_status, rule_confidence      # 100% rule-based fallback
+
+priority = {"normal": 0, "warning": 1, "fall": 2}
+
+if priority[nn_status] &gt;= priority[rule_status]:
+    status     = nn_status
+    confidence = 0.7 × nn_conf + 0.3 × rule_conf
+elif rule_conf &gt; 0.8:                        # rules see greater severity, and are confident
+    status     = rule_status                 # safety override — escalate
+    confidence = 0.5 × rule_conf + 0.5 × nn_conf
+else:
+    status     = nn_status
+    confidence = 0.7 × nn_conf + 0.3 × rule_conf</pre>
+<p>
+The middle branch encodes the central safety philosophy of the system: when the interpretable
+biomechanical rules detect a <em>more severe</em> situation than the network and are highly confident,
+the rules win. A missed fall is a far costlier error than a false alarm, so the design biases toward
+escalation.
+</p>
+
+<h3>9.6 Temporal Smoothing</h3>
+<pre>history.append((status, confidence))          # bounded deque, maxlen = 10
+recent = history[-5:]                         # 5-frame voting window
+
+if count(recent, "fall")    &gt;= 3:  return "fall",    mean_confidence("fall")
+if count(recent, "warning") &gt;= 2:  return "warning", mean_confidence("warning")
+return most_frequent(recent), mean_confidence(most_frequent)</pre>
+<p>
+Thresholds are asymmetric by severity: a <code>fall</code> requires a 3-of-5 majority (suppressing spurious
+alarms), while a <code>warning</code> requires only 2-of-5 (surfacing early instability readily, since the
+cost of an unnecessary warning is low). Fewer than three frames of history pass through unmodified so
+the system responds immediately at start-up.
+</p>
+
+<!-- ============ 10. NON-FUNCTIONAL DESIGN ============ -->
+
+<h2>10. Non-Functional Design</h2>
+
+<h3>10.1 Performance</h3>
+<table>
+  <tr><th style="width:30%">Design decision</th><th>Performance rationale</th></tr>
+  <tr><td>YOLOv8 <em>nano</em> variant</td><td>Smallest pose model in the family; keeps per-frame inference tractable on CPU-only hardware.</td></tr>
+  <tr><td>13 of 17 keypoints retained</td><td>Reduces the feature vector by 24% and removes four facial landmarks that contribute noise rather than postural signal.</td></tr>
+  <tr><td>Bounded deque buffers</td><td>O(1) append with automatic eviction; no array reallocation per frame.</td></tr>
+  <tr><td><code>torch.no_grad()</code> at inference</td><td>Disables autograd bookkeeping, reducing both latency and memory.</td></tr>
+  <tr><td>Threaded alert channels</td><td>The buzzer alone blocks ~600 ms; dispatching it inline would drop roughly 18 frames per alert.</td></tr>
+  <tr><td>Detection fused into the stream generator</td><td>One inference pass serves both the video stream and the telemetry API — no duplicated computation.</td></tr>
+  <tr><td><code>threaded=True</code> Flask server</td><td>Prevents the long-lived MJPEG response from starving concurrent <code>/status</code> requests.</td></tr>
+</table>
+<p>Observed on the development machine (CPU-only): sustained 25–30 fps end-to-end with one subject in frame, meeting the SRS target of ≥ 25 fps.</p>
+
+<h3>10.2 Reliability and Fault Tolerance</h3>
+<table>
+  <tr><th style="width:26%">Failure mode</th><th>Design response</th></tr>
+  <tr><td>Neural checkpoint missing or corrupt</td><td><code>_load_model()</code> catches all exceptions, logs a warning and returns <code>None</code>. The system continues in rule-only mode — degraded accuracy, uninterrupted service.</td></tr>
+  <tr><td>Camera read failure</td><td>Consecutive failures are counted; brief failures are retried after 100 ms, and after 15 consecutive failures the device handle is released, held for one second, and reopened. The stream is never terminated by a transient fault.</td></tr>
+  <tr><td>Client disconnect mid-stream</td><td>A <code>finally</code> block releases the capture handle, so the device is always available for reacquisition — important on drivers that permit only one open handle.</td></tr>
+  <tr><td>Subject briefly occluded</td><td>Last-known keypoints are reused for up to 10 frames, preventing loss of an in-progress fall sequence.</td></tr>
+  <tr><td>Audio device unavailable</td><td><code>_sound_alert()</code> catches the exception and falls back to terminal bells.</td></tr>
+  <tr><td>SMTP unreachable or unconfigured</td><td>Runs on a daemon thread with a broad exception handler; failure is logged and never propagates to the detection loop.</td></tr>
+  <tr><td>Log file corrupted</td><td><code>_load_existing_log()</code> catches decode errors and starts a fresh in-memory list rather than crashing at start-up.</td></tr>
+</table>
+
+<h3>10.3 Privacy and Security</h3>
+<ul>
+  <li><strong>No video retention.</strong> Frames exist only in memory. The sole persisted imagery is one JPEG per confirmed alert.</li>
+  <li><strong>Local-only processing.</strong> All inference is on-device; no third-party service receives video.</li>
+  <li><strong>Minimal egress.</strong> The optional e-mail channel transmits event metadata and a single frame, and is disabled by default.</li>
+  <li><strong>Auditability.</strong> Every alert is recorded with timestamp, status, confidence and evidence frame, supporting after-the-fact review.</li>
+</ul>
+<div class="warn">
+<strong>Known gap (FYP-2).</strong> The Flask server binds to <code>0.0.0.0</code> with no authentication, so any
+host on the local network can reach the dashboard and video feed. This is acceptable for a controlled
+demonstration but must be addressed before any real deployment. Planned remediation: bind to
+<code>127.0.0.1</code> by default, and add session authentication plus TLS for remote access.
+</div>
+
+<h3>10.4 Maintainability</h3>
+<ul>
+  <li><strong>Single-responsibility modules</strong> with narrow, array-based interfaces allow any stage to be replaced independently — the MediaPipe → YOLOv8 migration required changes to <code>pose_estimator.py</code> alone.</li>
+  <li><strong>No magic numbers</strong> in algorithm code; every threshold resolves to a named configuration field.</li>
+  <li><strong>Train/serve parity</strong> is structural: the training pipeline imports the very same <code>PoseEstimator</code> and <code>FeatureExtractor</code> classes used at inference, eliminating a common source of silent skew.</li>
+  <li><strong>Architecture substitution</strong> via a factory function and a configuration string, with no call-site changes.</li>
+</ul>
+
+<!-- ============ 11. TRACEABILITY ============ -->
+
+<h2>11. Requirements Traceability Matrix</h2>
+<p>
+Each functional requirement from the SRS is mapped to the design element that realises it and to its
+implementation status in the Checkpoint-2 build.
+</p>
+<table>
+  <tr><th style="width:9%">SRS Req.</th><th style="width:26%">Requirement summary</th><th style="width:20%">Design element</th><th style="width:14%">SDD ref.</th><th>Status</th></tr>
+  <tr><td>FR-1.1</td><td>YOLOv8-Pose extracts 17 keypoints per frame</td><td><code>PoseEstimator.process_frame()</code></td><td>§5.2.1, §6.1</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-1.2</td><td>Track up to 5 persons simultaneously</td><td><code>MultiPersonPoseEstimator</code></td><td>§5.2.2</td><td class="status-partial">Partial — class implemented and demonstrated standalone; not yet integrated into the dashboard pipeline</td></tr>
+  <tr><td>FR-1.3</td><td>Skeleton overlay on the video stream</td><td><code>_draw_custom_skeleton()</code></td><td>§5.2.1</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-1.4</td><td>Retain last position for up to 10 occluded frames</td><td><code>_handle_lost_tracking()</code></td><td>§5.2.1</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-2.1</td><td>Body orientation angle (head → hip)</td><td><code>extract_frame_features()</code></td><td>§9.1</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-2.2</td><td>Head drop speed</td><td><code>get_rule_based_status()</code></td><td>§9.2</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-2.3</td><td>Ground proximity below 60% frame height</td><td><code>near_ground</code> predicate</td><td>§9.3</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-2.4</td><td>30-frame buffer, stride 5</td><td><code>FeatureExtractor.update()</code></td><td>§6.3</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-2.5</td><td>Feature standardisation from training statistics</td><td><code>TemporalFeatureProcessor</code></td><td>§5.3</td><td class="status-partial">Partial — implemented in the training path; not applied at live inference</td></tr>
+  <tr><td>FR-3.1</td><td>Heuristic state machine with physics thresholds</td><td><code>get_rule_based_status()</code></td><td>§8.1, §9.4</td><td class="status-partial">Partial — the <code>normal</code> and <code>warning</code> rules conform; the <code>fall</code> rule triggers on descent speed alone, omitting the ground-proximity and angle confirmation the requirement specifies (see §12.2)</td></tr>
+  <tr><td>FR-3.2</td><td>CNN-LSTM temporal classification</td><td><code>FallDetectorCNNLSTM</code></td><td>§5.4</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-3.3</td><td>Fusion at 70% NN weight with rule fallback</td><td><code>_fuse_predictions()</code></td><td>§9.5</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-3.4</td><td>Temporal smoothing (3 of 5 / 2 of 5)</td><td><code>_smooth_predictions()</code></td><td>§9.6</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-4.1</td><td>Live HUD with status, telemetry and FPS</td><td><code>_draw_hud()</code></td><td>§5.5</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-4.2</td><td>Responsive dashboard grid layout</td><td><code>index.html</code>, <code>style.css</code>, <code>app.js</code></td><td>§7.2</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-5.1</td><td>Audible beep pattern on fall</td><td><code>_sound_alert()</code></td><td>§5.6</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-5.2</td><td>Dashboard visual alert overlay</td><td><code>fall-overlay</code> + <code>triggerFallUI()</code></td><td>§7.2</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-5.3</td><td>Local popup alert window</td><td><code>_visual_alert()</code></td><td>§5.6</td><td class="status-done">Implemented — duration now configurable</td></tr>
+  <tr><td>FR-5.4</td><td>SMTP e-mail with JPEG attachment</td><td><code>_email_alert()</code></td><td>§5.6</td><td class="status-partial">Implemented but disabled by default; requires credential configuration</td></tr>
+  <tr><td>FR-5.5</td><td>Configurable alert cooldown (30 s)</td><td><code>trigger_alert()</code> gate</td><td>§8.3</td><td class="status-done">Implemented</td></tr>
+  <tr><td>FR-5.6</td><td>Persistent daily JSON event logging</td><td><code>_log_event()</code></td><td>§6.4</td><td class="status-done">Implemented</td></tr>
+  <tr><td colspan="2"><em>Beyond SRS — added during Checkpoint-2</em></td><td><code>_desktop_notification()</code></td><td>§5.6</td><td class="status-done">Native OS notification channel</td></tr>
+  <tr><td colspan="2"><em>Beyond SRS — added during Checkpoint-2</em></td><td><code>/alerts/mute</code>, camera reconnect</td><td>§7.1, §10.2</td><td class="status-done">Operator mute control and camera recovery</td></tr>
+</table>
+
+<!-- ============ 12. STATUS AND ROADMAP ============ -->
+
+<h2>12. Implementation Status and FYP-2 Roadmap</h2>
+
+<h3>12.1 Delivered in the Checkpoint-2 MVP</h3>
+<ul>
+  <li>End-to-end real-time pipeline from webcam to classified verdict, running at 25–30 fps on CPU.</li>
+  <li>YOLOv8-Pose estimation with skeleton overlay and occlusion tolerance.</li>
+  <li>Biomechanical feature engineering with a fully explainable rule engine.</li>
+  <li>Trained CNN-LSTM checkpoint loading and participating in fused decisions.</li>
+  <li>Six alert channels with cooldown governance and an operator mute control.</li>
+  <li>Web dashboard with live MJPEG video, real-time telemetry, connection-state indicators and an event feed.</li>
+  <li>Persistent JSON event logging with JPEG evidence capture.</li>
+  <li>Camera disconnect detection and automatic recovery.</li>
+</ul>
+
+<h3>12.2 Known Limitations</h3>
+<div class="warn">
+<strong>Rule-engine coupling defect (highest priority).</strong> In the current state machine the
+<code>fall</code> verdict is reachable <em>only</em> through the <code>drop_speed &gt; 20</code> trigger, while the
+<code>is_lying</code> predicate — which is the condition that actually encodes body angle and ground
+proximity — can escalate no further than <code>warning</code>. Two consequences follow: a rapid head
+movement near the camera can register a <code>fall</code> while the subject is upright; and a subject who is
+already motionless on the floor produces no velocity spike and therefore never reaches
+<code>fall</code>. The remediation is to require a confirmed lying posture sustained across several frames
+as a necessary condition for <code>fall</code>, with velocity acting as a corroborating rather than sole
+trigger. This is scheduled as the first task of FYP-2.
+</div>
+<table>
+  <tr><th style="width:30%">Limitation</th><th>Impact and planned resolution</th></tr>
+  <tr><td>Hip keypoint confidence not validated</td><td>When hips are outside the frame or poorly visible, YOLO still emits an estimated position which feeds the angle calculation unchecked, producing spurious <code>warning</code> states at close camera range. Resolution: gate the angle computation on per-keypoint confidence and hold the previous value when unreliable.</td></tr>
+  <tr><td>Multi-person not wired into the dashboard</td><td>The live pipeline processes only the highest-scoring subject. Resolution: per-person feature buffers and independent state machines keyed by a tracking ID.</td></tr>
+  <tr><td>Inference-time normalisation not applied</td><td>Training standardises features; the live path does not, introducing potential train/serve skew. Resolution: persist normalisation statistics in the checkpoint and apply them in <code>_predict()</code>.</td></tr>
+  <tr><td>No automated test suite</td><td>No regression protection. Resolution: unit tests for the geometric functions, the state machine and the fusion logic, plus a recorded-clip integration test.</td></tr>
+  <tr><td>Unauthenticated network exposure</td><td>See Section 10.3. Resolution: loopback binding by default plus authentication.</td></tr>
+  <tr><td>Event Log and Settings views not implemented</td><td>Navigation entries are visibly disabled. Resolution: implement in FYP-2 against the existing JSON logs and configuration model.</td></tr>
+</table>
+
+<h3>12.3 FYP-2 Roadmap</h3>
+<table>
+  <tr><th style="width:10%">Priority</th><th style="width:32%">Work item</th><th>Description</th></tr>
+  <tr><td>1</td><td>Rule-engine correction</td><td>Restructure the state machine so posture and ground proximity are necessary conditions for a fall verdict; add keypoint-confidence gating.</td></tr>
+  <tr><td>2</td><td>Dataset and model maturation</td><td>Train on a public fall-detection corpus (URFD / Le2i) plus locally recorded scenarios; report precision, recall and F1 per class with a confusion matrix.</td></tr>
+  <tr><td>3</td><td>Multi-person integration</td><td>Bring <code>MultiPersonPoseEstimator</code> into the live pipeline with per-subject state and identity-tagged alerts.</td></tr>
+  <tr><td>4</td><td>Event Log and Settings UI</td><td>Browsable, filterable incident history with capture thumbnails; live threshold tuning from the browser.</td></tr>
+  <tr><td>5</td><td>Alert channel expansion</td><td>SMS/WhatsApp gateway integration for off-site caregivers.</td></tr>
+  <tr><td>6</td><td>Security hardening</td><td>Authentication, TLS, and secure-by-default network binding.</td></tr>
+  <tr><td>7</td><td>Test automation</td><td>Unit and integration suites with continuous execution on push.</td></tr>
+  <tr><td>8</td><td>Edge optimisation</td><td>ONNX Runtime inference path; feasibility assessment on Raspberry Pi / Jetson Nano class hardware.</td></tr>
+</table>
+
+<!-- ============ 13. APPENDIX ============ -->
+
+<h2>13. Appendix A — Configuration Parameter Reference</h2>
+<p>Complete enumeration of tunable parameters as defined in <code>config.py</code>.</p>
+
+<h3>A.1 Pose and Feature Parameters</h3>
+<table>
+  <tr><th style="width:34%">Parameter</th><th style="width:16%">Default</th><th>Effect</th></tr>
+  <tr><td><code>min_detection_confidence</code></td><td>0.5</td><td>Minimum YOLO score for a person detection to be accepted.</td></tr>
+  <tr><td><code>min_tracking_confidence</code></td><td>0.5</td><td>Minimum score for continued tracking.</td></tr>
+  <tr><td><code>CRITICAL_KEYPOINTS</code></td><td>13 indices</td><td>Subset of YOLO joints retained for analysis.</td></tr>
+  <tr><td><code>sequence_length</code></td><td>30</td><td>Frames per temporal window (~1 s at 30 fps).</td></tr>
+  <tr><td><code>stride</code></td><td>5</td><td>Sliding-window step during offline sequence generation.</td></tr>
+  <tr><td><code>num_raw_features</code></td><td>39</td><td>13 keypoints × 3 values.</td></tr>
+  <tr><td><code>num_engineered_features</code></td><td>12</td><td>5 active + 7 reserved.</td></tr>
+  <tr><td><code>vertical_speed_threshold</code></td><td>0.15</td><td>Normalised rapid-descent threshold (training-side).</td></tr>
+  <tr><td><code>body_angle_threshold</code></td><td>45.0°</td><td>Reference tilt threshold.</td></tr>
+  <tr><td><code>stillness_threshold</code></td><td>0.005</td><td>Post-fall motion floor.</td></tr>
+  <tr><td><code>stillness_duration_frames</code></td><td>15</td><td>Frames of stillness confirming a fall.</td></tr>
+</table>
+
+<h3>A.2 Model and Training Parameters</h3>
+<table>
+  <tr><th style="width:34%">Parameter</th><th style="width:16%">Default</th><th>Effect</th></tr>
+  <tr><td><code>architecture</code></td><td><code>cnn_lstm</code></td><td>Selects <code>lstm</code>, <code>cnn_lstm</code> or <code>transformer</code>.</td></tr>
+  <tr><td><code>input_size</code></td><td>51</td><td>Feature dimensions per frame.</td></tr>
+  <tr><td><code>hidden_size</code></td><td>128</td><td>LSTM hidden units / Transformer model width.</td></tr>
+  <tr><td><code>num_layers</code></td><td>2</td><td>Recurrent depth.</td></tr>
+  <tr><td><code>num_classes</code></td><td>3</td><td>normal, warning, fall.</td></tr>
+  <tr><td><code>dropout</code></td><td>0.3</td><td>Regularisation strength.</td></tr>
+  <tr><td><code>bidirectional</code></td><td>true</td><td>Doubles effective LSTM output width.</td></tr>
+  <tr><td><code>cnn_filters</code></td><td>[64, 128]</td><td>1-D convolution channel progression.</td></tr>
+  <tr><td><code>batch_size</code> / <code>learning_rate</code></td><td>32 / 0.001</td><td>Optimiser configuration.</td></tr>
+  <tr><td><code>epochs</code> / <code>patience</code></td><td>100 / 15</td><td>Training length and early-stopping window.</td></tr>
+  <tr><td><code>class_weights</code></td><td>[1.0, 2.0, 3.0]</td><td>Loss weighting; penalises missed falls most heavily.</td></tr>
+</table>
+
+<h3>A.3 Runtime and Alert Parameters</h3>
+<table>
+  <tr><th style="width:34%">Parameter</th><th style="width:16%">Default</th><th>Effect</th></tr>
+  <tr><td><code>camera.source</code></td><td>0</td><td>Device index or media path / URL.</td></tr>
+  <tr><td><code>camera.width</code> × <code>height</code></td><td>640 × 480</td><td>Requested capture resolution.</td></tr>
+  <tr><td><code>device</code></td><td><code>auto</code></td><td>Resolves to CUDA when available, otherwise CPU.</td></tr>
+  <tr><td><code>confidence_threshold</code></td><td>0.7</td><td>Minimum fused confidence to raise an alert.</td></tr>
+  <tr><td><code>enable_sound</code> / <code>enable_email</code> / <code>enable_logging</code></td><td>true / false / true</td><td>Per-channel enablement.</td></tr>
+  <tr><td><code>alert_cooldown_seconds</code></td><td>30.0</td><td>Minimum interval between alerts, all channels.</td></tr>
+  <tr><td><code>popup_duration_ms</code></td><td>3000</td><td>On-screen popup lifetime.</td></tr>
+  <tr><td><code>log_dir</code></td><td><code>logs</code></td><td>Root for event logs and captures.</td></tr>
+</table>
+
+<h3>A.4 Repository Structure</h3>
+<pre>FYP-2026-G6-RealTimeAutomatedFallDetectionAndAlertSystem/
+├── docs/           SRS, this Software Design Document
+├── architecture/   Architecture diagrams (Checkpoint-2)
+├── src/            Application source code
+├── test/           Test scenarios and results
+├── evidence/       Implementation evidence — screenshots, logs, demo capture
+├── dataset/        Dataset references and preparation notes
+├── research/       Literature review and background reading
+├── reports/        Progress and final reports
+├── presentations/  Proposal and defence slide decks
+└── meeting_logs/   Supervisor meeting records</pre>
+
+<div style="margin-top:26px; padding-top:12px; border-top:2px solid #2563eb; text-align:center; color:#64748b; font-size:9pt;">
+  <strong>End of Software Design Document</strong><br>
+  GuardianAI — Real-Time Automated Fall Detection and Alert System · FYP-2026-G6 · Version 1.0<br>
+  Prepared for FYP-I Checkpoint-2 · Subject to Faculty Supervisor review and approval
+</div>
+
+</body>
+</html>

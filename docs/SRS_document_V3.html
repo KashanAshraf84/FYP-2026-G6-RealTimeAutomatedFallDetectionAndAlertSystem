@@ -1,0 +1,1231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Software Requirements Specification v3.0 — GuardianAI</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", "Calibri", Arial, sans-serif; font-size: 10.5pt; line-height: 1.55; color: #1e293b; margin: 0; }
+  h1, h2, h3, h4 { color: #0f172a; font-weight: 600; margin: 0 0 8px 0; }
+  h2 { font-size: 15pt; border-bottom: 2px solid #0d9488; padding-bottom: 5px; margin-top: 22px; page-break-after: avoid; }
+  h3 { font-size: 12pt; margin-top: 16px; color: #0f766e; page-break-after: avoid; }
+  h4 { font-size: 10.5pt; margin-top: 12px; color: #334155; page-break-after: avoid; }
+  p { margin: 6px 0; text-align: justify; }
+  ul, ol { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code { font-family: "Consolas", "Courier New", monospace; font-size: 9pt; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; color: #0f172a; }
+  pre { font-family: "Consolas", "Courier New", monospace; font-size: 8.5pt; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #0d9488; padding: 8px 10px; border-radius: 4px; line-height: 1.4; page-break-inside: avoid; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 9.5pt; page-break-inside: avoid; }
+  th { background: #0f766e; color: #ffffff; text-align: left; padding: 6px 8px; font-weight: 600; border: 1px solid #115e59; }
+  td { padding: 5px 8px; border: 1px solid #cbd5e1; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .cover { height: 250mm; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; page-break-after: always; }
+  .cover .badge { font-size: 10pt; letter-spacing: 2px; color: #0d9488; font-weight: 600; margin-bottom: 10px; }
+  .cover h1 { font-size: 30pt; line-height: 1.15; margin: 6px 0; color: #0f172a; }
+  .cover .subtitle { font-size: 14pt; color: #475569; margin: 8px 0 4px 0; font-weight: 400; }
+  .cover .project { font-size: 12pt; color: #64748b; margin-bottom: 28px; font-style: italic; }
+  .cover .rule { width: 120px; height: 4px; background: #0d9488; margin: 18px auto 26px auto; border-radius: 2px; }
+  .cover table { width: 78%; font-size: 10.5pt; }
+  .cover .footer-note { margin-top: 34px; font-size: 9.5pt; color: #94a3b8; }
+  .page-break { page-break-before: always; }
+  .fig { margin: 14px 0; text-align: center; page-break-inside: avoid; }
+  .fig svg { max-width: 100%; height: auto; }
+  .fig-cap { font-size: 9pt; color: #64748b; margin-top: 6px; font-style: italic; }
+  .note { background: #f0fdfa; border-left: 4px solid #0d9488; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; page-break-inside: avoid; }
+  .warn { background: #fffbeb; border-left: 4px solid #d97706; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; page-break-inside: avoid; }
+  .new { background: #ecfdf5; border-left: 4px solid #059669; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; page-break-inside: avoid; }
+  .toc { font-size: 10.5pt; }
+  .toc-item { display: flex; padding: 3px 0; border-bottom: 1px dotted #cbd5e1; }
+  .toc-num { width: 34px; color: #0d9488; font-weight: 600; }
+  .toc-l2 { padding-left: 34px; font-size: 10pt; color: #475569; }
+  .must { color: #b91c1c; font-weight: 600; }
+  .should { color: #b45309; font-weight: 600; }
+  .could { color: #0369a1; font-weight: 600; }
+  .wont { color: #64748b; font-weight: 600; }
+  .st-done { color: #059669; font-weight: 600; }
+  .st-part { color: #d97706; font-weight: 600; }
+  .st-plan { color: #64748b; font-weight: 600; }
+  .tag-new { background: #059669; color:#fff; font-size:7.5pt; padding:1px 5px; border-radius:3px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="badge">SOFTWARE REQUIREMENTS SPECIFICATION</div>
+  <h1>GuardianAI</h1>
+  <div class="subtitle">Real-Time Automated Fall Detection<br>and Alert System</div>
+  <div class="rule"></div>
+  <div class="project">For Elderly and Patient Safety in Low-Resource Environments</div>
+
+  <table>
+    <tr><th style="width:38%">Group ID</th><td>FYP-2026-G6</td></tr>
+    <tr><th>Document</th><td>Software Requirements Specification (SRS)</td></tr>
+    <tr><th>Version</th><td><strong>3.0</strong> (supersedes V2)</td></tr>
+    <tr><th>Deliverable</th><td>FYP-I Checkpoint-2</td></tr>
+    <tr><th>Standard</th><td>Adapted from IEEE Std 830-1998 / ISO-IEC-IEEE 29148</td></tr>
+    <tr><th>Programme</th><td>BS Computer Science</td></tr>
+  </table>
+
+  <table style="margin-top:18px">
+    <tr><th style="width:38%">Team Member</th><th style="width:24%">Roll No</th><th>Role</th></tr>
+    <tr><td>Kashan M. Ashraf</td><td>BSCS-01007</td><td>Video Processing + Testing</td></tr>
+    <tr><td>Umer Ahmed</td><td>BSCS-01011</td><td>AI Model + Development</td></tr>
+    <tr><td>Imran</td><td>BSCS-01014</td><td>UI Design + Documentation</td></tr>
+  </table>
+
+  <div class="footer-note">
+    Repository: FYP-2026-G6-RealTimeAutomatedFallDetectionAndAlertSystem<br>
+    Prepared for review and approval by the Faculty Supervisor
+  </div>
+</div>
+
+<!-- ============ DOCUMENT CONTROL ============ -->
+<h2>Document Control</h2>
+
+<h3>Revision History</h3>
+<table>
+  <tr><th style="width:10%">Version</th><th style="width:16%">Stage</th><th style="width:20%">Author</th><th>Summary of Change</th></tr>
+  <tr><td>1.0</td><td>Proposal</td><td>FYP-2026-G6</td><td>Initial requirements captured from the approved project proposal.</td></tr>
+  <tr><td>2.0</td><td>Checkpoint-1</td><td>FYP-2026-G6</td><td>Expanded functional requirements FR-1 to FR-5, external interface definitions, and an initial architecture sketch.</td></tr>
+  <tr><td><strong>3.0</strong></td><td><strong>Checkpoint-2</strong></td><td>FYP-2026-G6</td><td><strong>Current revision.</strong> Corrected factual inconsistencies carried over from V2; replaced the unrendered architecture source block with proper diagrams; introduced formal requirement identifiers with priority and verification method; added a system context diagram, use-case model, two previously undocumented requirement groups (FR-6 operator control, FR-7 training and data management), structured non-functional requirement IDs, acceptance criteria, and forward traceability to the Software Design Document. A full itemised change log appears in Section 9.</td></tr>
+</table>
+
+<h3>Document Approval</h3>
+<table>
+  <tr><th style="width:30%">Role</th><th style="width:35%">Name</th><th>Signature / Date</th></tr>
+  <tr><td>Group Lead</td><td>Kashan M. Ashraf</td><td>&nbsp;<br>&nbsp;</td></tr>
+  <tr><td>Faculty Supervisor</td><td>&nbsp;</td><td>&nbsp;<br>&nbsp;</td></tr>
+</table>
+
+<h3>Related Documents</h3>
+<table>
+  <tr><th style="width:34%">Document</th><th style="width:20%">Location</th><th>Relationship</th></tr>
+  <tr><td>Software Design Document (SDD) v1.0</td><td><code>/docs</code></td><td>Child document. Specifies <em>how</em> the requirements in this SRS are realised. Section 8 provides forward traceability into it.</td></tr>
+  <tr><td>SRS v2</td><td><code>/docs</code></td><td>Superseded by this revision. Retained for audit purposes.</td></tr>
+  <tr><td>FYP Proposal</td><td><code>/reports</code></td><td>Source of the original problem statement and objectives.</td></tr>
+  <tr><td>Implementation Evidence</td><td><code>/evidence</code></td><td>Verification artefacts referenced by the acceptance criteria in Section 7.</td></tr>
+</table>
+
+<!-- ============ TOC ============ -->
+<div class="page-break"></div>
+<h2>Table of Contents</h2>
+<div class="toc">
+  <div class="toc-item"><span class="toc-num">1</span><span>Introduction</span></div>
+  <div class="toc-item toc-l2"><span>1.1 Purpose · 1.2 Scope · 1.3 Definitions and Acronyms · 1.4 References · 1.5 Document Conventions</span></div>
+  <div class="toc-item"><span class="toc-num">2</span><span>Overall Description</span></div>
+  <div class="toc-item toc-l2"><span>2.1 Product Perspective · 2.2 System Context · 2.3 Product Functions · 2.4 User Classes · 2.5 Use-Case Model · 2.6 Operating Environment · 2.7 Constraints · 2.8 Assumptions and Dependencies</span></div>
+  <div class="toc-item"><span class="toc-num">3</span><span>Functional Requirements</span></div>
+  <div class="toc-item toc-l2"><span>FR-1 Pose Estimation · FR-2 Feature Engineering · FR-3 Hybrid Decision Engine · FR-4 Monitoring Dashboard · FR-5 Alerting and Notification · FR-6 Operator Control · FR-7 Training and Data Management</span></div>
+  <div class="toc-item"><span class="toc-num">4</span><span>External Interface Requirements</span></div>
+  <div class="toc-item toc-l2"><span>4.1 User Interfaces · 4.2 Hardware Interfaces · 4.3 Software Interfaces · 4.4 Communication Interfaces (REST API)</span></div>
+  <div class="toc-item"><span class="toc-num">5</span><span>Non-Functional Requirements</span></div>
+  <div class="toc-item toc-l2"><span>NFR-P Performance · NFR-R Reliability · NFR-S Safety · NFR-SEC Security and Privacy · NFR-U Usability · NFR-M Maintainability and Portability</span></div>
+  <div class="toc-item"><span class="toc-num">6</span><span>Requirement Prioritisation Summary</span></div>
+  <div class="toc-item"><span class="toc-num">7</span><span>Verification and Acceptance Criteria</span></div>
+  <div class="toc-item"><span class="toc-num">8</span><span>Requirements Traceability</span></div>
+  <div class="toc-item"><span class="toc-num">9</span><span>Change Log — V2 to V3</span></div>
+  <div class="toc-item"><span class="toc-num">A</span><span>Appendix A — Academic Viva and Defence Supplement</span></div>
+  <div class="toc-item"><span class="toc-num">B</span><span>Appendix B — Threshold and Parameter Glossary</span></div>
+</div>
+
+<!-- ============ 1. INTRODUCTION ============ -->
+<div class="page-break"></div>
+<h2>1. Introduction</h2>
+
+<h3>1.1 Purpose</h3>
+<p>
+This document specifies the software requirements for <strong>GuardianAI</strong>, a real-time
+automated fall detection and alert system. It defines <em>what</em> the system must do, the
+constraints under which it must operate, and the criteria by which each requirement is judged
+satisfied. It is the authoritative reference against which the implementation is evaluated.
+</p>
+<p>
+GuardianAI addresses a specific problem: in Pakistan, elderly care and patient monitoring are
+constrained by staff shortages and the absence of smart healthcare infrastructure. Falls in homes and
+hospitals frequently go unnoticed, and the delay between a fall and its discovery is a primary
+determinant of injury severity. This system detects falls in real time from ordinary camera feeds,
+processes video entirely on local hardware, and alerts caregivers immediately — without requiring
+wearable devices or costly specialised sensors.
+</p>
+
+<h3>1.2 Scope</h3>
+<p>The GuardianAI system encompasses the following capabilities:</p>
+<ul>
+  <li>Real-time video ingestion from local webcams, USB cameras, IP/RTSP streams, or recorded video files.</li>
+  <li>Human pose estimation and skeletal joint tracking using YOLOv8-Pose.</li>
+  <li>Derivation of spatial and temporal biomechanical features — body orientation angle, head drop speed, ground proximity, and postural aspect ratio.</li>
+  <li>A hybrid decision engine fusing an explainable rule-based state machine with a temporal deep learning classifier (CNN-LSTM, with LSTM and Transformer alternatives).</li>
+  <li>Multi-channel notification: console output, on-screen popup, audible buzzer, native operating-system notification, optional SMTP e-mail, and persistent JSON event logging with JPEG evidence capture.</li>
+  <li>An interactive web monitoring dashboard presenting a live annotated video feed, real-time telemetry, system health indicators, and an incident history.</li>
+  <li>Operator controls for pausing the feed, muting alerts, and resetting tracking state.</li>
+  <li>An offline training subsystem for dataset preprocessing, model training, evaluation, and ONNX export.</li>
+</ul>
+<p><strong>Explicitly out of scope for this release:</strong> clinical certification or diagnostic claims;
+wearable or accelerometer-based sensing; hospital information-system integration; native mobile
+applications; cloud or multi-site deployment; and identification of individuals by name or biometric
+identity.</p>
+
+<h3>1.3 Definitions, Acronyms and Abbreviations</h3>
+<table>
+  <tr><th style="width:22%">Term</th><th>Definition</th></tr>
+  <tr><td>YOLOv8-Pose</td><td>You Only Look Once, version 8, pose variant — a single-stage neural network that detects persons and regresses 17 skeletal keypoints in one pass. <strong>The pose estimation technology used by this system.</strong></td></tr>
+  <tr><td>MediaPipe</td><td>An open-source Google framework for multi-modal machine learning pipelines. <em>Historical only:</em> evaluated during Checkpoint-1 and replaced by YOLOv8-Pose. Retained in this glossary because it appears in earlier documents and in the project's development history.</td></tr>
+  <tr><td>Keypoint</td><td>A detected body joint expressed as <code>(x, y, confidence)</code>.</td></tr>
+  <tr><td>Critical keypoints</td><td>The 13 of 17 YOLO joints retained for fall analysis; the four facial landmarks are discarded.</td></tr>
+  <tr><td>CNN-LSTM</td><td>A hybrid network in which a 1-D convolutional front-end extracts local motion patterns and an LSTM models longer-range temporal progression.</td></tr>
+  <tr><td>Sequence buffer</td><td>A 30-frame sliding window of feature vectors forming one input sample to the temporal classifier.</td></tr>
+  <tr><td>Decision fusion</td><td>Weighted combination of the rule-based verdict and the neural verdict into a single classification.</td></tr>
+  <tr><td>Temporal smoothing</td><td>A majority-vote filter over recent frames that suppresses single-frame flicker.</td></tr>
+  <tr><td>Body orientation angle</td><td>The angle of the vector from the nose to the hip midpoint. Approximately 90° upright; approaching 0° or 180° when horizontal.</td></tr>
+  <tr><td>Ground proximity</td><td>Condition in which the head occupies the lower 40% of the frame.</td></tr>
+  <tr><td>XAI</td><td>Explainable Artificial Intelligence — the property that an automated decision can be traced to human-interpretable evidence.</td></tr>
+  <tr><td>MJPEG</td><td>Motion JPEG; a stream of independent JPEG images delivered over a single HTTP response.</td></tr>
+  <tr><td>HUD</td><td>Heads-Up Display — the telemetry overlay drawn onto the annotated video frame.</td></tr>
+  <tr><td>FPS</td><td>Frames Per Second.</td></tr>
+  <tr><td>SMTP</td><td>Simple Mail Transfer Protocol.</td></tr>
+  <tr><td>Edge deployment</td><td>Executing inference on the machine attached to the camera rather than transmitting video to a remote server.</td></tr>
+  <tr><td>MoSCoW</td><td>Prioritisation scheme: Must have, Should have, Could have, Won't have (this release).</td></tr>
+</table>
+
+<h3>1.4 References</h3>
+<ol>
+  <li>Ultralytics YOLOv8 Documentation — <code>https://docs.ultralytics.com</code> <em>(primary pose estimation technology)</em>.</li>
+  <li>PyTorch Documentation — <code>https://pytorch.org/docs</code>.</li>
+  <li>Flask Documentation — <code>https://flask.palletsprojects.com</code>.</li>
+  <li>OpenCV Documentation — <code>https://docs.opencv.org</code>.</li>
+  <li>IEEE Std 830-1998, <em>IEEE Recommended Practice for Software Requirements Specifications</em>.</li>
+  <li>ISO/IEC/IEEE 29148:2018, <em>Systems and software engineering — Life cycle processes — Requirements engineering</em>.</li>
+  <li>GuardianAI Software Design Document v1.0, FYP-2026-G6.</li>
+  <li>MediaPipe Pose Landmark Detection — <code>https://developers.google.com/mediapipe</code> <em>(historical reference; superseded)</em>.</li>
+</ol>
+
+<h3>1.5 Document Conventions</h3>
+<p>This revision introduces a formal convention for stating requirements. Every requirement carries a
+unique identifier, a priority, and a verification method.</p>
+
+<h4>Requirement identifiers</h4>
+<table>
+  <tr><th style="width:16%">Prefix</th><th>Meaning</th></tr>
+  <tr><td><code>FR-n.m</code></td><td>Functional requirement, group <em>n</em>, item <em>m</em>.</td></tr>
+  <tr><td><code>NFR-X.m</code></td><td>Non-functional requirement, category <em>X</em> (P performance, R reliability, S safety, SEC security, U usability, M maintainability).</td></tr>
+  <tr><td><code>UC-n</code></td><td>Use case.</td></tr>
+</table>
+
+<h4>Priority (MoSCoW)</h4>
+<table>
+  <tr><th style="width:16%">Level</th><th>Meaning</th></tr>
+  <tr><td class="must">MUST</td><td>Mandatory for FYP-1. The system is not acceptable without it.</td></tr>
+  <tr><td class="should">SHOULD</td><td>Important and expected, but the system remains demonstrable if it degrades.</td></tr>
+  <tr><td class="could">COULD</td><td>Desirable enhancement; implemented if time permits.</td></tr>
+  <tr><td class="wont">WON'T</td><td>Explicitly deferred to FYP-2. Recorded so scope boundaries are unambiguous.</td></tr>
+</table>
+
+<h4>Verification method</h4>
+<table>
+  <tr><th style="width:16%">Code</th><th>Meaning</th></tr>
+  <tr><td><strong>T</strong></td><td>Test — executed against defined inputs with a measurable pass condition.</td></tr>
+  <tr><td><strong>D</strong></td><td>Demonstration — observed live during the prototype demonstration.</td></tr>
+  <tr><td><strong>I</strong></td><td>Inspection — verified by examining source code, configuration or output artefacts.</td></tr>
+  <tr><td><strong>A</strong></td><td>Analysis — verified by measurement and reasoning, e.g. sustained frame-rate profiling.</td></tr>
+</table>
+<p>The keywords <strong>shall</strong> (mandatory), <strong>should</strong> (recommended) and <strong>may</strong>
+(optional) are used consistently in the sense defined by IEEE Std 830-1998.</p>
+
+<!-- ============ 2. OVERALL DESCRIPTION ============ -->
+<div class="page-break"></div>
+<h2>2. Overall Description</h2>
+
+<h3>2.1 Product Perspective</h3>
+<p>
+GuardianAI is a <strong>self-contained, edge-deployable monitoring application</strong>. It is not a
+component of a larger product and has no mandatory dependency on any external service. It executes on
+a single commodity computer attached to a camera, performs all inference locally, and exposes a
+lightweight web interface over the local network.
+</p>
+<p>
+This architecture is a direct consequence of the problem domain. Low-resource care environments
+cannot be assumed to have reliable internet connectivity, budget for cloud inference, or the legal
+and ethical clearance to transmit continuous video of vulnerable individuals off-site. Local
+processing resolves all three constraints simultaneously.
+</p>
+
+<h3>2.2 System Context</h3>
+<p>Figure 2.1 shows GuardianAI as a single system together with every external entity it exchanges data with.</p>
+
+<div class="fig">
+<svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="cx" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#475569"/></marker>
+    <marker id="cxg" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/></marker>
+  </defs>
+
+  <!-- Central system -->
+  <ellipse cx="360" cy="190" rx="118" ry="66" fill="#ccfbf1" stroke="#0d9488" stroke-width="2.4"/>
+  <text x="360" y="182" font-size="14" text-anchor="middle" font-weight="600" fill="#115e59">GuardianAI</text>
+  <text x="360" y="200" font-size="9" text-anchor="middle" fill="#0f766e">Fall Detection System</text>
+  <text x="360" y="215" font-size="8" text-anchor="middle" fill="#14b8a6">(edge application)</text>
+
+  <!-- Camera -->
+  <rect x="24" y="30" width="122" height="52" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="85" y="52" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">Camera</text>
+  <text x="85" y="68" font-size="8" text-anchor="middle" fill="#475569">webcam / IP / file</text>
+
+  <!-- Monitored person -->
+  <rect x="24" y="150" width="122" height="52" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="85" y="172" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">Monitored Person</text>
+  <text x="85" y="188" font-size="8" text-anchor="middle" fill="#475569">elderly / patient</text>
+
+  <!-- Admin -->
+  <rect x="24" y="272" width="122" height="52" rx="6" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="85" y="294" font-size="10" text-anchor="middle" font-weight="600" fill="#0f172a">System Admin</text>
+  <text x="85" y="310" font-size="8" text-anchor="middle" fill="#475569">configures thresholds</text>
+
+  <!-- Caregiver -->
+  <rect x="574" y="30" width="122" height="52" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text x="635" y="52" font-size="10" text-anchor="middle" font-weight="600" fill="#1e40af">Caregiver / Nurse</text>
+  <text x="635" y="68" font-size="8" text-anchor="middle" fill="#475569">browser dashboard</text>
+
+  <!-- Local alert hw -->
+  <rect x="574" y="150" width="122" height="52" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="635" y="168" font-size="10" text-anchor="middle" font-weight="600" fill="#991b1b">Local Alert Devices</text>
+  <text x="635" y="183" font-size="8" text-anchor="middle" fill="#7f1d1d">speaker · OS notify</text>
+  <text x="635" y="195" font-size="8" text-anchor="middle" fill="#7f1d1d">· popup window</text>
+
+  <!-- SMTP -->
+  <rect x="574" y="272" width="122" height="52" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="635" y="292" font-size="10" text-anchor="middle" font-weight="600" fill="#475569">SMTP Gateway</text>
+  <text x="635" y="308" font-size="8" text-anchor="middle" fill="#64748b">optional · off by default</text>
+
+  <!-- Storage bottom -->
+  <rect x="290" y="316" width="140" height="46" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="360" y="336" font-size="9.5" text-anchor="middle" font-weight="600" fill="#92400e">Local File System</text>
+  <text x="360" y="351" font-size="8" text-anchor="middle" fill="#78350f">JSON logs · JPEG captures</text>
+
+  <!-- flows -->
+  <line x1="146" y1="60" x2="268" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#cx)"/>
+  <text x="176" y="98" font-size="8" fill="#334155">video frames</text>
+
+  <line x1="146" y1="176" x2="240" y2="185" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4,3" marker-end="url(#cxg)"/>
+  <text x="152" y="204" font-size="8" fill="#64748b">observed by camera</text>
+
+  <line x1="146" y1="296" x2="266" y2="228" stroke="#475569" stroke-width="1.4" marker-end="url(#cx)"/>
+  <text x="152" y="266" font-size="8" fill="#334155">configuration</text>
+
+  <line x1="452" y1="150" x2="572" y2="62" stroke="#2563eb" stroke-width="1.6" marker-end="url(#cx)"/>
+  <text x="474" y="104" font-size="8" fill="#1e40af">live feed + telemetry</text>
+  <line x1="572" y1="76" x2="456" y2="164" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="4,3" marker-end="url(#cx)"/>
+  <text x="486" y="140" font-size="8" fill="#1e40af">mute / pause / reset</text>
+
+  <line x1="478" y1="188" x2="572" y2="176" stroke="#dc2626" stroke-width="1.6" marker-end="url(#cx)"/>
+  <text x="492" y="205" font-size="8" fill="#991b1b">fall alerts</text>
+
+  <line x1="452" y1="230" x2="572" y2="292" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#cxg)"/>
+  <text x="470" y="270" font-size="8" fill="#64748b">e-mail + JPEG</text>
+
+  <line x1="360" y1="256" x2="360" y2="314" stroke="#d97706" stroke-width="1.5" marker-end="url(#cx)"/>
+  <text x="366" y="288" font-size="8" fill="#92400e">event records</text>
+</svg>
+<div class="fig-cap">Figure 2.1 — System context diagram. Solid arrows are mandatory data flows; dashed arrows are optional or indirect. Raw video enters but never leaves the system.</div>
+</div>
+
+<h3>2.3 Product Functions</h3>
+<table>
+  <tr><th style="width:26%">Function</th><th>Description</th></tr>
+  <tr><td>Pose detection and tracking</td><td>Detect persons in the camera field of view and extract 17 skeletal joint coordinates each, retaining the 13 relevant to postural analysis.</td></tr>
+  <tr><td>Biomechanical assessment</td><td>Continuously measure body tilt angle, head drop speed and ground proximity, and expose these values for inspection.</td></tr>
+  <tr><td>Temporal AI classification</td><td>Analyse a 30-frame window (approximately one second at 30 FPS) and classify activity as <code>normal</code>, <code>warning</code> or <code>fall</code>.</td></tr>
+  <tr><td>Decision fusion</td><td>Combine heuristic and neural verdicts, biasing toward escalation when the interpretable rules detect greater severity.</td></tr>
+  <tr><td>Multi-channel alerting</td><td>Raise audible, visual, on-screen, operating-system and optional e-mail notifications, subject to a cooldown that prevents flooding.</td></tr>
+  <tr><td>Evidence logging</td><td>Persist every alert as a structured JSON record accompanied by a single JPEG frame.</td></tr>
+  <tr><td>Live monitoring dashboard</td><td>Serve an annotated video stream with real-time telemetry, system health indicators and an incident history.</td></tr>
+  <tr><td>Operator control</td><td>Allow the operator to pause the feed, mute alerts and reset tracking state without restarting the application.</td></tr>
+  <tr><td>Model training</td><td>Preprocess video datasets, train the temporal classifier, evaluate it, and export to ONNX.</td></tr>
+</table>
+
+<h3>2.4 User Classes and Characteristics</h3>
+<table>
+  <tr><th style="width:18%">User class</th><th style="width:14%">Technical skill</th><th style="width:14%">Frequency</th><th>Needs and expectations</th></tr>
+  <tr><td>Caregiver / Nurse</td><td>Low — general computer literacy only</td><td>Continuous during shift</td><td>Must understand system state at a glance from across a room. Requires unambiguous alerts and the ability to silence them quickly without disabling monitoring. Must never be required to interpret technical output.</td></tr>
+  <tr><td>System Administrator</td><td>Moderate to high</td><td>Installation and occasional tuning</td><td>Installs dependencies, selects the camera source, adjusts detection thresholds for the room geometry, and optionally configures SMTP credentials.</td></tr>
+  <tr><td>Developer / Researcher</td><td>High</td><td>Development phase</td><td>Trains and evaluates models, extends the feature set, and inspects logs for accuracy analysis.</td></tr>
+  <tr><td>Monitored Person</td><td>None — passive</td><td>Continuous</td><td>Not a system operator. Requires that monitoring be non-intrusive, wearable-free, and privacy-preserving.</td></tr>
+</table>
+
+<h3>2.5 Use-Case Model</h3>
+
+<div class="fig">
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <!-- boundary -->
+  <rect x="196" y="16" width="330" height="368" rx="8" fill="#f8fafc" stroke="#0d9488" stroke-width="1.8"/>
+  <text x="361" y="36" font-size="10" text-anchor="middle" font-weight="600" fill="#115e59">GuardianAI System</text>
+
+  <!-- Caregiver actor -->
+  <circle cx="80" cy="96" r="12" fill="none" stroke="#1e40af" stroke-width="1.8"/>
+  <line x1="80" y1="108" x2="80" y2="134" stroke="#1e40af" stroke-width="1.8"/>
+  <line x1="64" y1="118" x2="96" y2="118" stroke="#1e40af" stroke-width="1.8"/>
+  <line x1="80" y1="134" x2="68" y2="154" stroke="#1e40af" stroke-width="1.8"/>
+  <line x1="80" y1="134" x2="92" y2="154" stroke="#1e40af" stroke-width="1.8"/>
+  <text x="80" y="172" font-size="9.5" text-anchor="middle" font-weight="600" fill="#1e40af">Caregiver</text>
+
+  <!-- Admin actor -->
+  <circle cx="80" cy="270" r="12" fill="none" stroke="#7c3aed" stroke-width="1.8"/>
+  <line x1="80" y1="282" x2="80" y2="308" stroke="#7c3aed" stroke-width="1.8"/>
+  <line x1="64" y1="292" x2="96" y2="292" stroke="#7c3aed" stroke-width="1.8"/>
+  <line x1="80" y1="308" x2="68" y2="328" stroke="#7c3aed" stroke-width="1.8"/>
+  <line x1="80" y1="308" x2="92" y2="328" stroke="#7c3aed" stroke-width="1.8"/>
+  <text x="80" y="346" font-size="9.5" text-anchor="middle" font-weight="600" fill="#7c3aed">Administrator</text>
+
+  <!-- Camera actor (system) -->
+  <rect x="596" y="70" width="100" height="42" rx="5" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="646" y="88" font-size="9" text-anchor="middle" font-weight="600" fill="#0f172a">« system »</text>
+  <text x="646" y="102" font-size="9" text-anchor="middle" fill="#334155">Camera</text>
+
+  <rect x="596" y="270" width="100" height="42" rx="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4,3"/>
+  <text x="646" y="288" font-size="9" text-anchor="middle" font-weight="600" fill="#475569">« system »</text>
+  <text x="646" y="302" font-size="9" text-anchor="middle" fill="#64748b">SMTP</text>
+
+  <!-- use cases -->
+  <ellipse cx="361" cy="66" rx="104" ry="21" fill="#ffffff" stroke="#0d9488" stroke-width="1.4"/>
+  <text x="361" y="63" font-size="9" text-anchor="middle" fill="#0f172a">UC-1 Monitor Live Feed</text>
+  <text x="361" y="75" font-size="7.5" text-anchor="middle" fill="#64748b">FR-4</text>
+
+  <ellipse cx="361" cy="118" rx="104" ry="21" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="361" y="115" font-size="9" text-anchor="middle" fill="#0f172a">UC-2 Receive Fall Alert</text>
+  <text x="361" y="127" font-size="7.5" text-anchor="middle" fill="#991b1b">FR-3, FR-5</text>
+
+  <ellipse cx="361" cy="170" rx="104" ry="21" fill="#ffffff" stroke="#0d9488" stroke-width="1.4"/>
+  <text x="361" y="167" font-size="9" text-anchor="middle" fill="#0f172a">UC-3 Mute / Unmute Alerts</text>
+  <text x="361" y="179" font-size="7.5" text-anchor="middle" fill="#64748b">FR-6.2</text>
+
+  <ellipse cx="361" cy="222" rx="104" ry="21" fill="#ffffff" stroke="#0d9488" stroke-width="1.4"/>
+  <text x="361" y="219" font-size="9" text-anchor="middle" fill="#0f172a">UC-4 Pause / Resume Feed</text>
+  <text x="361" y="231" font-size="7.5" text-anchor="middle" fill="#64748b">FR-6.1</text>
+
+  <ellipse cx="361" cy="274" rx="104" ry="21" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4,3"/>
+  <text x="361" y="271" font-size="9" text-anchor="middle" fill="#475569">UC-5 Review Event History</text>
+  <text x="361" y="283" font-size="7.5" text-anchor="middle" fill="#94a3b8">FR-4.4 · FYP-2</text>
+
+  <ellipse cx="361" cy="326" rx="104" ry="21" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="361" y="323" font-size="9" text-anchor="middle" fill="#0f172a">UC-6 Configure System</text>
+  <text x="361" y="335" font-size="7.5" text-anchor="middle" fill="#64748b">FR-6.4</text>
+
+  <ellipse cx="361" cy="366" rx="104" ry="19" fill="#ffffff" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="361" y="364" font-size="9" text-anchor="middle" fill="#0f172a">UC-7 Train / Evaluate Model</text>
+  <text x="361" y="376" font-size="7.5" text-anchor="middle" fill="#64748b">FR-7</text>
+
+  <!-- associations caregiver -->
+  <line x1="104" y1="110" x2="256" y2="70" stroke="#1e40af" stroke-width="1.1"/>
+  <line x1="104" y1="118" x2="256" y2="118" stroke="#1e40af" stroke-width="1.1"/>
+  <line x1="104" y1="128" x2="256" y2="168" stroke="#1e40af" stroke-width="1.1"/>
+  <line x1="104" y1="136" x2="256" y2="218" stroke="#1e40af" stroke-width="1.1"/>
+  <line x1="104" y1="144" x2="257" y2="270" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- admin -->
+  <line x1="104" y1="286" x2="257" y2="322" stroke="#7c3aed" stroke-width="1.1"/>
+  <line x1="104" y1="296" x2="257" y2="362" stroke="#7c3aed" stroke-width="1.1"/>
+  <line x1="104" y1="276" x2="257" y2="228" stroke="#7c3aed" stroke-width="1.1"/>
+
+  <!-- camera -->
+  <line x1="594" y1="88" x2="466" y2="70" stroke="#475569" stroke-width="1.2"/>
+  <line x1="594" y1="98" x2="466" y2="116" stroke="#475569" stroke-width="1.2"/>
+  <!-- smtp -->
+  <path d="M 594 288 L 560 288 L 560 118 L 468 118" fill="none" stroke="#94a3b8" stroke-width="1.1" stroke-dasharray="4,3"/>
+  <text x="566" y="196" font-size="7.5" fill="#94a3b8">« extend »</text>
+</svg>
+<div class="fig-cap">Figure 2.2 — Use-case model. The greyed, dashed use case (UC-5) is specified in this document but deferred to FYP-2.</div>
+</div>
+
+<h4>UC-2 — Receive Fall Alert (primary use case, expanded)</h4>
+<table>
+  <tr><th style="width:20%">Field</th><th>Detail</th></tr>
+  <tr><td>Actor</td><td>Caregiver (primary), Camera (supporting)</td></tr>
+  <tr><td>Precondition</td><td>System is running, camera is connected, monitored person is within the field of view.</td></tr>
+  <tr><td>Trigger</td><td>The monitored person falls.</td></tr>
+  <tr><td>Main flow</td><td>1. Camera delivers frames. 2. System extracts keypoints and computes biomechanical features. 3. Rule engine and neural classifier each produce a verdict. 4. Verdicts are fused and temporally smoothed. 5. Status resolves to <code>fall</code> with confidence above threshold. 6. System raises buzzer, popup, OS notification and dashboard overlay. 7. System writes a JSON event record and a JPEG capture. 8. Caregiver observes the alert and responds.</td></tr>
+  <tr><td>Alternative flow</td><td>5a. Confidence below threshold → status remains <code>warning</code>; dashboard reflects it, no alert is raised.<br>6a. Alerts are muted → buzzer, popup and OS notification are suppressed; logging and dashboard update continue.<br>6b. Cooldown active → alert suppressed to prevent flooding.</td></tr>
+  <tr><td>Exception flow</td><td>2a. Person not detected for more than 10 consecutive frames → tracking reported lost; status returns to <code>normal</code>.<br>1a. Camera read fails → system attempts reconnection; dashboard shows <em>No Camera</em>.</td></tr>
+  <tr><td>Postcondition</td><td>Alert delivered through all enabled channels; event persisted with evidence frame.</td></tr>
+</table>
+
+<h3>2.6 Operating Environment</h3>
+<table>
+  <tr><th style="width:24%">Element</th><th>Requirement</th></tr>
+  <tr><td>Operating system</td><td>Windows 10 or 11 (primary, tested). The codebase is cross-platform; the buzzer degrades to terminal bells on Linux and macOS.</td></tr>
+  <tr><td>Runtime</td><td>Python 3.8 or later.</td></tr>
+  <tr><td>Processor</td><td>x86-64 CPU. A CUDA-capable GPU is detected and used automatically when present but is not required.</td></tr>
+  <tr><td>Memory</td><td>8 GB RAM recommended.</td></tr>
+  <tr><td>Camera</td><td>Any device enumerable by OpenCV, at 640 × 480 or higher.</td></tr>
+  <tr><td>Browser</td><td>Any modern browser supporting MJPEG in an <code>&lt;img&gt;</code> element.</td></tr>
+  <tr><td>Network</td><td>Local network only. Internet access is not required for operation.</td></tr>
+</table>
+
+<h3>2.7 Design and Implementation Constraints</h3>
+<table>
+  <tr><th style="width:26%">Constraint</th><th>Rationale and consequence</th></tr>
+  <tr><td>Real-time latency</td><td>A fall must be recognised within 1–2 seconds of occurring, which bounds the temporal window and forbids blocking operations in the frame loop.</td></tr>
+  <tr><td>Explainability</td><td>Clinical settings require an auditable reason for every alert, so a purely black-box classifier is unacceptable; interpretable rules must remain a first-class decision path.</td></tr>
+  <tr><td>Privacy</td><td>Continuous video of vulnerable people is highly sensitive; the system must not record video.</td></tr>
+  <tr><td>Affordability</td><td>The target environment cannot fund specialised hardware, so the design is limited to a single ordinary camera and commodity computing.</td></tr>
+  <tr><td>Graceful degradation</td><td>An unattended safety system must not fail hard; every external dependency requires a defined fallback.</td></tr>
+  <tr><td>Academic scope</td><td>FYP-1 targets a demonstrable MVP, so flat-file persistence is acceptable and authentication is deferred.</td></tr>
+</table>
+
+<h3>2.8 Assumptions and Dependencies</h3>
+<table>
+  <tr><th style="width:34%">Assumption or dependency</th><th>Impact if invalid</th></tr>
+  <tr><td>Camera field of view is unobstructed and covers the monitored area</td><td>Falls outside the field of view cannot be detected. Mitigated in part by 10-frame occlusion tolerance.</td></tr>
+  <tr><td>Lighting is sufficient for body-outline detection</td><td>Pose confidence drops below threshold and detection fails. No low-light enhancement stage exists.</td></tr>
+  <tr><td>The subject's hips and head are within frame</td><td>The orientation angle becomes unreliable; this is a known accuracy limitation at close camera range.</td></tr>
+  <tr><td>Python dependencies (PyTorch, Ultralytics, OpenCV, Flask) are installable</td><td>System cannot run. Dependencies are declared with lower bounds in <code>requirements.txt</code>.</td></tr>
+  <tr><td>A caregiver is reachable by at least one alert channel</td><td>Alerts are raised but unobserved. Multiple independent channels mitigate this.</td></tr>
+  <tr><td>SMTP credentials are supplied if e-mail alerting is enabled</td><td>E-mail channel silently disabled; all other channels unaffected.</td></tr>
+</table>
+
+<!-- ============ 3. FUNCTIONAL REQUIREMENTS ============ -->
+<div class="page-break"></div>
+<h2>3. Functional Requirements</h2>
+<p>
+Each requirement below states a single verifiable capability, together with its priority (MoSCoW) and
+verification method (T/D/I/A) as defined in Section 1.5.
+</p>
+
+<h3>3.1 FR-1 — Pose Estimation Pipeline</h3>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-1.1</strong></td>
+    <td>The system <strong>shall</strong> use the YOLOv8-Pose (nano) model to extract 17 skeletal keypoints from every processed video frame, discarding detections scoring below the configured confidence threshold (default 0.5).</td>
+    <td class="must">MUST</td><td>T, I</td>
+    <td>With a person in frame, keypoints are returned; with an empty scene, none are.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-1.2</strong></td>
+    <td>The system <strong>shall</strong> reduce the 17 detected keypoints to the 13 designated critical keypoints, discarding the four facial landmarks (eyes and ears).</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Feature arrays have shape <code>(13, 3)</code>.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-1.3</strong></td>
+    <td>The system <strong>shall</strong> normalise keypoint coordinates to the range <code>[0, 1]</code> against frame width and height, so downstream logic is independent of camera resolution.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>All coordinate values lie within <code>[0, 1]</code> regardless of capture resolution.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-1.4</strong></td>
+    <td>The system <strong>shall</strong> superimpose a skeleton overlay on the video stream, drawing 14 limb connections and joint markers, omitting any joint whose confidence is below 0.4.</td>
+    <td class="should">SHOULD</td><td>D</td>
+    <td>Skeleton is visible and tracks the subject in the dashboard feed.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-1.5</strong></td>
+    <td>Where a subject becomes temporarily undetected, the system <strong>shall</strong> retain the last known keypoints for up to 10 consecutive frames before declaring tracking lost.</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Brief occlusion does not reset the temporal buffer or clear the current status.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-1.6</strong></td>
+    <td>The system <strong>should</strong> support simultaneous tracking of up to 5 persons, maintaining independent keypoint buffers and detection state per subject.</td>
+    <td class="wont">WON'T<br>(FYP-2)</td><td>D</td>
+    <td>Capability exists as <code>MultiPersonPoseEstimator</code> and is demonstrable standalone; integration into the live dashboard pipeline is deferred to FYP-2.</td>
+  </tr>
+</table>
+<div class="warn">
+<strong>Scope correction from V2.</strong> SRS v2 stated multi-person tracking as an active requirement
+and the project README listed it as complete. In fact only the single-subject path is wired into the
+live pipeline. FR-1.6 is therefore reclassified as WON'T (this release) so the delivered scope is
+stated accurately.
+</div>
+
+<h3>3.2 FR-2 — Biomechanical Feature Engineering</h3>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-2.1</strong></td>
+    <td>The system <strong>shall</strong> compute the body orientation angle as the absolute angle of the vector from the nose keypoint to the <strong>midpoint of the left and right hip keypoints</strong>:<br>
+    <code>angle = |degrees(arctan2(y_hip − y_nose, x_hip − x_nose))|</code></td>
+    <td class="must">MUST</td><td>T, I</td>
+    <td>Reports approximately 90° for an upright subject and approaches 0° or 180° for a horizontal subject.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.2</strong></td>
+    <td>The system <strong>shall</strong> compute head drop speed as the frame-to-frame vertical displacement of the head keypoint, in pixels per frame against a virtual 640 × 480 reference frame:<br>
+    <code>speed = y_head(t) − y_head(t−1)</code></td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Positive during downward motion, near zero when stationary.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.3</strong></td>
+    <td>The system <strong>shall</strong> evaluate ground proximity as true when the head coordinate falls below 60% of the virtual frame height (<code>y &gt; 288</code> px of 480).</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Predicate is true when the subject is at floor level, false when standing.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.4</strong></td>
+    <td>The system <strong>shall</strong> accumulate a rolling buffer of 30 frames — <strong>approximately one second at 30 FPS</strong> — as the input window for temporal classification, using a stride of 5 frames when generating training sequences.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Buffer reaches exactly 30 entries before neural inference is attempted.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.5</strong></td>
+    <td>Where a frame contains no detected person, the system <strong>shall</strong> append a zero-valued feature vector rather than skipping the frame, preserving the real-time spacing of the temporal window.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Buffer length advances at a constant rate irrespective of detection gaps.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.6</strong></td>
+    <td>The system <strong>shall</strong> encode each frame as a 51-dimensional feature vector comprising 39 flattened raw keypoint values and 12 engineered feature slots (5 active, 7 reserved).</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Vector length is exactly 51 and matches <code>ModelConfig.input_size</code>.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.7</strong></td>
+    <td>The system <strong>should</strong> apply the feature standardisation statistics computed during training to live inference input.</td>
+    <td class="should">SHOULD</td><td>I</td>
+    <td><em>Partially met.</em> Standardisation exists in the training path; it is not yet applied at live inference. Tracked as a known train/serve skew for FYP-2.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-2.8</strong></td>
+    <td>The system <strong>should</strong> disregard the orientation angle when the contributing hip keypoints fall below a minimum confidence, holding the previous valid value instead.</td>
+    <td class="should">SHOULD</td><td>T</td>
+    <td><em>Not yet met.</em> New requirement raised at Checkpoint-2 in response to observed false <code>warning</code> states at close camera range (see Section 9).</td>
+  </tr>
+</table>
+
+<h3>3.3 FR-3 — Hybrid Decision Engine</h3>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-3.1</strong></td>
+    <td>The system <strong>shall</strong> apply a rule-based state machine classifying each frame as <code>normal</code>, <code>warning</code> or <code>fall</code> using the configured physical thresholds:
+    <ul style="margin:4px 0 0 0">
+      <li><code>normal</code> — angle ≥ 70° and no rapid descent.</li>
+      <li><code>warning</code> — angle &lt; 70°, or a lying posture sustained for ≥ 5 frames.</li>
+      <li><code>fall</code> — rapid descent (&gt; 20 px/frame) sustained for ≥ 2 frames, <strong>confirmed by</strong> ground proximity and an orientation angle &lt; 50°.</li>
+    </ul></td>
+    <td class="must">MUST</td><td>T, D</td>
+    <td><em>Partially met.</em> The <code>normal</code> and <code>warning</code> rules behave as specified. The <code>fall</code> rule currently triggers on the descent condition alone, without the ground-proximity and angle confirmation this requirement mandates. See the defect note below.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.2</strong></td>
+    <td>The system <strong>shall</strong> classify 30-frame sequences using a CNN-LSTM temporal neural network producing confidence scores across the three classes.</td>
+    <td class="must">MUST</td><td>T, I</td>
+    <td>Checkpoint loads and <code>/health</code> reports <code>model_loaded: true</code>.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.3</strong></td>
+    <td>The system <strong>shall</strong> fuse rule and neural verdicts using a default neural weight of 0.7, and <strong>shall</strong> prioritise the rule verdict where it indicates greater severity with confidence above 0.8.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Fusion follows the specified branch logic; severity escalation is preserved.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.4</strong></td>
+    <td>Where no trained checkpoint is available, the system <strong>shall</strong> operate on rule-based classification alone without raising an unhandled exception.</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Renaming the checkpoint file yields a warning and continued operation.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.5</strong></td>
+    <td>The system <strong>shall</strong> apply temporal smoothing over the last 5 frames, emitting <code>fall</code> only where at least 3 of 5 frames classify as <code>fall</code>, and <code>warning</code> where at least 2 of 5 classify as <code>warning</code>.</td>
+    <td class="must">MUST</td><td>T, I</td>
+    <td>Single-frame anomalies do not alter the reported status.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.6</strong></td>
+    <td>The system <strong>shall</strong> raise an alert only where the smoothed status is <code>fall</code> and fused confidence exceeds 0.7.</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Low-confidence detections update the dashboard without triggering alerts.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-3.7</strong></td>
+    <td>The system <strong>shall</strong> expose the raw biomechanical evidence (angle, speed) underlying every classification through both the video HUD and the status API.</td>
+    <td class="must">MUST</td><td>D, I</td>
+    <td>Angle and speed are visible on the overlay and present in <code>/status</code>.</td>
+  </tr>
+</table>
+<div class="warn">
+<strong>Open defect against FR-3.1 (highest-priority correction).</strong> In the current build the
+<code>fall</code> verdict is reachable <em>only</em> through the descent-speed trigger, while the lying
+predicate — which encodes the angle and ground-proximity conditions — can escalate no further than
+<code>warning</code>. Two failure modes follow: a rapid head movement close to the camera can register a
+<code>fall</code> while the subject is upright, and a subject already motionless on the floor generates no
+velocity spike and therefore never reaches <code>fall</code>. FR-3.1 states the <em>intended</em> behaviour
+and is retained unchanged; the implementation must be corrected to satisfy it. This is the first
+scheduled task of FYP-2.
+</div>
+
+<h3>3.4 FR-4 — Interactive Monitoring Dashboard</h3>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-4.1</strong></td>
+    <td>The system <strong>shall</strong> render a heads-up display on the video stream showing the current status (colour-coded green / amber / red), confidence, a telemetry panel with body angle, drop speed and a stability bar, and a frame-rate counter.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>All HUD elements are present and update continuously.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-4.2</strong></td>
+    <td>The system <strong>shall</strong> serve a web dashboard presenting a live MJPEG video feed, a status card with confidence bar, telemetry tiles (persons, body angle, drop speed, cumulative falls), and an incident list.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>Dashboard loads at <code>http://127.0.0.1:5000</code> and displays all panels.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-4.3</strong></td>
+    <td>The dashboard <strong>shall</strong> refresh all telemetry at intervals not exceeding 1 second (implemented at 500 ms).</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Values visibly track subject movement without manual refresh.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-4.4</strong></td>
+    <td>The dashboard <strong>should</strong> provide a browsable, filterable history of past incidents with associated capture thumbnails.</td>
+    <td class="wont">WON'T<br>(FYP-2)</td><td>D</td>
+    <td>Navigation entry is present but explicitly disabled and labelled as future scope.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-4.5</strong></td>
+    <td>The dashboard <strong>shall</strong> display live system health indicators reflecting actual state: server reachability, and detection status distinguishing <em>Active</em>, <em>Paused</em> and <em>No Camera</em>.</td>
+    <td class="must">MUST</td><td>D, T</td>
+    <td>Disconnecting the camera changes the indicator to <em>No Camera</em> within one poll interval.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-4.6</strong></td>
+    <td>The dashboard <strong>shall</strong> present a prominent visual overlay when status becomes <code>fall</code>.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>Overlay appears on fall and clears on return to a lower severity.</td>
+  </tr>
+</table>
+<div class="new">
+<span class="tag-new">NEW IN V3</span> &nbsp; <strong>FR-4.5</strong> formalises a requirement that was
+absent from V2. The Checkpoint-1 dashboard displayed permanently hard-coded "Online" and "Active"
+indicators that did not reflect reality — they continued to read "Active" when the camera was
+disconnected. Health indicators are now required to be state-derived.
+</div>
+
+<h3>3.5 FR-5 — Alerting and Notification</h3>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-5.1</strong></td>
+    <td>On detecting a fall the system <strong>shall</strong> emit an audible alarm — a three-tone pattern of 1000 Hz, 1500 Hz and 1000 Hz, each of 200 ms — on the host machine.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>Buzzer is audible on fall detection.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.2</strong></td>
+    <td>The system <strong>shall</strong> display a high-priority alert window on the host machine for a configurable duration (default 3000 ms), dismissing it automatically without operator interaction.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>Popup appears and self-dismisses after the configured interval.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.3</strong></td>
+    <td>The system <strong>shall</strong> raise a native operating-system notification on fall or warning, so that alerts remain visible when the dashboard is closed or the operator is using another application.</td>
+    <td class="must">MUST</td><td>D</td>
+    <td>OS notification appears with the dashboard closed and another application in focus.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.4</strong></td>
+    <td>The system <strong>may</strong> transmit an HTML e-mail notification containing event details and the captured JPEG as an attachment, over SMTP with STARTTLS.</td>
+    <td class="could">COULD</td><td>T</td>
+    <td>Implemented; disabled by default pending credential configuration.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.5</strong></td>
+    <td>The system <strong>shall</strong> enforce a configurable cooldown period (default 30 seconds) applied collectively across all alert channels, to prevent notification flooding during a sustained event.</td>
+    <td class="must">MUST</td><td>T</td>
+    <td>Repeated detections within the window produce exactly one alert.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.6</strong></td>
+    <td>The system <strong>shall</strong> write every alert to a daily JSON log file <code>logs/fall_events_YYYYMMDD.json</code> recording status, confidence, ISO-8601 timestamp and person identifier, and <strong>shall</strong> save one JPEG frame per alert as evidence.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Log file and corresponding capture exist after a detection.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.7</strong></td>
+    <td>All blocking alert channels <strong>shall</strong> execute asynchronously so that no notification delays frame processing.</td>
+    <td class="must">MUST</td><td>A, I</td>
+    <td>Frame rate shows no measurable drop while an alert is being delivered.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-5.8</strong></td>
+    <td>On start-up the system <strong>shall</strong> reload the current day's existing log file so that restarting the application preserves rather than truncates the day's event history.</td>
+    <td class="should">SHOULD</td><td>T</td>
+    <td>Event count is retained across a restart within the same day.</td>
+  </tr>
+</table>
+<div class="new">
+<span class="tag-new">NEW IN V3</span> &nbsp; <strong>FR-5.3</strong> (OS notification) and
+<strong>FR-5.7</strong> (asynchronous delivery) were implemented during Checkpoint-2 and were not
+present in V2. FR-5.7 arose from a measured defect: the buzzer blocks its calling thread for
+approximately 600 ms, which visibly stalled the video pipeline on every alert when executed inline.
+</div>
+
+<h3>3.6 FR-6 — Operator Control and System Management</h3>
+<div class="new">
+<span class="tag-new">NEW GROUP IN V3</span> &nbsp; V2 specified no operator controls at all. Live
+demonstration made clear that an operator must be able to intervene without terminating monitoring.
+</div>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-6.1</strong></td>
+    <td>The operator <strong>shall</strong> be able to pause and resume the live video feed from the dashboard, with a clear visual indication of the paused state.</td>
+    <td class="should">SHOULD</td><td>D</td>
+    <td>Pausing halts the stream and displays a paused overlay; resuming restores it.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-6.2</strong></td>
+    <td>The operator <strong>shall</strong> be able to mute and unmute alerts independently of pausing. Muting <strong>shall</strong> suppress the buzzer, popup and OS notification while <strong>continuing</strong> event logging and dashboard updates.</td>
+    <td class="must">MUST</td><td>D, T</td>
+    <td>With alerts muted, a detection produces no audible or popup output but does append a log record.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-6.3</strong></td>
+    <td>The system <strong>shall</strong> provide an endpoint to reset tracking state — clearing the feature buffer and smoothing history — without restarting the process.</td>
+    <td class="should">SHOULD</td><td>T</td>
+    <td><code>POST /reset</code> returns success and detection recommences from a clean state.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-6.4</strong></td>
+    <td>All operational thresholds, paths and hyper-parameters <strong>shall</strong> be defined in a single centralised configuration module, with no threshold values embedded in algorithm code.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Inspection confirms every threshold resolves to a named configuration field.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-6.5</strong></td>
+    <td>The system <strong>should</strong> allow thresholds to be adjusted from the dashboard at runtime.</td>
+    <td class="wont">WON'T<br>(FYP-2)</td><td>D</td>
+    <td>Settings navigation entry is present but explicitly disabled.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-6.6</strong></td>
+    <td>The system <strong>shall</strong> resolve all configured relative paths to absolute paths at start-up, so behaviour is identical regardless of the working directory from which it is launched.</td>
+    <td class="should">SHOULD</td><td>T</td>
+    <td>Launching from a different directory produces identical log and model resolution.</td>
+  </tr>
+</table>
+
+<h3>3.7 FR-7 — Model Training and Data Management</h3>
+<div class="new">
+<span class="tag-new">NEW GROUP IN V3</span> &nbsp; The training subsystem exists in the codebase but
+was entirely undocumented in V2, leaving a substantial part of the delivered work unspecified.
+</div>
+<table>
+  <tr><th style="width:9%">ID</th><th style="width:47%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr>
+    <td><strong>FR-7.1</strong></td>
+    <td>The system <strong>shall</strong> provide an offline pipeline that extracts frames from labelled videos, computes features using the <strong>same</strong> pose estimation and feature extraction components used at inference, and emits training sequences.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Training imports the same classes as the live path, guaranteeing train/serve feature parity.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.2</strong></td>
+    <td>The system <strong>shall</strong> support the three-class label scheme <code>normal</code> = 0, <code>warning</code> = 1, <code>fall</code> = 2.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Label mapping is defined in one place and used consistently.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.3</strong></td>
+    <td>Training <strong>shall</strong> apply class weighting (default <code>[1.0, 2.0, 3.0]</code>) to compensate for the natural scarcity of fall examples, penalising missed falls most heavily.</td>
+    <td class="must">MUST</td><td>I</td>
+    <td>Weighted loss is configured and applied.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.4</strong></td>
+    <td>Training <strong>shall</strong> implement early stopping with configurable patience and <strong>shall</strong> retain the best-validation checkpoint separately from the final-epoch checkpoint.</td>
+    <td class="should">SHOULD</td><td>I</td>
+    <td><code>fall_detector_best.pth</code> is produced and auto-discovered at inference.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.5</strong></td>
+    <td>The system <strong>shall</strong> support selecting among LSTM, CNN-LSTM and Transformer architectures by configuration value alone, without code modification.</td>
+    <td class="should">SHOULD</td><td>T</td>
+    <td>Each architecture instantiates and trains via the factory function.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.6</strong></td>
+    <td>The system <strong>should</strong> support exporting the trained model to ONNX for optimised edge runtimes.</td>
+    <td class="could">COULD</td><td>T</td>
+    <td>Export produces a valid opset-13 graph with a dynamic batch axis.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.7</strong></td>
+    <td>The system <strong>should</strong> provide synthetic data generation so the full pipeline can be exercised end to end without a labelled video corpus.</td>
+    <td class="should">SHOULD</td><td>D</td>
+    <td><code>python main.py demo</code> trains and runs detection on a clean machine.</td>
+  </tr>
+  <tr>
+    <td><strong>FR-7.8</strong></td>
+    <td>The system <strong>shall</strong> report per-class precision, recall and F1 together with a confusion matrix when evaluating a trained model.</td>
+    <td class="wont">WON'T<br>(FYP-2)</td><td>T</td>
+    <td>Requires the labelled dataset scheduled for FYP-2.</td>
+  </tr>
+</table>
+
+<!-- ============ 4. EXTERNAL INTERFACES ============ -->
+<div class="page-break"></div>
+<h2>4. External Interface Requirements</h2>
+
+<h3>4.1 User Interfaces</h3>
+<p>The web dashboard shall be responsive and cross-browser compatible, built with HTML5 for structure,
+CSS3 for presentation (Inter and Outfit typefaces, dark theme, card-based layout), and vanilla
+JavaScript for status polling and DOM updates. No JavaScript framework or build step is used, so the
+interface is directly inspectable.</p>
+<table>
+  <tr><th style="width:26%">Element</th><th>Requirement</th></tr>
+  <tr><td>Status legibility</td><td>Current status shall be readable at a glance from across a room, using both text and colour coding (green / amber / red).</td></tr>
+  <tr><td>Colour independence</td><td>Status shall never be conveyed by colour alone; a textual label shall always accompany it.</td></tr>
+  <tr><td>Control affordances</td><td>Pause and Mute controls shall be adjacent to the video feed and clearly indicate their current state.</td></tr>
+  <tr><td>Unavailable features</td><td>Navigation entries for features deferred to FYP-2 shall be visibly disabled and labelled as such, rather than presenting non-functional controls.</td></tr>
+  <tr><td>No installation</td><td>The dashboard shall require no client-side installation beyond a web browser.</td></tr>
+</table>
+
+<h3>4.2 Hardware Interfaces</h3>
+<table>
+  <tr><th style="width:24%">Interface</th><th>Specification</th></tr>
+  <tr><td>Camera</td><td>Any device enumerable by OpenCV — integrated webcam, USB camera, or IP/RTSP stream by URL. Default source index 0, requested at 640 × 480 @ 30 FPS.</td></tr>
+  <tr><td>Audio output</td><td>System default audio device. No dedicated sound hardware or external audio file is required.</td></tr>
+  <tr><td>Compute</td><td>x86-64 CPU minimum; CUDA-capable GPU detected and used automatically when available.</td></tr>
+  <tr><td>Display</td><td>Required on the host machine for the popup alert window; the dashboard itself may be viewed from any networked device.</td></tr>
+</table>
+
+<h3>4.3 Software Interfaces</h3>
+<table>
+  <tr><th style="width:28%">Component</th><th style="width:18%">Version</th><th>Purpose</th></tr>
+  <tr><td>Python</td><td>≥ 3.8</td><td>Runtime environment.</td></tr>
+  <tr><td>Ultralytics (YOLOv8)</td><td>≥ 8.0.0</td><td>Pose estimation. <strong>Required</strong> — omitted from the V2 dependency list, which prevented installation from succeeding.</td></tr>
+  <tr><td>PyTorch</td><td>≥ 2.0.0</td><td>Temporal model execution and training.</td></tr>
+  <tr><td>OpenCV</td><td>≥ 4.8.0</td><td>Frame capture, JPEG encoding, overlay drawing.</td></tr>
+  <tr><td>Flask</td><td>≥ 3.0.0</td><td>Web server and REST endpoints.</td></tr>
+  <tr><td>NumPy</td><td>≥ 1.24.0</td><td>Array and vector mathematics.</td></tr>
+  <tr><td>scikit-learn</td><td>≥ 1.3.0</td><td>Training metrics and data splitting.</td></tr>
+  <tr><td>plyer</td><td>≥ 2.1.0</td><td>Cross-platform native OS notifications.</td></tr>
+  <tr><td>ONNX Runtime</td><td>≥ 1.16.0</td><td>Optional optimised inference runtime.</td></tr>
+</table>
+<div class="warn">
+<strong>Dependency corrections applied since V2.</strong> The V2 dependency list named
+<code>mediapipe</code>, which is no longer imported anywhere in the codebase, and
+<code>smtplib-attachment</code>, which is not a real installable package — its presence caused
+<code>pip install -r requirements.txt</code> to fail outright. Conversely <code>ultralytics</code>, on which
+pose estimation entirely depends, was absent. All three issues are corrected.
+</div>
+
+<h3>4.4 Communication Interfaces — REST API</h3>
+<p>The system shall expose the following HTTP interface on port 5000.</p>
+<table>
+  <tr><th style="width:9%">Method</th><th style="width:19%">Route</th><th style="width:34%">Purpose</th><th>Response</th></tr>
+  <tr><td>GET</td><td><code>/</code></td><td>Serve the dashboard application.</td><td><code>text/html</code></td></tr>
+  <tr><td>GET</td><td><code>/static/&lt;path&gt;</code></td><td>Serve CSS and JavaScript assets.</td><td>Static file</td></tr>
+  <tr><td>GET</td><td><code>/video_feed</code></td><td>Continuous annotated video stream with skeleton and HUD.</td><td><code>multipart/x-mixed-replace</code></td></tr>
+  <tr><td>GET</td><td><code>/health</code></td><td>Liveness probe; reports whether the neural checkpoint loaded.</td><td><code>{status, model_loaded, timestamp}</code></td></tr>
+  <tr><td>GET</td><td><code>/status</code></td><td>Primary telemetry endpoint polled by the dashboard.</td><td><code>{current_status, event_summary, camera_connected, alerts_muted}</code></td></tr>
+  <tr><td>POST</td><td><code>/detect</code></td><td>Stateless single-frame inference (form-data file or base64 JSON).</td><td><code>{status, confidence, keypoints_detected, processing_time_ms}</code></td></tr>
+  <tr><td>POST</td><td><code>/detect/batch</code></td><td>Sequence inference over an ordered list of base64 frames.</td><td><code>{results[], final_status, final_confidence, num_frames, processing_time_ms}</code></td></tr>
+  <tr><td>POST</td><td><code>/alerts/mute</code> <span class="tag-new">NEW</span></td><td>Toggle or set alert muting. Empty body toggles; <code>{"muted": bool}</code> sets explicitly.</td><td><code>{muted}</code></td></tr>
+  <tr><td>POST</td><td><code>/reset</code></td><td>Clear feature buffer and smoothing history.</td><td><code>{message}</code></td></tr>
+</table>
+
+<h4>Representative <code>/status</code> response</h4>
+<pre>{
+  "current_status": {
+    "status":       "normal",     // normal | warning | fall
+    "confidence":   100.0,        // percentage
+    "person_count": 1,
+    "angle":        87.5,         // degrees  — explainability evidence
+    "speed":        0.0           // px/frame — explainability evidence
+  },
+  "event_summary": {
+    "total_events": 3,
+    "falls":        1,
+    "warnings":     2,
+    "log_file":     "logs/fall_events_20260726.json"
+  },
+  "camera_connected": true,       // NEW in V3
+  "alerts_muted":     false       // NEW in V3
+}</pre>
+<p>All error conditions shall return an <code>{"error": "..."}</code> body with an appropriate HTTP status
+code (400 for malformed input, 500 for processing failure).</p>
+
+<!-- ============ 5. NON-FUNCTIONAL ============ -->
+<div class="page-break"></div>
+<h2>5. Non-Functional Requirements</h2>
+
+<h3>5.1 NFR-P — Performance</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Target</th></tr>
+  <tr><td><strong>NFR-P.1</strong></td><td>Pose estimation and keypoint extraction shall complete within 25 ms per frame on a standard CPU.</td><td class="must">MUST</td><td>A</td><td>≤ 25 ms</td></tr>
+  <tr><td><strong>NFR-P.2</strong></td><td>Temporal model forward pass shall complete within 8 ms per sequence.</td><td class="should">SHOULD</td><td>A</td><td>≤ 8 ms</td></tr>
+  <tr><td><strong>NFR-P.3</strong></td><td>The visualisation pipeline shall sustain at least 25 FPS end to end with one subject in frame.</td><td class="must">MUST</td><td>A, D</td><td>≥ 25 FPS<br><span class="st-done">Met: 25–30 observed</span></td></tr>
+  <tr><td><strong>NFR-P.4</strong></td><td>A fall shall be recognised and alerted within 2 seconds of occurring.</td><td class="must">MUST</td><td>T</td><td>≤ 2 s</td></tr>
+  <tr><td><strong>NFR-P.5</strong></td><td>Alert delivery shall not measurably reduce the frame rate of the video pipeline.</td><td class="must">MUST</td><td>A</td><td>No visible stall</td></tr>
+  <tr><td><strong>NFR-P.6</strong></td><td>The dashboard shall remain responsive to API requests while the video stream is active.</td><td class="must">MUST</td><td>T</td><td><code>/status</code> responds under concurrent streaming</td></tr>
+</table>
+
+<h3>5.2 NFR-R — Reliability and Availability</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr><td><strong>NFR-R.1</strong></td><td>Where the neural checkpoint is missing or fails to load, the system shall continue operating on rule-based detection without an uncaught exception.</td><td class="must">MUST</td><td>T</td><td>Renaming the checkpoint yields a warning and continued service.</td></tr>
+  <tr><td><strong>NFR-R.2</strong></td><td>Where camera connectivity drops, the system shall attempt reconnection and resume streaming automatically once the device is available, without terminating the stream or requiring a restart.</td><td class="must">MUST</td><td>T</td><td>Disconnecting and reconnecting the camera restores the feed unattended.</td></tr>
+  <tr><td><strong>NFR-R.3</strong></td><td>The camera handle shall be released whenever the stream ends, including on client disconnect, so the device can always be reacquired.</td><td class="must">MUST</td><td>I, T</td><td>Pause followed by resume reliably reopens the device.</td></tr>
+  <tr><td><strong>NFR-R.4</strong></td><td>Failure of any single alert channel shall not prevent the remaining channels from delivering.</td><td class="must">MUST</td><td>T</td><td>Disabling audio still yields popup, OS notification and log entry.</td></tr>
+  <tr><td><strong>NFR-R.5</strong></td><td>A corrupted or unreadable event log shall not prevent start-up.</td><td class="should">SHOULD</td><td>T</td><td>Malformed JSON is handled and a fresh log begun.</td></tr>
+  <tr><td><strong>NFR-R.6</strong></td><td>The system shall be capable of continuous unattended operation for a full care shift (minimum 8 hours).</td><td class="should">SHOULD</td><td>T</td><td>No memory growth or degradation over an 8-hour run.</td></tr>
+</table>
+
+<h3>5.3 NFR-S — Safety</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr><td><strong>NFR-S.1</strong></td><td>Decision logic shall bias toward escalation: where the interpretable rules indicate greater severity than the neural network with high confidence, the more severe verdict shall prevail.</td><td class="must">MUST</td><td>I</td><td>Fusion logic implements the severity override.</td></tr>
+  <tr><td><strong>NFR-S.2</strong></td><td>Every classification shall be traceable to the raw biomechanical values that produced it, to support clinical audit.</td><td class="must">MUST</td><td>D, I</td><td>Angle and speed exposed on HUD and API.</td></tr>
+  <tr><td><strong>NFR-S.3</strong></td><td>Muting alerts shall never suppress event logging, so the evidentiary record remains complete.</td><td class="must">MUST</td><td>T</td><td>Muted detection still writes a log record.</td></tr>
+  <tr><td><strong>NFR-S.4</strong></td><td>The system shall present no diagnostic or medical claim; it is an assistive alerting tool only.</td><td class="must">MUST</td><td>I</td><td>No clinical claim appears in the interface or documentation.</td></tr>
+</table>
+
+<h3>5.4 NFR-SEC — Security and Privacy</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr><td><strong>NFR-SEC.1</strong></td><td>Video streams shall be processed in local memory and shall never be written to disk as continuous recordings.</td><td class="must">MUST</td><td>I</td><td>No video file is produced during operation.</td></tr>
+  <tr><td><strong>NFR-SEC.2</strong></td><td>Only a single JPEG frame per confirmed alert shall be persisted, stored locally in the log directory.</td><td class="must">MUST</td><td>I</td><td>Capture count equals alert count.</td></tr>
+  <tr><td><strong>NFR-SEC.3</strong></td><td>All inference shall execute locally; no video data shall be transmitted to any third-party service.</td><td class="must">MUST</td><td>I</td><td>No outbound video traffic.</td></tr>
+  <tr><td><strong>NFR-SEC.4</strong></td><td>E-mail alerting shall be disabled by default and shall transmit only event metadata and a single frame when enabled.</td><td class="must">MUST</td><td>I</td><td>Default configuration has e-mail off.</td></tr>
+  <tr><td><strong>NFR-SEC.5</strong></td><td>The system shall not perform biometric identification or associate detections with named individuals.</td><td class="must">MUST</td><td>I</td><td>No identity data is stored.</td></tr>
+  <tr><td><strong>NFR-SEC.6</strong></td><td>The dashboard and API shall require authentication, and shall not be exposed on all network interfaces by default.</td><td class="wont">WON'T<br>(FYP-2)</td><td>T</td><td><span class="st-plan">Not met.</span> The server currently binds <code>0.0.0.0</code> without authentication — acceptable for a controlled demonstration, but a documented prerequisite for real deployment.</td></tr>
+</table>
+
+<h3>5.5 NFR-U — Usability</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr><td><strong>NFR-U.1</strong></td><td>A non-technical caregiver shall be able to interpret system status without training or documentation.</td><td class="must">MUST</td><td>D</td><td>Status is a plain word plus colour, not a numeric code.</td></tr>
+  <tr><td><strong>NFR-U.2</strong></td><td>Alerts shall be perceivable through at least two independent sensory channels (audible and visual).</td><td class="must">MUST</td><td>D</td><td>Buzzer plus popup, OS notification and dashboard overlay.</td></tr>
+  <tr><td><strong>NFR-U.3</strong></td><td>An operator shall be able to silence an active alert in a single interaction.</td><td class="should">SHOULD</td><td>D</td><td>One click on Mute.</td></tr>
+  <tr><td><strong>NFR-U.4</strong></td><td>The dashboard shall require no client installation or configuration.</td><td class="must">MUST</td><td>D</td><td>Opening the URL is sufficient.</td></tr>
+</table>
+
+<h3>5.6 NFR-M — Maintainability and Portability</h3>
+<table>
+  <tr><th style="width:11%">ID</th><th style="width:46%">Requirement</th><th style="width:9%">Priority</th><th style="width:7%">Verif.</th><th>Acceptance condition</th></tr>
+  <tr><td><strong>NFR-M.1</strong></td><td>Each pipeline stage shall be an independently replaceable module with a narrow interface.</td><td class="must">MUST</td><td>I</td><td>The MediaPipe → YOLOv8 migration touched only the pose module.</td></tr>
+  <tr><td><strong>NFR-M.2</strong></td><td>No threshold or tunable constant shall be embedded in algorithm code.</td><td class="must">MUST</td><td>I</td><td>All values resolve to configuration fields.</td></tr>
+  <tr><td><strong>NFR-M.3</strong></td><td>Training and inference shall share identical feature computation code to prevent train/serve skew.</td><td class="must">MUST</td><td>I</td><td>Both import the same extractor classes.</td></tr>
+  <tr><td><strong>NFR-M.4</strong></td><td>The system shall run on Windows, Linux and macOS, degrading platform-specific features gracefully.</td><td class="should">SHOULD</td><td>T</td><td>Buzzer falls back to terminal bells off Windows.</td></tr>
+  <tr><td><strong>NFR-M.5</strong></td><td>The codebase shall have automated unit tests covering the geometric functions, state machine and fusion logic.</td><td class="wont">WON'T<br>(FYP-2)</td><td>T</td><td><span class="st-plan">Not met.</span> No test suite currently exists.</td></tr>
+</table>
+
+<!-- ============ 6. PRIORITISATION ============ -->
+<h2>6. Requirement Prioritisation Summary</h2>
+<table>
+  <tr><th style="width:14%">Priority</th><th style="width:10%">Count</th><th>Requirements</th></tr>
+  <tr><td class="must">MUST</td><td>38</td><td>Core detection pipeline (FR-1.1–1.5, FR-2.1–2.6), decision engine (FR-3.1–3.7), dashboard (FR-4.1–4.3, 4.5, 4.6), primary alerting (FR-5.1–5.3, 5.5–5.7), mute and configuration (FR-6.2, 6.4), training fundamentals (FR-7.1–7.3), and all MUST-level non-functional requirements.</td></tr>
+  <tr><td class="should">SHOULD</td><td>14</td><td>FR-1.4, FR-2.7, FR-2.8, FR-5.8, FR-6.1, FR-6.3, FR-6.6, FR-7.4, FR-7.5, FR-7.7, NFR-P.2, NFR-R.5, NFR-R.6, NFR-U.3, NFR-M.4.</td></tr>
+  <tr><td class="could">COULD</td><td>2</td><td>FR-5.4 (e-mail alerting), FR-7.6 (ONNX export). Both implemented but not required for demonstration.</td></tr>
+  <tr><td class="wont">WON'T<br>(FYP-2)</td><td>6</td><td>FR-1.6 multi-person integration, FR-4.4 event history UI, FR-6.5 runtime configuration UI, FR-7.8 evaluation metrics, NFR-SEC.6 authentication, NFR-M.5 automated tests.</td></tr>
+</table>
+
+<!-- ============ 7. ACCEPTANCE ============ -->
+<h2>7. Verification and Acceptance Criteria</h2>
+<p>The Checkpoint-2 prototype is considered acceptable when the following criteria are demonstrated
+together in a single session.</p>
+<table>
+  <tr><th style="width:8%">AC</th><th style="width:34%">Criterion</th><th style="width:12%">Verifies</th><th>Evidence artefact</th></tr>
+  <tr><td>AC-1</td><td>Application starts and the dashboard loads without error; <code>/health</code> reports the model loaded.</td><td>FR-3.2, FR-4.2</td><td>Screenshot, health response</td></tr>
+  <tr><td>AC-2</td><td>Live video displays with skeleton overlay tracking a moving subject.</td><td>FR-1.1, FR-1.4</td><td>Screenshot, demo video</td></tr>
+  <tr><td>AC-3</td><td>Telemetry (persons, angle, speed) updates continuously and plausibly as the subject moves.</td><td>FR-3.7, FR-4.3</td><td>Demo video</td></tr>
+  <tr><td>AC-4</td><td>A simulated fall produces a <code>fall</code> status with confidence above threshold.</td><td>FR-3.1, FR-3.6</td><td>Screenshot, demo video</td></tr>
+  <tr><td>AC-5</td><td>The fall triggers buzzer, popup and OS notification, the last visible with the dashboard closed.</td><td>FR-5.1–5.3</td><td>Demo video</td></tr>
+  <tr><td>AC-6</td><td>A JSON event record and a JPEG capture are written for the event.</td><td>FR-5.6</td><td>Log file, capture image</td></tr>
+  <tr><td>AC-7</td><td>Repeated detections within 30 seconds yield exactly one alert.</td><td>FR-5.5</td><td>Log inspection</td></tr>
+  <tr><td>AC-8</td><td>Muting suppresses buzzer, popup and OS notification while logging continues.</td><td>FR-6.2, NFR-S.3</td><td>Demo video, log file</td></tr>
+  <tr><td>AC-9</td><td>Pausing halts the feed and displays the paused state; resuming restores it.</td><td>FR-6.1</td><td>Demo video</td></tr>
+  <tr><td>AC-10</td><td>Disconnecting the camera changes the indicator to <em>No Camera</em>; reconnecting restores the feed unattended.</td><td>FR-4.5, NFR-R.2</td><td>Demo video</td></tr>
+  <tr><td>AC-11</td><td>Removing the checkpoint leaves the system running on rules alone.</td><td>FR-3.4, NFR-R.1</td><td>Console output</td></tr>
+  <tr><td>AC-12</td><td>Sustained frame rate of at least 25 FPS is observed on the HUD counter.</td><td>NFR-P.3</td><td>Screenshot</td></tr>
+</table>
+
+<!-- ============ 8. TRACEABILITY ============ -->
+<div class="page-break"></div>
+<h2>8. Requirements Traceability</h2>
+<p>Forward traceability from each requirement group to its realising design section and current build status.</p>
+<table>
+  <tr><th style="width:13%">Requirement</th><th style="width:24%">Implementing component</th><th style="width:12%">SDD section</th><th>Status in Checkpoint-2 build</th></tr>
+  <tr><td>FR-1.1–1.3</td><td><code>pose_estimator.py</code></td><td>§5.2.1, §6.1</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-1.4</td><td><code>_draw_custom_skeleton()</code></td><td>§5.2.1</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-1.5</td><td><code>_handle_lost_tracking()</code></td><td>§5.2.1</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-1.6</td><td><code>MultiPersonPoseEstimator</code></td><td>§5.2.2</td><td class="st-part">Standalone only — not integrated</td></tr>
+  <tr><td>FR-2.1–2.6</td><td><code>feature_extractor.py</code></td><td>§5.3, §6.2, §9.1–9.3</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-2.7</td><td><code>TemporalFeatureProcessor</code></td><td>§5.3</td><td class="st-part">Training path only</td></tr>
+  <tr><td>FR-2.8</td><td>— (new requirement)</td><td>§12.2</td><td class="st-plan">Not implemented</td></tr>
+  <tr><td>FR-3.1</td><td><code>get_rule_based_status()</code></td><td>§8.1, §9.4</td><td class="st-part">Partial — fall rule omits angle/ground confirmation</td></tr>
+  <tr><td>FR-3.2</td><td><code>FallDetectorCNNLSTM</code></td><td>§5.4</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-3.3</td><td><code>_fuse_predictions()</code></td><td>§9.5</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-3.4</td><td><code>_load_model()</code> fallback</td><td>§5.5</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-3.5</td><td><code>_smooth_predictions()</code></td><td>§9.6</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-3.6–3.7</td><td><code>process_frame()</code>, <code>_draw_hud()</code></td><td>§5.5</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-4.1–4.3</td><td><code>_draw_hud()</code>, <code>static/</code></td><td>§5.5, §7.2</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-4.4</td><td>— (deferred)</td><td>§12.3</td><td class="st-plan">Deferred to FYP-2</td></tr>
+  <tr><td>FR-4.5–4.6</td><td><code>app.js</code>, <code>/status</code></td><td>§7.1, §7.2</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-5.1–5.3</td><td><code>alert_system.py</code></td><td>§5.6</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-5.4</td><td><code>_email_alert()</code></td><td>§5.6</td><td class="st-part">Implemented, disabled by default</td></tr>
+  <tr><td>FR-5.5–5.8</td><td><code>trigger_alert()</code>, <code>_log_event()</code></td><td>§5.6, §6.4, §8.3</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-6.1–6.3</td><td><code>app.js</code>, <code>/alerts/mute</code>, <code>/reset</code></td><td>§7.1, §7.2</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-6.4, 6.6</td><td><code>config.py</code></td><td>§5.1</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-6.5</td><td>— (deferred)</td><td>§12.3</td><td class="st-plan">Deferred to FYP-2</td></tr>
+  <tr><td>FR-7.1–7.7</td><td><code>train.py</code>, <code>dataset.py</code></td><td>§5.8</td><td class="st-done">Implemented</td></tr>
+  <tr><td>FR-7.8</td><td>— (deferred)</td><td>§12.3</td><td class="st-plan">Requires labelled dataset</td></tr>
+  <tr><td>NFR-P.*</td><td>Pipeline design, threading</td><td>§10.1</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-R.*</td><td>Fallbacks, reconnection</td><td>§10.2</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-S.*</td><td>Fusion override, XAI telemetry</td><td>§9.5, §5.5</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-SEC.1–5</td><td>No-recording design</td><td>§10.3</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-SEC.6</td><td>— (deferred)</td><td>§10.3</td><td class="st-plan">Deferred to FYP-2</td></tr>
+  <tr><td>NFR-U.*</td><td>Dashboard design</td><td>§7.2</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-M.1–4</td><td>Modular architecture</td><td>§10.4</td><td class="st-done">Met</td></tr>
+  <tr><td>NFR-M.5</td><td>— (deferred)</td><td>§12.2</td><td class="st-plan">Deferred to FYP-2</td></tr>
+</table>
+
+<!-- ============ 9. CHANGE LOG ============ -->
+<div class="page-break"></div>
+<h2>9. Change Log — V2 to V3</h2>
+<p>
+This section itemises every substantive change from SRS v2, so the supervisor can review the
+revision without re-reading the whole document.
+</p>
+
+<h3>9.1 Factual Corrections</h3>
+<table>
+  <tr><th style="width:6%">#</th><th style="width:30%">Issue in V2</th><th>Correction in V3</th></tr>
+  <tr><td>1</td><td><strong>Temporal window duration contradiction.</strong> V2 stated the 30-frame sequence represented "2 seconds" in two places, but "1 second at 30 FPS" in FR-2.4.</td><td>Standardised to <strong>approximately one second at 30 FPS</strong>, which is arithmetically correct. Corrected in Section 2.3, FR-2.4 and Appendix A.</td></tr>
+  <tr><td>2</td><td><strong>MediaPipe / YOLOv8 ambiguity.</strong> V2 named MediaPipe in the glossary and reference list while specifying YOLOv8-Pose in the requirements, leaving the actual technology unclear.</td><td>YOLOv8-Pose is stated unambiguously as the pose technology. MediaPipe is retained in the glossary and references but explicitly marked <em>historical — superseded</em>, with the migration rationale recorded.</td></tr>
+  <tr><td>3</td><td><strong>Corrupted inline references.</strong> Text such as "using pose_estimator.py (pose_estimator.py." appeared throughout Section 1.2 with unclosed parentheses and duplicated filenames.</td><td>All malformed references rewritten as clean prose.</td></tr>
+  <tr><td>4</td><td><strong>Unrendered diagram source.</strong> Section 2.1 contained a raw Mermaid code block that appeared in the document as an unreadable single line of text, so the architecture was effectively undocumented.</td><td>Replaced with two properly rendered vector diagrams: a system context diagram (Figure 2.1) and a use-case model (Figure 2.2).</td></tr>
+  <tr><td>5</td><td><strong>Overstated multi-person support.</strong> V2 presented tracking of 5 persons as a delivered function.</td><td>Reclassified as FR-1.6 with priority WON'T (FYP-2), with an explicit note that only the single-subject path is integrated.</td></tr>
+  <tr><td>6</td><td><strong>Incomplete dependency list.</strong> V2 named <code>mediapipe</code> (unused) and <code>smtplib-attachment</code> (not a real package, causing installation to fail), while omitting <code>ultralytics</code>, on which the system depends.</td><td>Dependency table in Section 4.3 corrected, with the defect explained.</td></tr>
+</table>
+
+<h3>9.2 Structural Improvements</h3>
+<table>
+  <tr><th style="width:6%">#</th><th style="width:30%">Addition</th><th>Purpose</th></tr>
+  <tr><td>7</td><td>Requirement identifiers, MoSCoW priority and verification method on every requirement</td><td>Makes each requirement individually addressable, testable and prioritised — the principal weakness of V2, in which requirements were prose paragraphs with no acceptance condition.</td></tr>
+  <tr><td>8</td><td>System context diagram (Figure 2.1)</td><td>Defines the system boundary and every external entity, which V2 never stated.</td></tr>
+  <tr><td>9</td><td>Use-case model (Figure 2.2) with an expanded primary use case</td><td>Connects requirements to actor goals rather than listing capabilities in isolation.</td></tr>
+  <tr><td>10</td><td>Section 2.6 Operating Environment</td><td>V2 scattered environment assumptions across several sections.</td></tr>
+  <tr><td>11</td><td>Section 6 Prioritisation Summary</td><td>Gives an at-a-glance view of committed versus deferred scope.</td></tr>
+  <tr><td>12</td><td>Section 7 Acceptance Criteria (AC-1 to AC-12)</td><td>Defines objectively what a successful demonstration looks like, with the evidence artefact for each.</td></tr>
+  <tr><td>13</td><td>Section 8 Traceability</td><td>Links every requirement forward to its design section and honest build status.</td></tr>
+  <tr><td>14</td><td>Document control: revision history, approval block, related documents</td><td>Standard configuration-management practice, absent from V2.</td></tr>
+</table>
+
+<h3>9.3 New Requirements Introduced</h3>
+<table>
+  <tr><th style="width:12%">ID</th><th style="width:28%">Requirement</th><th>Reason for addition</th></tr>
+  <tr><td>FR-2.8</td><td>Keypoint-confidence gating for the orientation angle</td><td>Raised in response to observed false <code>warning</code> states when hips are near the frame edge and YOLO emits low-confidence estimated positions that are consumed unchecked.</td></tr>
+  <tr><td>FR-4.5</td><td>Live system-health indicators</td><td>The Checkpoint-1 dashboard hard-coded "Online" and "Active", continuing to display "Active" with the camera disconnected — actively misleading in a safety context.</td></tr>
+  <tr><td>FR-5.3</td><td>Native OS notification channel</td><td>Alerts were invisible when the operator was working in another application or had the dashboard closed.</td></tr>
+  <tr><td>FR-5.7</td><td>Asynchronous alert delivery</td><td>The buzzer blocks its thread for roughly 600 ms; executed inline it visibly stalled the video pipeline on every alert.</td></tr>
+  <tr><td>FR-5.8</td><td>Log continuity across restart</td><td>Prevents the day's audit trail being truncated by a restart.</td></tr>
+  <tr><td>FR-6.1–6.6</td><td>Operator control group</td><td>V2 specified no operator controls whatsoever; demonstration showed pause, mute and reset to be operationally necessary.</td></tr>
+  <tr><td>FR-7.1–7.8</td><td>Training and data management group</td><td>The training subsystem existed in code but was entirely unspecified, leaving a substantial deliverable undocumented.</td></tr>
+  <tr><td>NFR-U.*, NFR-M.*</td><td>Usability, maintainability and portability categories</td><td>V2 covered only performance, reliability, safety and security.</td></tr>
+</table>
+
+<h3>9.4 Defects Recorded Against Existing Requirements</h3>
+<table>
+  <tr><th style="width:12%">Against</th><th>Defect and disposition</th></tr>
+  <tr><td>FR-3.1</td><td><strong>Fall rule does not implement its specified condition.</strong> The requirement mandates that a fall be confirmed by ground proximity and an angle below 50° following rapid descent; the implementation triggers on descent speed alone. The requirement is <em>correct as written</em> and is retained unchanged — the implementation must be brought into conformance. Scheduled as the first task of FYP-2 and recorded in SDD §12.2.</td></tr>
+  <tr><td>FR-2.7</td><td>Feature standardisation is applied during training but not at live inference, creating potential train/serve skew. Reclassified as partially met.</td></tr>
+</table>
+
+<div class="note">
+<strong>On recording defects in a requirements document.</strong> Requirements state intended
+behaviour, and remain valid even where the current build does not yet satisfy them. Recording the gap
+explicitly — rather than silently weakening the requirement to match the code — keeps the
+specification honest and gives FYP-2 a precise, prioritised work list.
+</div>
+
+<!-- ============ APPENDIX A ============ -->
+<div class="page-break"></div>
+<h2>Appendix A — Academic Viva and Defence Supplement</h2>
+<p>Retained from V2 and revised for factual accuracy.</p>
+
+<h3>A.1 Why fuse rules with deep learning rather than relying on the network alone?</h3>
+<p>
+Neural networks are black-box models. Fusing interpretable biomechanical rules with the network's
+output makes the system <em>explainable</em>. An examiner or clinician can see that a fall was raised
+because the body angle fell to 35° at a velocity of 22 px/frame and the subject remained down —
+corroborated by the CNN-LSTM classification. The rules additionally act as a safety guardrail: where
+they detect greater severity with high confidence, they override the network, because a missed fall
+is far costlier than a false alarm.
+</p>
+
+<h3>A.2 How does the system avoid false positives from ordinary fast movements?</h3>
+<p>Three independent mechanisms operate together:</p>
+<ol>
+  <li><strong>Temporal sequence buffering.</strong> A 30-frame window (approximately one second) is analysed, so a rapid downward movement immediately followed by an upright posture is classified as normal.</li>
+  <li><strong>Counter-based hysteresis.</strong> The fall counter must reach 2 before a fall is even a candidate, and it decays rather than resetting, so isolated noisy frames dissipate.</li>
+  <li><strong>Temporal smoothing.</strong> A fall must be classified in at least 3 of the last 5 frames before it is emitted.</li>
+</ol>
+<p>
+<em>Honest qualification.</em> These mechanisms are effective against transient noise but do not fully
+resolve the FR-3.1 defect described in Section 9.4: because the fall trigger is currently driven by
+descent speed alone, a sufficiently sustained rapid head movement can still produce a false positive.
+The corrective work is specified and scheduled.
+</p>
+
+<h3>A.3 Trade-offs among the three model architectures</h3>
+<table>
+  <tr><th style="width:20%">Architecture</th><th>Assessment</th></tr>
+  <tr><td>LSTM</td><td>Captures temporal ordering well, but treats the 51 input dimensions as an unstructured vector and so models spatial relationships between joints inefficiently.</td></tr>
+  <tr><td><strong>CNN-LSTM</strong> (chosen)</td><td>The 1-D convolutional front-end learns local joint-motion patterns automatically before the LSTM models longer-range progression. Best accuracy-per-millisecond balance for edge hardware.</td></tr>
+  <tr><td>Transformer</td><td>Strongest long-range modelling through self-attention, but higher compute cost and a greater tendency to overfit the modest keypoint dataset available at FYP-1 scale.</td></tr>
+</table>
+
+<h3>A.4 Why YOLOv8-Pose instead of MediaPipe?</h3>
+<p>
+MediaPipe was evaluated during Checkpoint-1 and provides excellent single-subject tracking with very
+low latency. It was replaced because it is fundamentally single-person oriented, whereas the target
+deployment — a care ward or shared living space — routinely contains several people, and because
+YOLOv8-Pose proved more robust to partial occlusion, which is common when furniture obscures part of
+a subject. YOLOv8 also detects persons and regresses keypoints in a single pass, simplifying the
+pipeline. The cost is a larger model and higher CPU load, mitigated by selecting the nano variant.
+</p>
+
+<h3>A.5 What happens if the model file is missing?</h3>
+<p>
+The system logs a warning and continues using rule-based detection alone. This is a deliberate
+reliability property (NFR-R.1): an unattended safety system must degrade rather than fail, and it is
+what allows the prototype to be demonstrated on a machine that has never run training.
+</p>
+
+<!-- ============ APPENDIX B ============ -->
+<h2>Appendix B — Threshold and Parameter Glossary</h2>
+<table>
+  <tr><th style="width:30%">Parameter</th><th style="width:14%">Value</th><th>Meaning</th></tr>
+  <tr><td>Detection confidence</td><td>0.5</td><td>Minimum YOLO score for a person detection to be accepted.</td></tr>
+  <tr><td>Joint draw confidence</td><td>0.4</td><td>Minimum keypoint score for a joint to be drawn on the overlay.</td></tr>
+  <tr><td>Occlusion tolerance</td><td>10 frames</td><td>Frames for which last-known keypoints are retained before tracking is declared lost.</td></tr>
+  <tr><td>Sequence length</td><td>30 frames</td><td>Temporal window, approximately one second at 30 FPS.</td></tr>
+  <tr><td>Training stride</td><td>5 frames</td><td>Sliding-window step during offline sequence generation.</td></tr>
+  <tr><td>Feature dimensions</td><td>51</td><td>39 raw keypoint values plus 12 engineered slots (5 active, 7 reserved).</td></tr>
+  <tr><td>Upright angle threshold</td><td>70°</td><td>Below this, posture is considered unstable (<code>warning</code>).</td></tr>
+  <tr><td>Lying angle threshold</td><td>50°</td><td>Below this, combined with ground proximity, posture is considered lying.</td></tr>
+  <tr><td>Ground proximity</td><td>60% height</td><td>Head below this fraction of frame height indicates floor level (y &gt; 288 of 480).</td></tr>
+  <tr><td>Drop speed threshold</td><td>20 px/frame</td><td>Descent rate indicating rapid, uncontrolled motion.</td></tr>
+  <tr><td>Fall counter threshold</td><td>2 frames</td><td>Consecutive qualifying frames before a fall is a candidate.</td></tr>
+  <tr><td>Lying counter threshold</td><td>5 frames</td><td>Sustained lying frames before a warning is raised.</td></tr>
+  <tr><td>Smoothing window</td><td>5 frames</td><td>Voting window; 3 of 5 for fall, 2 of 5 for warning.</td></tr>
+  <tr><td>Neural fusion weight</td><td>0.7</td><td>Weight given to the network verdict; rules receive 0.3.</td></tr>
+  <tr><td>Rule override confidence</td><td>0.8</td><td>Rule confidence above which greater severity overrides the network.</td></tr>
+  <tr><td>Alert confidence gate</td><td>0.7</td><td>Minimum fused confidence required to raise an alert.</td></tr>
+  <tr><td>Alert cooldown</td><td>30 s</td><td>Minimum interval between alerts, applied across all channels.</td></tr>
+  <tr><td>Popup duration</td><td>3000 ms</td><td>On-screen alert window lifetime.</td></tr>
+  <tr><td>Dashboard poll interval</td><td>500 ms</td><td>Telemetry refresh rate.</td></tr>
+  <tr><td>Camera reconnect threshold</td><td>15 failures</td><td>Consecutive read failures before the device is released and reopened.</td></tr>
+</table>
+
+<div style="margin-top:26px; padding-top:12px; border-top:2px solid #0d9488; text-align:center; color:#64748b; font-size:9pt;">
+  <strong>End of Software Requirements Specification</strong><br>
+  GuardianAI — Real-Time Automated Fall Detection and Alert System · FYP-2026-G6 · Version 3.0<br>
+  Supersedes SRS v2 · Prepared for FYP-I Checkpoint-2 · Subject to Faculty Supervisor review and approval
+</div>
+
+</body>
+</html>
