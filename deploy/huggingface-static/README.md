@@ -20,12 +20,25 @@ uploaded — there is no server-side component at all.
 
 ## How to use
 
-1. Press **Start Camera** and allow access when prompted.
+1. Press **Start Camera**. Allow **camera** access, and allow **notifications**
+   if you want alerts while you are working in another application.
 2. Wait for the models to download (~16 MB, once — then cached).
 3. Stand back so your **head, torso and hips** are all in frame; the detector
    measures the angle between your nose and your hip midpoint.
 4. Lower yourself toward the floor and watch the status card move
    `NORMAL` → `WARNING` → `FALL`.
+
+### Alerts while you are in another application
+
+On a fall the demo raises a **native OS notification** — the browser equivalent
+of the `plyer` desktop notification in the local application — so the alert is
+visible even when this tab is behind another window. Grant the notification
+permission when prompted; the sidebar shows whether it is enabled.
+
+Detection continues while the tab is in the background, but browsers throttle
+hidden tabs, so throughput drops until you return to the tab. The **Mute**
+button suppresses the tone and the notification together, matching the local
+application's behaviour, while event logging continues.
 
 ## How it works
 

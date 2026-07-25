@@ -32,6 +32,7 @@ const ui = {
   eventLog: el('event-log'), fallOverlay: el('fall-overlay'),
   engineStatus: el('engine-status'), cameraStatus: el('camera-status'),
   fpsStatus: el('fps-status'), backendStatus: el('backend-status'),
+  notifyStatus: el('notify-status'),
 };
 
 let poseSession = null, lstmSession = null;
@@ -41,6 +42,7 @@ let running = false, muted = false, stream = null;
 let lostFrames = 0, lastKeypoints = null;
 let lastStatus = 'normal', fallCount = 0, lastAlertTime = 0;
 let frameTimes = [];
+let loopScheduled = false;
 
 // ---------------------------------------------------------------- helpers
 
@@ -67,6 +69,57 @@ function addLogItem(status, confidence) {
   ui.eventLog.prepend(item);
   const items = ui.eventLog.querySelectorAll('.log-item');
   if (items.length > 20) items[items.length - 1].remove();
+}
+
+/*
+ * Native OS notification, the browser equivalent of
+ * alert_system._desktop_notification() (plyer) in the local application.
+ *
+ * This is what makes an alert visible when the operator has switched to
+ * another application or the dashboard tab is not in front.
+ */
+async function requestNotificationPermission() {
+  if (!('Notification' in window)) {
+    ui.notifyStatus.textContent = 'Unsupported';
+    ui.notifyStatus.className = 'value offline';
+    return;
+  }
+  let perm = Notification.permission;
+  if (perm === 'default') {
+    // Must be triggered by a user gesture; the Start Camera click qualifies.
+    try { perm = await Notification.requestPermission(); } catch { /* ignore */ }
+  }
+  const map = {
+    granted: ['Enabled', 'value online'],
+    denied: ['Blocked', 'value offline'],
+    default: ['Not allowed', 'value'],
+  };
+  const [text, cls] = map[perm] || map.default;
+  ui.notifyStatus.textContent = text;
+  ui.notifyStatus.className = cls;
+}
+
+function showNotification(status, confidence) {
+  if (muted) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  try {
+    const n = new Notification(
+      status === 'fall' ? '🚨 Fall Detected' : '⚠️ Warning',
+      {
+        body: `Status: ${status.toUpperCase()} (${(confidence * 100).toFixed(1)}% confidence)\n`
+            + `Please check on the individual immediately.`,
+        icon: './icon.png',
+        badge: './favicon.png',
+        // `tag` collapses repeats into one entry rather than stacking them.
+        tag: 'guardianai-alert',
+        renotify: true,
+      });
+    n.onclick = () => { window.focus(); n.close(); };
+    // Auto-dismiss, mirroring the 3-second popup in the local application.
+    setTimeout(() => n.close(), 8000);
+  } catch (e) {
+    console.warn('Notification failed:', e);
+  }
 }
 
 // Reproduces the 1000/1500/1000 Hz pattern of alert_system._sound_alert().
@@ -286,6 +339,7 @@ async function processFrame() {
         lastAlertTime = now;
         fallCount++;
         playAlarm();
+        showNotification(status, confidence);
       }
     } else {
       extractor.update(null);
@@ -311,8 +365,38 @@ async function processFrame() {
     setError('Inference error: ' + err.message);
   }
 
-  if (running) requestAnimationFrame(processFrame);
+  scheduleNext();
 }
+
+/*
+ * Keep the detection loop alive when the tab is not in front.
+ *
+ * requestAnimationFrame is suspended outright while a document is hidden, so
+ * relying on it alone would freeze detection the moment the operator switches
+ * to another application - precisely when the OS notification matters most.
+ * When hidden we fall back to a timer instead. Browsers still throttle
+ * background timers, so throughput drops, but detection continues.
+ */
+function scheduleNext() {
+  if (!running || loopScheduled) return;
+  loopScheduled = true;
+  if (document.hidden) {
+    setTimeout(runOnce, 120);
+  } else {
+    requestAnimationFrame(runOnce);
+  }
+}
+
+function runOnce() {
+  loopScheduled = false;
+  processFrame();
+}
+
+// A pending rAF never fires once the tab is hidden, so restart the loop on
+// every visibility transition; the loopScheduled guard prevents duplicates.
+document.addEventListener('visibilitychange', () => {
+  if (running) scheduleNext();
+});
 
 // ------------------------------------------------------------- controls
 
@@ -324,6 +408,7 @@ async function start() {
   }
 
   ui.startBtn.disabled = true;
+  await requestNotificationPermission();
   try {
     if (!poseSession) await loadModels();
   } catch (e) {
