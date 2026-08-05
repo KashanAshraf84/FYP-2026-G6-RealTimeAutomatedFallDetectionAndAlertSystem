@@ -1,127 +1,101 @@
-# Real-Time Automated Fall Detection and Alert System
-### For Elderly and Patient Safety in Low-Resource Environments
+﻿# GuardianAI - Real-Time Automated Fall Detection and Alert System
 
----
+Final Year Project (BS Computer Science)
+Group ID: FYP-2026-G6
 
-## 🔴 Live Demo
+## What this project is about
 
-**https://kashan84-guardianai.static.hf.space**
+In a lot of homes and hospitals in Pakistan, elderly patients aren't monitored
+closely enough, so a fall can go unnoticed for a long time. GuardianAI tries to
+fix that using just a normal camera - no wearable sensors needed.
 
-Open it on any PC, press **Start Camera** and allow access. Pose estimation and
-fall classification both run **entirely inside your browser** via ONNX Runtime
-Web — no video is uploaded and there is no server, which preserves the same
-privacy property as the on-premises system. See [`deploy/`](deploy/) for details.
+It watches the camera feed, tracks the person's body pose, and decides whether
+what's happening is normal, a warning sign, or an actual fall. If it detects a
+fall, it immediately alerts a caregiver through sound, a popup, a notification,
+email, and logs the event.
 
----
+## Team
 
-## Group ID
-FYP-2026-G6
+| Name | Roll No | Role |
+|---|---|---|
+| Kashan M. Ashraf | BSCS-01007 | Video Processing + Testing |
+| Umer Ahmed | BSCS-01011 | AI Model + Development (Group Lead) |
+| Imran | BSCS-01014 | UI Design + Documentation |
 
-## Team Members
-|       Name       |   Roll No   |              Role                |
-|      ------      |  ---------  |             ------               |
-| Kashan M. Ashraf | BSCS-01007  |   Video Processing + Testing     |
-|     Umer Ahmed   | BSCS-01011  |    AI Model + Development        |
-|       Imran      | BSCS-01014  |    UI Design + Documentation     |
+## How it works (short version)
 
----
+1. **YOLOv8-Pose** detects the person and extracts body keypoints from each frame.
+2. Those keypoints are turned into features like body angle, how fast the
+   person is dropping, and how close they are to the ground.
+3. A **hybrid classifier** (rule-based checks + a CNN-LSTM neural network)
+   looks at the last ~1 second of motion and decides: normal, warning, or fall.
+4. If it's a confirmed fall with high enough confidence, the alert system
+   fires (buzzer, popup, OS notification, email) and the event gets saved to
+   a SQLite database.
 
-## Problem Statement
-In Pakistan, elderly care and patient monitoring are severely limited due to staff
-shortages and the absence of smart healthcare infrastructure. Falls in homes and
-hospitals frequently go unnoticed, leading to serious and often life-threatening
-injuries. This project proposes an affordable AI-based system — **GuardianAI** —
-that detects falls in real time using an ordinary camera feed, processes video
-entirely on local hardware, and immediately alerts caregivers through multiple
-channels.
+## How to run it
 
----
-
-## Implemented Features
-- [✔] Real-time person detection and pose estimation using **YOLOv8-Pose**
-- [✔] Biomechanical feature engineering (body angle, drop speed, ground proximity)
-- [✔] Hybrid decision engine — explainable rule-based state machine **+** CNN-LSTM temporal classifier, fused
-- [✔] Multi-channel alerting: audible buzzer, on-screen popup, native OS notification, optional e-mail, JSON event logging with JPEG capture
-- [✔] Live web dashboard — MJPEG video feed, real-time telemetry, live system-health indicators
-- [✔] Operator controls — pause/resume feed, mute/unmute alerts, reset tracking
-- [✔] Camera disconnect detection and automatic reconnection
-- [✔] Offline training pipeline (dataset preprocessing, CNN-LSTM/LSTM/Transformer training, ONNX export)
-- [ ] Multi-person tracking integrated into the live dashboard *(implemented standalone, not yet wired into the main pipeline — FYP-2)*
-- [ ] Browsable event history / live threshold configuration UI *(navigation present, intentionally disabled — FYP-2)*
-- [ ] Automated test suite *(FYP-2)*
-
-> **Note on scope accuracy:** an earlier revision of this checklist listed MediaPipe as
-> the pose backend and YOLOv8 as not-yet-implemented. That was backwards — the project
-> migrated from MediaPipe to YOLOv8-Pose during development, for better multi-person
-> robustness and occlusion tolerance. See `architecture/Updated_Architecture_v1.0.pdf`
-> for the full before/after rationale.
-
----
-
-## Setup / Execution Instructions
-
-**Requirements:**
-- Python 3.9+ (tested on 3.14)
-- A webcam or video file
-- See `src/requirements.txt` for the full pinned dependency list (OpenCV, PyTorch, Ultralytics YOLOv8, Flask, plyer, etc.)
-
-**Install:**
 ```bash
 cd src
 pip install -r requirements.txt
-```
-
-**Run the live dashboard (recommended):**
-```bash
 python api_server.py
 ```
-Then open `http://127.0.0.1:5000` in a browser. This starts the Flask server, loads
-the YOLOv8-Pose and CNN-LSTM models, and streams the annotated webcam feed with a
-live telemetry dashboard.
 
-**Alternative entry points (no web dashboard):**
+Then open `http://127.0.0.1:5000` in your browser. This starts the web
+dashboard with the live camera feed, pose overlay, current status, and alert
+history.
+
+Model weights are already included in the repo, so you don't need to train
+anything before running it.
+
+### Other ways to run it
+
 ```bash
-python main.py detect              # CLI detection on webcam, OpenCV window
-python main.py detect --source path/to/video.mp4
-python fyp1_demo.py                # standalone single-person demo
-python fyp2_multi_demo.py          # standalone multi-person demo
-python main.py train --synthetic   # train on synthetic data (no dataset required)
+python main.py detect                     # plain OpenCV window instead of the dashboard
+python main.py detect --source video.mp4  # run on a video file instead of a webcam
+python main.py train --synthetic          # train on generated synthetic data
 ```
 
-Pre-trained weights (`yolov8n-pose.pt`, `models/fall_detector_best.pth`) are included,
-so detection can be run immediately without training first.
+## Live demo (no install needed)
 
----
+There's also a browser-only version that runs entirely client-side (no
+server, nothing uploaded) using ONNX Runtime Web:
 
-## Current Project Status
-🟢 **FYP-I Checkpoint-2 delivered.** End-to-end pipeline running at 25–30 FPS: pose
-estimation, hybrid rule + neural fall classification, multi-channel alerting, and a
-live web dashboard are all implemented and demonstrable. A known defect in the
-rule-based fall-confirmation logic (see `docs/SDS_GuardianAI_v1.0.pdf`, §12.2) is
-documented and scheduled as the first FYP-2 task.
+**https://kashan84-guardianai.static.hf.space**
 
----
+## Project structure
 
-## Documentation
-| Document | Location | Description |
-|---|---|---|
-| Software Requirements Specification v3 | `docs/SRS_document_V3.pdf` | Current, authoritative requirements (supersedes V2) |
-| Software Design Document v1.0 | `docs/SDS_GuardianAI_v1.0.pdf` | Full architecture, class model, data design, algorithms |
-| Updated Architecture v1.0 | `architecture/Updated_Architecture_v1.0.pdf` | Checkpoint-1 → Checkpoint-2 architecture delta and rationale |
-
----
-
-## Repository Structure
 ```
-/docs           → SRS, SDD and other technical documentation
-/architecture   → Architecture diagrams and the Checkpoint-2 update document
-/src            → Application source code (Python + web dashboard)
-/deploy         → Live browser demo and server-side deployment variants
-/test           → Test cases and scenarios
-/presentations  → Proposal and defence slides
-/reports        → Progress and final reports
-/evidence       → Screenshots, demo recordings, logs and testing evidence
-/dataset        → Dataset references and preparation notes
-/research       → Literature review and background reading
-/meeting_logs   → Supervisor meeting records
+src/            main application code (Python + web dashboard)
+docs/           SRS and SDS documents
+architecture/   architecture diagrams
+deploy/         Hugging Face demo versions (browser + Docker)
+presentations/  slides used for the checkpoints
+evidence/       screenshots and demo evidence
+database/       DB schema and seed script
 ```
+
+## Known limitations
+
+- The fall-detection rule currently reacts mostly to how fast someone drops,
+  not their actual body posture. This means a quick hand or head movement
+  can occasionally register as a "fall", and a person who goes down slowly
+  might not get flagged. This is a known issue, documented in the SDS
+  (section 12.2), and the fix is planned for FYP-2.
+- Multi-person detection works as a standalone demo but isn't wired into the
+  live dashboard yet.
+- No automated test suite yet.
+
+## Status
+
+FYP-I Checkpoint-2 completed. Pose estimation, hybrid fall classification,
+multi-channel alerting, and the live dashboard are all working and were
+demonstrated at Checkpoint-2.
+
+## Documents
+
+| Document | Location |
+|---|---|
+| Software Requirements Specification v3 | `docs/SRS_document_V3.pdf` |
+| Software Design Document v1.0 | `docs/SDS_GuardianAI_v1.0.pdf` |
+| Updated Architecture v1.0 | `architecture/Updated_Architecture_v1.0.pdf` |
