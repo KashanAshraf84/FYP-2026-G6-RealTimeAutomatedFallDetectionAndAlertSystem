@@ -66,6 +66,11 @@ class FeatureConfig:
     stillness_threshold: float = 0.005         # Post-fall stillness
     stillness_duration_frames: int = 15        # Frames of stillness to confirm fall
 
+    # Below the fall drop-speed threshold (20 px/frame) but still a sudden
+    # jerk/lunge — flags "warning" for a single frame instead of waiting for
+    # the 3-of-5 temporal smoothing consensus, so brief jerks stay visible.
+    jerk_speed_threshold: float = 12.0
+
 
 @dataclass
 class ModelConfig:
@@ -158,6 +163,7 @@ class SystemConfig:
     yolo_model_path: str = "yolov8n-pose.pt"
     data_dir: str = "data"
     processed_data_dir: str = "data/processed"
+    database_path: str = "data/guardianai.db"
 
     # Display
     show_pose: bool = True
@@ -188,6 +194,8 @@ class SystemConfig:
             self.data_dir = os.path.join(self.project_dir, self.data_dir)
         if not os.path.isabs(self.processed_data_dir):
             self.processed_data_dir = os.path.join(self.project_dir, self.processed_data_dir)
+        if not os.path.isabs(self.database_path):
+            self.database_path = os.path.join(self.project_dir, self.database_path)
 
     def get_device(self):
         """Get the appropriate torch device."""

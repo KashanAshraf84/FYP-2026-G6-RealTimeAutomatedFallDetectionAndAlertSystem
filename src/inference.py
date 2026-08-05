@@ -19,6 +19,7 @@ from pose_estimator import PoseEstimator
 from feature_extractor import FeatureExtractor
 from fall_detector_model import create_model
 from alert_system import AlertSystem
+from database import Database
 from dataset import LABEL_NAMES
 
 
@@ -50,13 +51,22 @@ class FallDetectionInference:
         self.model = self._load_model(model_path)
         print("  [OK] Neural Network ready")
 
-        # 3. Alert System
-        self.alert_system = AlertSystem(self.config.alert)
+        # 3. Database (detection history + fired alerts)
+        self.database = Database(self.config.database_path)
+        print("  [OK] Database ready")
+
+        # 4. Alert System
+        self.alert_system = AlertSystem(self.config.alert, db=self.database)
         print("  [OK] Alert System ready")
 
         # Single-person state tracking
         self.feature_extractor = FeatureExtractor(self.config.features, self.config.pose)
         self._status_history = deque(maxlen=10)
+        self._last_logged_status = None
+
+        # Normalization parameters loaded from checkpoint (may be None for synthetic models)
+        self.norm_mean: Optional[np.ndarray] = None
+        self.norm_std: Optional[np.ndarray] = None
 
         # System state
         self._fps_buffer = deque(maxlen=30)
@@ -82,6 +92,14 @@ class FallDetectionInference:
             checkpoint = torch.load(path, map_location=self.device)
             model.load_state_dict(checkpoint["model_state_dict"])
             model.eval()
+            # Load normalization parameters if they were saved with this checkpoint.
+            if "norm_mean" in checkpoint and checkpoint["norm_mean"] is not None:
+                self.norm_mean = np.array(checkpoint["norm_mean"], dtype=np.float32)
+                self.norm_std = np.array(checkpoint["norm_std"], dtype=np.float32)
+                print("  [OK] Normalization params loaded from checkpoint")
+            else:
+                self.norm_mean = None
+                self.norm_std = None
             return model
         except Exception as e:
             print(f"  ⚠ Failed to load model: {e}")
@@ -103,31 +121,74 @@ class FallDetectionInference:
             sequence = self.feature_extractor.update(keypoints)
 
             # Rule-Based Detection
-            rule_status, rule_confidence = self.feature_extractor.get_rule_based_status(keypoints)
+            rule_status, rule_confidence, rule_is_instant = self.feature_extractor.get_rule_based_status(keypoints)
 
             # Neural Network Detection
             nn_status = "normal"
             nn_confidence = 0.0
+            nn_probs = None
             if sequence is not None and self.model is not None:
-                nn_status, nn_confidence, _ = self._predict(sequence)
+                nn_status, nn_confidence, nn_probs = self._predict(sequence)
 
             # Fuse Predictions
-            final_status, final_confidence = self._fuse_predictions(
+            fused_status, fused_confidence = self._fuse_predictions(
                 rule_status, rule_confidence,
                 nn_status, nn_confidence,
             )
 
             # Temporal Smoothing
             final_status, final_confidence = self._smooth_predictions(
-                final_status, final_confidence
+                fused_status, fused_confidence
             )
 
-            # --- Step 3: Trigger Alerts ---
-            if final_status == "fall" and final_confidence > self.config.confidence_threshold:
+            # A sudden jerk shows up as "warning" the instant it happens,
+            # bypassing the 3-of-5 smoothing consensus (which would otherwise
+            # vote out a one-frame blip). It never overrides a real "fall".
+            if rule_is_instant and final_status != "fall":
+                final_status = "warning"
+                final_confidence = max(final_confidence, rule_confidence)
+
+            # --- Diagnostic logging (every 30th frame to avoid spam) ---
+            if self._frame_count % 30 == 1 or final_status != fused_status:
+                angle = getattr(self.feature_extractor, '_last_angle', 0)
+                speed = getattr(self.feature_extractor, '_last_speed', 0)
+                nn_str = ""
+                if nn_probs is not None:
+                    nn_str = f" NN_probs=[N:{nn_probs[0]:.3f} W:{nn_probs[1]:.3f} F:{nn_probs[2]:.3f}]"
+                print(f"[DIAG F{self._frame_count:4d}] ang={angle:5.1f}° spd={speed:5.1f} | "
+                      f"rule={rule_status}({rule_confidence:.2f}, jerk={rule_is_instant}) | "
+                      f"nn={nn_status}({nn_confidence:.2f}){nn_str} | "
+                      f"fused={fused_status}({fused_confidence:.2f}) | "
+                      f"FINAL={final_status}({final_confidence:.2f})",
+                      flush=True)
+
+            # --- Step 3: Persist + Trigger Alerts ---
+            angle = getattr(self.feature_extractor, "_last_angle", None)
+            speed = getattr(self.feature_extractor, "_last_speed", None)
+            about_to_alert = (
+                final_status == "fall" and final_confidence > self.config.confidence_threshold
+            )
+            event_id = None
+            # Log every status transition, and always log immediately before an
+            # alert fires so the alert has a fresh detection_event to link to
+            # (status may not have "changed" if a fall has been ongoing for a
+            # while and a fresh alert fires after the cooldown elapses).
+            if final_status != self._last_logged_status or about_to_alert:
+                event_id = self.database.log_detection_event(
+                    status=final_status,
+                    confidence=final_confidence,
+                    angle=angle,
+                    speed=speed,
+                    person_count=person_count,
+                )
+                self._last_logged_status = final_status
+
+            if about_to_alert:
                 self.alert_system.trigger_alert(
                     status=final_status,
                     confidence=final_confidence,
-                    frame=frame
+                    frame=frame,
+                    event_id=event_id,
                 )
         else:
             self.feature_extractor.update(None)
@@ -159,11 +220,16 @@ class FallDetectionInference:
     def _predict(self, sequence: np.ndarray) -> Tuple[str, float, np.ndarray]:
         """
         Run neural network inference on a feature sequence.
+        Applies normalization if parameters were saved in the checkpoint.
 
         Returns:
             (predicted_label_name, confidence, class_probabilities)
         """
-        x = torch.tensor(sequence, dtype=torch.float32).unsqueeze(0).to(self.device)
+        seq = sequence.copy()
+        if self.norm_mean is not None and self.norm_std is not None:
+            seq = (seq - self.norm_mean) / (self.norm_std + 1e-8)
+
+        x = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(self.device)
         logits = self.model(x)
         probs = F.softmax(logits, dim=1).cpu().numpy()[0]
 
@@ -183,33 +249,44 @@ class FallDetectionInference:
     ) -> Tuple[str, float]:
         """
         Fuse rule-based and neural network predictions.
-        Neural network has higher weight when available.
+
+        Design (SRS FR-3.1): The NN is the primary classifier for normal /
+        warning states, but a "fall" output requires the rule engine to
+        *confirm* at least "warning" severity.  This prevents the NN from
+        overriding an emphatic "normal" from the physics-based system (e.g.
+        when hips are off-screen and the NN is out-of-distribution).
         """
         if nn_conf == 0.0:
-            # No neural network prediction available
+            # No NN available — rule engine is the only source
             return rule_status, rule_conf
 
-        # Priority fusion: if either detector says "fall", investigate
         status_priority = {"fall": 2, "warning": 1, "normal": 0}
-
         rule_priority = status_priority[rule_status]
-        nn_priority = status_priority[nn_status]
+        nn_priority   = status_priority[nn_status]
+        rule_weight   = 1.0 - nn_weight
 
-        rule_weight = 1.0 - nn_weight
+        # --- Guardrail: Physics Rule Engine says "normal" ---
+        # When physics rule engine detects normal upright stance (angle > 60°,
+        # no rapid drop), trust it over the NN which may be poorly calibrated.
+        if rule_status == "normal":
+            return "normal", rule_conf
 
+        # --- Standard priority fusion ---
         if nn_priority >= rule_priority:
             final_status = nn_status
-            final_conf = nn_conf * nn_weight + rule_conf * rule_weight
+            final_conf   = nn_conf * nn_weight + rule_conf * rule_weight
         else:
             # Rule-based detected higher severity
             if rule_conf > 0.8:
                 final_status = rule_status
-                final_conf = rule_conf * 0.5 + nn_conf * 0.5
+                final_conf   = rule_conf * 0.5 + nn_conf * 0.5
             else:
                 final_status = nn_status
-                final_conf = nn_conf * nn_weight + rule_conf * rule_weight
+                final_conf   = nn_conf * nn_weight + rule_conf * rule_weight
 
         return final_status, min(final_conf, 1.0)
+
+
 
     def _smooth_predictions(
         self, status: str, confidence: float
@@ -234,7 +311,7 @@ class FallDetectionInference:
             avg_conf = status_counts["fall"]["total_conf"] / status_counts["fall"]["count"]
             return "fall", avg_conf
 
-        if "warning" in status_counts and status_counts["warning"]["count"] >= 2:
+        if "warning" in status_counts and status_counts["warning"]["count"] >= 3:
             if "fall" not in status_counts or status_counts["fall"]["count"] < 3:
                 avg_conf = status_counts["warning"]["total_conf"] / status_counts["warning"]["count"]
                 return "warning", avg_conf

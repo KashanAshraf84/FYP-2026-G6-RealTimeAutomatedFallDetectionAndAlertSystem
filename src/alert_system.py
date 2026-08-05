@@ -23,6 +23,7 @@ from typing import Optional, Dict, List
 from pathlib import Path
 
 from config import AlertConfig
+from database import Database
 
 
 class AlertSystem:
@@ -31,8 +32,9 @@ class AlertSystem:
     Supports sound, email, and logging with configurable cooldowns.
     """
 
-    def __init__(self, config: Optional[AlertConfig] = None):
+    def __init__(self, config: Optional[AlertConfig] = None, db: Optional[Database] = None):
         self.config = config or AlertConfig()
+        self.db = db
         self._last_alert_time = 0
         self._alert_count = 0
         self._muted = False
@@ -72,6 +74,7 @@ class AlertSystem:
         frame: Optional[np.ndarray] = None,
         person_id: int = 0,
         extra_info: Optional[Dict] = None,
+        event_id: Optional[int] = None,
     ) -> bool:
         """
         Trigger a fall detection alert.
@@ -165,6 +168,10 @@ class AlertSystem:
                 "person_id": person_id
             }
             self._log_event(log_entry)
+
+        # --- Database record ---
+        if self.db is not None:
+            self.db.log_alert(status=status, confidence=confidence, person_id=person_id, event_id=event_id)
 
         return True
 

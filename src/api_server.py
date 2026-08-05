@@ -59,11 +59,27 @@ def generate_frames():
     """
     det = get_detector()
     source = det.config.camera.source
+    cam_cfg = det.config.camera
 
-    cap = cv2.VideoCapture(source)
+    def _open_camera():
+        c = cv2.VideoCapture(source)
+        # Force the configured capture resolution/fps and a 1-frame buffer.
+        # Without this, the OS/driver default resolution can be far larger
+        # than what the detection pipeline needs, and an unbounded internal
+        # buffer means a frame that arrives faster than it can be processed
+        # just queues up — the feed drifts further behind real time the
+        # longer it runs, which is what "laggy" looks like.
+        c.set(cv2.CAP_PROP_FRAME_WIDTH, cam_cfg.width)
+        c.set(cv2.CAP_PROP_FRAME_HEIGHT, cam_cfg.height)
+        c.set(cv2.CAP_PROP_FPS, cam_cfg.fps)
+        c.set(cv2.CAP_PROP_BUFFERSIZE, cam_cfg.buffer_size)
+        return c
+
+    cap = _open_camera()
     camera_state["connected"] = cap.isOpened()
     consecutive_failures = 0
     max_consecutive_failures = 15  # ~a couple seconds before a full reopen
+    jpeg_params = [int(cv2.IMWRITE_JPEG_QUALITY), 80]
 
     try:
         while True:
@@ -75,7 +91,7 @@ def generate_frames():
                 if consecutive_failures >= max_consecutive_failures:
                     cap.release()
                     time.sleep(1.0)
-                    cap = cv2.VideoCapture(source)
+                    cap = _open_camera()
                     camera_state["connected"] = cap.isOpened()
                     consecutive_failures = 0
                 else:
@@ -89,8 +105,9 @@ def generate_frames():
             result = det.process_frame(frame)
             annotated_frame = result["frame"]
 
-            # Encode as JPEG
-            ret, buffer = cv2.imencode('.jpg', annotated_frame)
+            # Encode as JPEG (quality 80 trims transfer size with no visible
+            # difference on a webcam feed, and cuts encode time per frame)
+            ret, buffer = cv2.imencode('.jpg', annotated_frame, jpeg_params)
             frame_bytes = buffer.tobytes()
 
             # Yield the output frame in byte format
@@ -268,19 +285,43 @@ def reset_tracking():
     det = get_detector()
     det.feature_extractor.reset()
     det._status_history.clear()
+    det._last_logged_status = None
     return jsonify({"message": "Tracking state reset"})
+
+
+@app.route("/events", methods=["GET"])
+def get_events():
+    """Recent detection_events rows (every normal/warning/fall status change)."""
+    det = get_detector()
+    limit = request.args.get("limit", default=50, type=int)
+    return jsonify({"events": det.database.get_recent_events(limit=limit)})
+
+
+@app.route("/alerts", methods=["GET"])
+def get_alerts():
+    """Recent alerts rows (real, cooldown-gated alerts that fired)."""
+    det = get_detector()
+    limit = request.args.get("limit", default=50, type=int)
+    return jsonify({"alerts": det.database.get_recent_alerts(limit=limit)})
+
+
+@app.route("/alerts/<int:alert_id>/acknowledge", methods=["POST"])
+def acknowledge_alert(alert_id):
+    """Mark an alert as acknowledged — the explicit user-action -> DB-write demo."""
+    det = get_detector()
+    found = det.database.acknowledge_alert(alert_id)
+    if not found:
+        return jsonify({"error": "No such alert"}), 404
+    return jsonify({"message": "Alert acknowledged", "id": alert_id})
 
 
 def run_api(host: str = "0.0.0.0", port: int = 5000, debug: bool = False):
     """Start the Flask API server."""
-    print(f"\nStarting Fall Detection API at http://{host}:{port}")
-    print(f"  GET  /health       - Health check")
-    print(f"  POST /detect       - Detect fall from single frame")
-    print(f"  POST /detect/batch - Detect fall from frame sequence")
-    print(f"  GET  /status       - Current detection status")
-    print(f"  POST /reset        - Reset tracking state")
+    print(f"\nStarting Fall Detection Web Dashboard at http://localhost:{port}")
     app.run(host=host, port=port, debug=debug, threaded=True, use_reloader=False)
 
 
 if __name__ == "__main__":
-    run_api(debug=True)
+    run_api(port=5000, debug=True)
+
+

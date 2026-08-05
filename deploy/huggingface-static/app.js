@@ -318,7 +318,7 @@ async function processFrame() {
 
     if (critical) {
       const sequence = extractor.update(critical);
-      const [ruleStatus, ruleConf] = extractor.getRuleBasedStatus(critical);
+      const [ruleStatus, ruleConf, ruleIsInstant] = extractor.getRuleBasedStatus(critical);
 
       let nnStatus = 'normal', nnConf = 0.0;
       if (sequence && lstmSession) {
@@ -331,6 +331,14 @@ async function processFrame() {
 
       [status, confidence] = fusePredictions(ruleStatus, ruleConf, nnStatus, nnConf);
       [status, confidence] = smoothPredictions(history, status, confidence);
+
+      // A sudden jerk shows up as "warning" the instant it happens,
+      // bypassing the 3-of-5 smoothing consensus (which would otherwise
+      // vote out a one-frame blip). It never overrides a real "fall".
+      if (ruleIsInstant && status !== 'fall') {
+        status = 'warning';
+        confidence = Math.max(confidence, ruleConf);
+      }
 
       // Alert gate + cooldown, matching inference.py and AlertSystem
       const now = Date.now() / 1000;

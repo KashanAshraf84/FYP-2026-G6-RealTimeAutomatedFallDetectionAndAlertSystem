@@ -36,15 +36,19 @@ class PersonState:
             return "normal", 0.0
             
         sequence = self.inference.feature_extractor.update(keypoints)
-        rule_status, rule_conf = self.inference.feature_extractor.get_rule_based_status(keypoints)
-        
+        rule_status, rule_conf, rule_is_instant = self.inference.feature_extractor.get_rule_based_status(keypoints)
+
         nn_status, nn_conf = "normal", 0.0
         if sequence is not None and self.inference.model is not None:
             nn_status, nn_conf, _ = self.inference._predict(sequence)
-            
+
         status, conf = self.inference._fuse_predictions(rule_status, rule_conf, nn_status, nn_conf)
         status, conf = self.inference._smooth_predictions(status, conf)
-        
+
+        if rule_is_instant and status != "fall":
+            status = "warning"
+            conf = max(conf, rule_conf)
+
         return status, conf
 
 def run_multi_demo(source=0):

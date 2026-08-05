@@ -30,12 +30,17 @@ export const CONFIG = {
   virtualHeight: 480,
 
   // Rule thresholds
-  uprightAngle: 70,
+  warningAngleThreshold: 60,
   lyingAngle: 50,
   groundProximityRatio: 0.6,
   dropSpeedThreshold: 20,
   fallCounterThreshold: 2,
   lyingCounterThreshold: 5,
+  hipConfidenceThreshold: 0.4,
+  // Below the fall drop-speed threshold but still a sudden jerk/lunge —
+  // flags "warning" for a single frame instead of waiting on the 3-of-5
+  // smoothing consensus, so brief jerks stay visible.
+  jerkSpeedThreshold: 12,
 
   // SystemConfig
   confidenceThreshold: 0.7,
@@ -62,10 +67,12 @@ export class FeatureExtractor {
     this.buffer = [];
     this.prevHeadY = null;       // used for the neural feature vector
     this.prevHeadYRule = null;   // used by the rule engine (kept separate)
+    this.prevHeadXRule = null;
     this.fallCounter = 0;
     this.lyingCounter = 0;
     this.lastAngle = 90.0;
     this.lastSpeed = 0.0;
+    this.lastMovementSpeed = 0.0;
   }
 
   /** Port of feature_extractor.extract_frame_features() */
@@ -122,28 +129,68 @@ export class FeatureExtractor {
     return flat;
   }
 
-  /** Port of feature_extractor.get_rule_based_status() */
+  /**
+   * Port of feature_extractor.get_rule_based_status().
+   *
+   * Returns [status, confidence, isInstant] — isInstant is true when
+   * "warning" was triggered by a single-frame speed jerk rather than the
+   * angle/lying rules, so the caller can surface it immediately instead of
+   * waiting on temporal smoothing.
+   */
   getRuleBasedStatus(kp) {
     const W = CONFIG.virtualWidth, H = CONFIG.virtualHeight;
+    const T = CONFIG.hipConfidenceThreshold;
     const head = [kp[0][0] * W, kp[0][1] * H];
-    const hip = [
-      ((kp[7][0] + kp[8][0]) / 2) * W,
-      ((kp[7][1] + kp[8][1]) / 2) * H,
-    ];
+
+    // --- Hip confidence guard (SRS FR-2.8) ---
+    // YOLO estimates hip positions even when the hips are off-frame, which
+    // corrupts the body-angle calculation. Fall back to the shoulder
+    // midpoint when the hips are not reliably visible.
+    const lHipConf = kp[7][2], rHipConf = kp[8][2];
+    let hip, hipsReliable;
+    if (lHipConf >= T && rHipConf >= T) {
+      hip = [((kp[7][0] + kp[8][0]) / 2) * W, ((kp[7][1] + kp[8][1]) / 2) * H];
+      hipsReliable = true;
+    } else if (lHipConf >= T) {
+      hip = [kp[7][0] * W, kp[7][1] * H];
+      hipsReliable = true;
+    } else if (rHipConf >= T) {
+      hip = [kp[8][0] * W, kp[8][1] * H];
+      hipsReliable = true;
+    } else {
+      const lShConf = kp[1][2], rShConf = kp[2][2];
+      if (lShConf >= T && rShConf >= T) {
+        hip = [((kp[1][0] + kp[2][0]) / 2) * W, ((kp[1][1] + kp[2][1]) / 2) * H];
+      } else if (lShConf >= T) {
+        hip = [kp[1][0] * W, kp[1][1] * H];
+      } else if (rShConf >= T) {
+        hip = [kp[2][0] * W, kp[2][1] * H];
+      } else {
+        hip = head; // last resort: no anchor at all
+      }
+      hipsReliable = false;
+    }
 
     const angle = Math.abs(Math.atan2(hip[1] - head[1], hip[0] - head[0]) * 180 / Math.PI);
-    const headY = head[1];
+    const headY = head[1], headX = head[0];
     const dropSpeed = this.prevHeadYRule !== null ? headY - this.prevHeadYRule : 0;
+    const horizSpeed = this.prevHeadXRule !== null ? headX - this.prevHeadXRule : 0;
     this.prevHeadYRule = headY;
+    this.prevHeadXRule = headX;
+
+    // Combined (any-direction) movement magnitude — catches sideways/upward
+    // jerks that a vertical-only drop_speed would miss.
+    const movementSpeed = Math.hypot(dropSpeed, horizSpeed);
+    this.lastMovementSpeed = movementSpeed;
 
     const nearGround = headY > H * CONFIG.groundProximityRatio;
-    const isLying = angle < CONFIG.lyingAngle && nearGround;
+    const isLying = angle < CONFIG.lyingAngle && nearGround && hipsReliable;
 
     // NOTE: this reproduces a known defect in the current build - the fall
     // verdict is reachable through the speed trigger alone, without the
     // ground-proximity/angle confirmation the specification requires.
     // Documented in SDD 12.2 and SRS v3 9.4; scheduled for FYP-2.
-    const fallTrigger = dropSpeed > CONFIG.dropSpeedThreshold;
+    const fallTrigger = dropSpeed > CONFIG.dropSpeedThreshold && hipsReliable;
 
     this.fallCounter = fallTrigger
       ? this.fallCounter + 1
@@ -153,12 +200,30 @@ export class FeatureExtractor {
     this.lastAngle = angle;
     this.lastSpeed = dropSpeed;
 
+    let status, confidence;
     if (this.fallCounter >= CONFIG.fallCounterThreshold) {
-      return ['fall', Math.min(0.6 + this.fallCounter * 0.1, 1.0)];
+      status = 'fall';
+      confidence = Math.min(0.6 + this.fallCounter * 0.1, 1.0);
+    } else if (this.lyingCounter >= CONFIG.lyingCounterThreshold) {
+      status = 'warning'; confidence = 0.8;
+    } else if (angle < CONFIG.warningAngleThreshold && hipsReliable) {
+      status = 'warning'; confidence = 0.6;
+    } else {
+      status = 'normal'; confidence = hipsReliable ? 1.0 : 0.7;
     }
-    if (this.lyingCounter >= CONFIG.lyingCounterThreshold) return ['warning', 0.8];
-    if (angle < CONFIG.uprightAngle) return ['warning', 0.6];
-    return ['normal', 1.0];
+
+    // --- Instant jerk override ---
+    // A sudden movement below the fall drop-speed threshold still counts as
+    // "warning" for this frame, even if it lasts a single frame and would
+    // otherwise be voted out by temporal smoothing.
+    let isInstant = false;
+    if (status !== 'fall' && movementSpeed > CONFIG.jerkSpeedThreshold) {
+      status = 'warning';
+      confidence = Math.max(confidence, 0.65);
+      isInstant = true;
+    }
+
+    return [status, confidence, isInstant];
   }
 }
 
@@ -166,6 +231,12 @@ export class FeatureExtractor {
 /** Port of inference._fuse_predictions() */
 export function fusePredictions(ruleStatus, ruleConf, nnStatus, nnConf) {
   if (nnConf === 0.0) return [ruleStatus, ruleConf];
+
+  // --- Guardrail: physics rule engine says "normal" ---
+  // When the physics rule engine detects a normal upright stance (angle
+  // above the warning threshold, no rapid drop), trust it over the NN,
+  // which may be poorly calibrated or out-of-distribution.
+  if (ruleStatus === 'normal') return ['normal', ruleConf];
 
   const w = CONFIG.nnWeight;
   const rw = 1.0 - w;
@@ -204,7 +275,7 @@ export function smoothPredictions(history, status, confidence) {
   if (counts.fall && counts.fall.count >= 3) {
     return ['fall', counts.fall.total / counts.fall.count];
   }
-  if (counts.warning && counts.warning.count >= 2) {
+  if (counts.warning && counts.warning.count >= 3) {
     if (!counts.fall || counts.fall.count < 3) {
       return ['warning', counts.warning.total / counts.warning.count];
     }
