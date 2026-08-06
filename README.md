@@ -48,6 +48,29 @@ history.
 Model weights are already included in the repo, so you don't need to train
 anything before running it.
 
+## Database
+
+Detection history and fired alerts are stored in a local **SQLite** database
+(`data/guardianai.db`), alongside the JSON event log. Two tables:
+
+- `detection_events` - one row per status change (normal / warning / fall)
+- `alerts` - one row per alert that actually fired, linked back to the
+  `detection_events` row that caused it
+
+You don't need to install or start anything separately - `database.py`
+creates the file and the tables automatically the first time the app runs
+(`Database(CONFIG.database_path)` in `inference.py`). The schema is also kept
+as a plain `.sql` file at `database/schema.sql` for reference.
+
+To look at the data or add sample rows for a demo:
+
+```bash
+python database/seed.py                       # inserts a few sample rows
+sqlite3 data/guardianai.db                     # open it directly (or use "DB Browser for SQLite")
+sqlite> SELECT * FROM detection_events;
+sqlite> SELECT * FROM alerts;
+```
+
 ### Other ways to run it
 
 ```bash
@@ -99,3 +122,6 @@ demonstrated at Checkpoint-2.
 | Software Requirements Specification v3 | `docs/SRS_document_V3.pdf` |
 | Software Design Document v1.0 | `docs/SDS_GuardianAI_v1.0.pdf` |
 | Updated Architecture v1.0 | `architecture/Updated_Architecture_v1.0.pdf` |
+
+The SDS covers all the UML diagrams asked for: use case, activity, sequence,
+class, ER, state, and architecture.

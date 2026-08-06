@@ -7,6 +7,7 @@ Handles fall notifications via:
   - Email notifications
   - JSON event logging with timestamps and frame captures
 """
+# fixed buzzer/threading bugs here - Kashan
 
 import os
 import json

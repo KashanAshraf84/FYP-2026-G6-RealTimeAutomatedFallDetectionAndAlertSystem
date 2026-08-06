@@ -1,3 +1,4 @@
+// dashboard UI logic - Imran
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const statusText = document.getElementById('current-status-text');

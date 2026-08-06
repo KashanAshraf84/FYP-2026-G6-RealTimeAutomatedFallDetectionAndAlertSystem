@@ -3,6 +3,7 @@ Fall Detection System - Configuration
 ======================================
 Central configuration for all system parameters.
 """
+# settings/config - Kashan
 
 import os
 from dataclasses import dataclass, field

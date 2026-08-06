@@ -4,6 +4,7 @@ Fall Detection System - Flask REST API for Cloud Deployment
 Provides REST endpoints for fall detection inference,
 suitable for deployment on cloud platforms.
 """
+# server + deployment - Kashan
 
 import os
 import io

@@ -6,6 +6,7 @@ Multiple neural network architectures for temporal fall detection:
   2. CNN-LSTM (default, recommended)
   3. Transformer
 """
+# AI model architectures - Umer
 
 import torch
 import torch.nn as nn

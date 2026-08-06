@@ -3,6 +3,7 @@ Fall Detection System - Pose Estimator (YOLOv8 Edition)
 ======================================================
 YOLOv8-Pose based pose estimation with high-accuracy keypoint extraction.
 """
+# camera + pose detection part - Umer
 
 import cv2
 import os
