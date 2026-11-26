@@ -1,0 +1,19 @@
+/* Additions to the Django app.css for the browser workspace (same look, extra widgets). */
+.boot{display:grid;place-items:center;min-height:100vh;color:var(--muted);font-size:13px}
+.demo-accounts{border:1px dashed var(--line);border-radius:9px;padding:12px 14px;font-size:12px;margin-top:18px;background:var(--bg)}
+.demo-accounts p{margin:6px 0 0;font-size:12px}
+.demo-accounts code{background:var(--soft);color:var(--violet);padding:2px 6px;border-radius:5px;font-size:12px}
+.live-link{font-size:9px;letter-spacing:1.3px;font-weight:750;color:#c3345d;white-space:nowrap}
+.field{margin-bottom:18px}
+.field .helptext{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+.field.check label{display:flex;align-items:center;gap:10px}
+.field .errorlist{margin:6px 0 0}
+.account-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}
+.account-row .pill{margin-left:8px}
+.text-button{background:none;border:0;color:var(--violet);font-size:12px;font-weight:600;padding:0;cursor:pointer}
+.text-button.danger{color:#c3345d}
+.video-stage video{background:#171b2c}
+.subject-card pre{margin:10px 0 0;max-height:220px;overflow:auto}
+.inline-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;margin-top:14px}
+.inline-form label{margin-bottom:4px}
+@media(max-width:700px){.inline-form{grid-template-columns:1fr}.live-link{display:none}}

@@ -1,0 +1,10 @@
+# Exact ML versions used to train and evaluate weights/fallnet_v2.pt
+# (Python 3.14.6, Windows 11, CPU-only torch build). Core web versions: requirements-lock.txt.
+torch==2.14.1
+torchvision==0.29.1
+ultralytics==8.4.183
+numpy==2.5.4
+opencv-python==5.0.0.93   # cv2 5.0.0 was the build actually imported
+scikit-learn==1.9.1
+scipy==1.18.1
+matplotlib==3.11.2

@@ -1,0 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+ultralytics>=8.3
+opencv-python-headless
+numpy
+scipy
+pillow
+imageio-ffmpeg

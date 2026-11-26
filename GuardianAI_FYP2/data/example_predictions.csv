@@ -1,0 +1,5 @@
+clip_id,subject_id,split,y_true,y_pred
+example-001,example-person-a,test,normal,normal
+example-002,example-person-b,test,fall,fall
+example-003,example-person-c,test,warning,normal
+example-004,example-person-d,test,fall,warning

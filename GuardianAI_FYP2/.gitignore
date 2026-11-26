@@ -1,0 +1,28 @@
+﻿.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.sqlite3-*
+.env
+instance/
+staticfiles/
+
+# Weights: ship the trained FYP-2 model and the pose model; old FYP1 toy checkpoints stay local
+weights/*
+!weights/README.md
+!weights/fallnet_v2.pt
+!weights/yolov8n-pose.pt
+!weights/pose_onnx/
+# (weights/pose_backend.json and weights/ov_cache/ are per-machine and stay local)
+
+# Raw dataset videos (1 GB, third-party licence) - download GMDCSA-24 separately; the pose cache in data/keypoints is kept
+data/dataset/**/*.mp4
+data/dataset/**/*.avi
+data/*.db
+data/*.npz
+
+# Local runtime output (alert snapshots contain people's images)
+logs/
+training/logs/
+training/results/quick/
+deploy/build/

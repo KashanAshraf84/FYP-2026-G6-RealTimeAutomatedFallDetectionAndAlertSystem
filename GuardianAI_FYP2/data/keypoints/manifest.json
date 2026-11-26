@@ -1,0 +1,1442 @@
+{
+  "S1-fall-01": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\01.mp4",
+    "sampled_frames": 103,
+    "frames_with_person": 74,
+    "detections": 80,
+    "duration_s": 6.87,
+    "fps": 29.57,
+    "resolution": "1280x720"
+  },
+  "S1-fall-02": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\02.mp4",
+    "sampled_frames": 96,
+    "frames_with_person": 93,
+    "detections": 102,
+    "duration_s": 6.37,
+    "fps": 29.67,
+    "resolution": "1280x720"
+  },
+  "S1-fall-03": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\03.mp4",
+    "sampled_frames": 89,
+    "frames_with_person": 89,
+    "detections": 120,
+    "duration_s": 5.92,
+    "fps": 29.72,
+    "resolution": "1280x720"
+  },
+  "S1-fall-04": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\04.mp4",
+    "sampled_frames": 75,
+    "frames_with_person": 74,
+    "detections": 104,
+    "duration_s": 4.96,
+    "fps": 29.43,
+    "resolution": "1280x720"
+  },
+  "S1-fall-05": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\05.mp4",
+    "sampled_frames": 88,
+    "frames_with_person": 88,
+    "detections": 98,
+    "duration_s": 5.86,
+    "fps": 29.7,
+    "resolution": "1280x720"
+  },
+  "S1-fall-06": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\06.mp4",
+    "sampled_frames": 86,
+    "frames_with_person": 84,
+    "detections": 108,
+    "duration_s": 5.7,
+    "fps": 29.66,
+    "resolution": "1280x720"
+  },
+  "S1-fall-07": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\07.mp4",
+    "sampled_frames": 78,
+    "frames_with_person": 78,
+    "detections": 90,
+    "duration_s": 5.15,
+    "fps": 29.69,
+    "resolution": "1280x720"
+  },
+  "S1-fall-08": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\08.mp4",
+    "sampled_frames": 66,
+    "frames_with_person": 66,
+    "detections": 74,
+    "duration_s": 4.35,
+    "fps": 29.63,
+    "resolution": "1280x720"
+  },
+  "S1-fall-09": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\09.mp4",
+    "sampled_frames": 67,
+    "frames_with_person": 61,
+    "detections": 62,
+    "duration_s": 4.48,
+    "fps": 29.23,
+    "resolution": "1280x720"
+  },
+  "S1-fall-10": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\10.mp4",
+    "sampled_frames": 68,
+    "frames_with_person": 68,
+    "detections": 78,
+    "duration_s": 4.5,
+    "fps": 29.57,
+    "resolution": "1280x720"
+  },
+  "S1-fall-11": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\11.mp4",
+    "sampled_frames": 92,
+    "frames_with_person": 92,
+    "detections": 96,
+    "duration_s": 6.1,
+    "fps": 29.68,
+    "resolution": "1280x720"
+  },
+  "S1-fall-12": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\12.mp4",
+    "sampled_frames": 103,
+    "frames_with_person": 103,
+    "detections": 115,
+    "duration_s": 6.83,
+    "fps": 29.27,
+    "resolution": "1280x720"
+  },
+  "S1-fall-13": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\13.mp4",
+    "sampled_frames": 65,
+    "frames_with_person": 65,
+    "detections": 65,
+    "duration_s": 4.32,
+    "fps": 29.62,
+    "resolution": "640x480"
+  },
+  "S1-fall-14": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\14.mp4",
+    "sampled_frames": 86,
+    "frames_with_person": 86,
+    "detections": 101,
+    "duration_s": 5.7,
+    "fps": 29.66,
+    "resolution": "640x480"
+  },
+  "S1-fall-15": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\15.mp4",
+    "sampled_frames": 90,
+    "frames_with_person": 90,
+    "detections": 97,
+    "duration_s": 6.0,
+    "fps": 29.66,
+    "resolution": "640x480"
+  },
+  "S1-fall-16": {
+    "video": "data\\dataset\\falls\\Subject1\\Fall\\16.mp4",
+    "sampled_frames": 92,
+    "frames_with_person": 92,
+    "detections": 129,
+    "duration_s": 6.1,
+    "fps": 29.69,
+    "resolution": "1280x720"
+  },
+  "S2-fall-01": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\01.mp4",
+    "sampled_frames": 96,
+    "frames_with_person": 94,
+    "detections": 102,
+    "duration_s": 6.37,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S2-fall-02": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\02.mp4",
+    "sampled_frames": 127,
+    "frames_with_person": 109,
+    "detections": 126,
+    "duration_s": 8.45,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S2-fall-03": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\03.mp4",
+    "sampled_frames": 106,
+    "frames_with_person": 106,
+    "detections": 132,
+    "duration_s": 7.04,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S2-fall-04": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\04.mp4",
+    "sampled_frames": 153,
+    "frames_with_person": 143,
+    "detections": 159,
+    "duration_s": 10.21,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S2-fall-05": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\05.mp4",
+    "sampled_frames": 68,
+    "frames_with_person": 68,
+    "detections": 68,
+    "duration_s": 4.53,
+    "fps": 29.81,
+    "resolution": "1280x720"
+  },
+  "S2-fall-06": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\06.mp4",
+    "sampled_frames": 98,
+    "frames_with_person": 97,
+    "detections": 114,
+    "duration_s": 6.5,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-fall-07": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\07.mp4",
+    "sampled_frames": 68,
+    "frames_with_person": 68,
+    "detections": 74,
+    "duration_s": 4.53,
+    "fps": 29.81,
+    "resolution": "1280x720"
+  },
+  "S2-fall-08": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\08.mp4",
+    "sampled_frames": 91,
+    "frames_with_person": 91,
+    "detections": 143,
+    "duration_s": 6.06,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S2-fall-09": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\09.mp4",
+    "sampled_frames": 84,
+    "frames_with_person": 77,
+    "detections": 89,
+    "duration_s": 5.6,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S2-fall-10": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\10.mp4",
+    "sampled_frames": 167,
+    "frames_with_person": 76,
+    "detections": 77,
+    "duration_s": 11.14,
+    "fps": 14.99,
+    "resolution": "1280x720"
+  },
+  "S2-fall-11": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\11.mp4",
+    "sampled_frames": 159,
+    "frames_with_person": 143,
+    "detections": 150,
+    "duration_s": 10.59,
+    "fps": 15.01,
+    "resolution": "1280x720"
+  },
+  "S2-fall-12": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\12.mp4",
+    "sampled_frames": 184,
+    "frames_with_person": 172,
+    "detections": 278,
+    "duration_s": 12.26,
+    "fps": 15.01,
+    "resolution": "640x480"
+  },
+  "S2-fall-13": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\13.mp4",
+    "sampled_frames": 133,
+    "frames_with_person": 99,
+    "detections": 141,
+    "duration_s": 8.9,
+    "fps": 14.95,
+    "resolution": "640x480"
+  },
+  "S2-fall-14": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\14.mp4",
+    "sampled_frames": 168,
+    "frames_with_person": 158,
+    "detections": 236,
+    "duration_s": 11.2,
+    "fps": 15.0,
+    "resolution": "640x480"
+  },
+  "S2-fall-15": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\15.mp4",
+    "sampled_frames": 175,
+    "frames_with_person": 175,
+    "detections": 195,
+    "duration_s": 11.67,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S2-fall-16": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\16.mp4",
+    "sampled_frames": 61,
+    "frames_with_person": 61,
+    "detections": 61,
+    "duration_s": 4.02,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S2-fall-17": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\17.mp4",
+    "sampled_frames": 98,
+    "frames_with_person": 98,
+    "detections": 98,
+    "duration_s": 6.5,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-fall-18": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\18.mp4",
+    "sampled_frames": 174,
+    "frames_with_person": 174,
+    "detections": 175,
+    "duration_s": 11.55,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-fall-19": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\19.mp4",
+    "sampled_frames": 233,
+    "frames_with_person": 233,
+    "detections": 233,
+    "duration_s": 15.52,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S2-fall-20": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\20.mp4",
+    "sampled_frames": 172,
+    "frames_with_person": 172,
+    "detections": 177,
+    "duration_s": 11.46,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S2-fall-21": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\21.mp4",
+    "sampled_frames": 143,
+    "frames_with_person": 143,
+    "detections": 144,
+    "duration_s": 9.49,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S2-fall-22": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\22.mp4",
+    "sampled_frames": 78,
+    "frames_with_person": 78,
+    "detections": 79,
+    "duration_s": 5.2,
+    "fps": 29.8,
+    "resolution": "1280x720"
+  },
+  "S2-fall-23": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\23.mp4",
+    "sampled_frames": 113,
+    "frames_with_person": 113,
+    "detections": 113,
+    "duration_s": 7.54,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S2-fall-24": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\24.mp4",
+    "sampled_frames": 107,
+    "frames_with_person": 107,
+    "detections": 138,
+    "duration_s": 7.14,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S2-fall-25": {
+    "video": "data\\dataset\\falls\\Subject2\\Fall\\25.mp4",
+    "sampled_frames": 110,
+    "frames_with_person": 109,
+    "detections": 115,
+    "duration_s": 7.3,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S3-fall-01": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\01.mp4",
+    "sampled_frames": 57,
+    "frames_with_person": 44,
+    "detections": 51,
+    "duration_s": 3.81,
+    "fps": 29.93,
+    "resolution": "1280x720"
+  },
+  "S3-fall-02": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\02.mp4",
+    "sampled_frames": 99,
+    "frames_with_person": 99,
+    "detections": 112,
+    "duration_s": 6.56,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S3-fall-03": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\03.mp4",
+    "sampled_frames": 84,
+    "frames_with_person": 84,
+    "detections": 126,
+    "duration_s": 5.6,
+    "fps": 29.81,
+    "resolution": "1280x720"
+  },
+  "S3-fall-04": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\04.mp4",
+    "sampled_frames": 82,
+    "frames_with_person": 75,
+    "detections": 105,
+    "duration_s": 5.46,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S3-fall-05": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\05.mp4",
+    "sampled_frames": 151,
+    "frames_with_person": 151,
+    "detections": 181,
+    "duration_s": 10.05,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S3-fall-06": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\06.mp4",
+    "sampled_frames": 84,
+    "frames_with_person": 57,
+    "detections": 67,
+    "duration_s": 5.55,
+    "fps": 29.89,
+    "resolution": "1280x720"
+  },
+  "S3-fall-07": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\07.mp4",
+    "sampled_frames": 136,
+    "frames_with_person": 131,
+    "detections": 157,
+    "duration_s": 9.03,
+    "fps": 29.8,
+    "resolution": "1280x720"
+  },
+  "S3-fall-08": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\08.mp4",
+    "sampled_frames": 95,
+    "frames_with_person": 85,
+    "detections": 116,
+    "duration_s": 6.34,
+    "fps": 29.35,
+    "resolution": "1280x720"
+  },
+  "S3-fall-09": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\09.mp4",
+    "sampled_frames": 94,
+    "frames_with_person": 93,
+    "detections": 128,
+    "duration_s": 6.22,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S3-fall-10": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\10.mp4",
+    "sampled_frames": 66,
+    "frames_with_person": 66,
+    "detections": 68,
+    "duration_s": 4.39,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S3-fall-11": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\11.mp4",
+    "sampled_frames": 134,
+    "frames_with_person": 134,
+    "detections": 161,
+    "duration_s": 8.95,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S3-fall-12": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\12.mp4",
+    "sampled_frames": 64,
+    "frames_with_person": 61,
+    "detections": 74,
+    "duration_s": 4.26,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S3-fall-13": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\13.mp4",
+    "sampled_frames": 61,
+    "frames_with_person": 60,
+    "detections": 63,
+    "duration_s": 4.05,
+    "fps": 29.89,
+    "resolution": "1280x720"
+  },
+  "S3-fall-14": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\14.mp4",
+    "sampled_frames": 185,
+    "frames_with_person": 154,
+    "detections": 174,
+    "duration_s": 12.31,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S3-fall-15": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\15.mp4",
+    "sampled_frames": 85,
+    "frames_with_person": 77,
+    "detections": 110,
+    "duration_s": 5.65,
+    "fps": 15.05,
+    "resolution": "1280x720"
+  },
+  "S3-fall-16": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\16.mp4",
+    "sampled_frames": 91,
+    "frames_with_person": 62,
+    "detections": 76,
+    "duration_s": 6.08,
+    "fps": 14.97,
+    "resolution": "1280x720"
+  },
+  "S3-fall-17": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\17.mp4",
+    "sampled_frames": 128,
+    "frames_with_person": 105,
+    "detections": 134,
+    "duration_s": 8.51,
+    "fps": 15.04,
+    "resolution": "1280x720"
+  },
+  "S3-fall-18": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\18.mp4",
+    "sampled_frames": 178,
+    "frames_with_person": 133,
+    "detections": 159,
+    "duration_s": 11.87,
+    "fps": 14.99,
+    "resolution": "1280x720"
+  },
+  "S3-fall-19": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\19.mp4",
+    "sampled_frames": 86,
+    "frames_with_person": 66,
+    "detections": 110,
+    "duration_s": 5.71,
+    "fps": 15.05,
+    "resolution": "640x480"
+  },
+  "S3-fall-20": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\20.mp4",
+    "sampled_frames": 94,
+    "frames_with_person": 92,
+    "detections": 157,
+    "duration_s": 6.24,
+    "fps": 15.06,
+    "resolution": "640x480"
+  },
+  "S3-fall-21": {
+    "video": "data\\dataset\\falls\\Subject3\\Fall\\21.mp4",
+    "sampled_frames": 138,
+    "frames_with_person": 137,
+    "detections": 143,
+    "duration_s": 9.17,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S4-fall-01": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\01.mp4",
+    "sampled_frames": 70,
+    "frames_with_person": 53,
+    "detections": 53,
+    "duration_s": 4.66,
+    "fps": 29.84,
+    "resolution": "640x480"
+  },
+  "S4-fall-02": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\02.mp4",
+    "sampled_frames": 45,
+    "frames_with_person": 45,
+    "detections": 49,
+    "duration_s": 2.98,
+    "fps": 29.89,
+    "resolution": "640x480"
+  },
+  "S4-fall-03": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\03.mp4",
+    "sampled_frames": 101,
+    "frames_with_person": 96,
+    "detections": 98,
+    "duration_s": 6.71,
+    "fps": 29.83,
+    "resolution": "640x480"
+  },
+  "S4-fall-04": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\04.mp4",
+    "sampled_frames": 71,
+    "frames_with_person": 55,
+    "detections": 57,
+    "duration_s": 4.72,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S4-fall-05": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\05.mp4",
+    "sampled_frames": 111,
+    "frames_with_person": 111,
+    "detections": 111,
+    "duration_s": 7.41,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S4-fall-06": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\06.mp4",
+    "sampled_frames": 92,
+    "frames_with_person": 68,
+    "detections": 70,
+    "duration_s": 6.13,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S4-fall-07": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\07.mp4",
+    "sampled_frames": 95,
+    "frames_with_person": 94,
+    "detections": 94,
+    "duration_s": 6.31,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S4-fall-08": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\08.mp4",
+    "sampled_frames": 94,
+    "frames_with_person": 55,
+    "detections": 55,
+    "duration_s": 6.26,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S4-fall-09": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\09.mp4",
+    "sampled_frames": 91,
+    "frames_with_person": 91,
+    "detections": 91,
+    "duration_s": 6.07,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-fall-10": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\10.mp4",
+    "sampled_frames": 76,
+    "frames_with_person": 57,
+    "detections": 59,
+    "duration_s": 5.06,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S4-fall-11": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\11.mp4",
+    "sampled_frames": 69,
+    "frames_with_person": 68,
+    "detections": 68,
+    "duration_s": 4.56,
+    "fps": 29.81,
+    "resolution": "1280x720"
+  },
+  "S4-fall-12": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\12.mp4",
+    "sampled_frames": 70,
+    "frames_with_person": 70,
+    "detections": 70,
+    "duration_s": 4.63,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-fall-13": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\13.mp4",
+    "sampled_frames": 75,
+    "frames_with_person": 75,
+    "detections": 76,
+    "duration_s": 4.99,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-fall-14": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\14.mp4",
+    "sampled_frames": 79,
+    "frames_with_person": 60,
+    "detections": 61,
+    "duration_s": 5.25,
+    "fps": 29.91,
+    "resolution": "1280x720"
+  },
+  "S4-fall-15": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\15.mp4",
+    "sampled_frames": 73,
+    "frames_with_person": 73,
+    "detections": 75,
+    "duration_s": 4.85,
+    "fps": 29.9,
+    "resolution": "1280x720"
+  },
+  "S4-fall-16": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\16.mp4",
+    "sampled_frames": 107,
+    "frames_with_person": 98,
+    "detections": 99,
+    "duration_s": 7.11,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-fall-17": {
+    "video": "data\\dataset\\falls\\Subject4\\Fall\\17.mp4",
+    "sampled_frames": 104,
+    "frames_with_person": 104,
+    "detections": 105,
+    "duration_s": 6.93,
+    "fps": 29.87,
+    "resolution": "1280x720"
+  },
+  "S1-adl-01": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\01.mp4",
+    "sampled_frames": 124,
+    "frames_with_person": 124,
+    "detections": 144,
+    "duration_s": 8.27,
+    "fps": 29.61,
+    "resolution": "1280x720"
+  },
+  "S1-adl-02": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\02.mp4",
+    "sampled_frames": 101,
+    "frames_with_person": 101,
+    "detections": 103,
+    "duration_s": 6.69,
+    "fps": 29.6,
+    "resolution": "1280x720"
+  },
+  "S1-adl-03": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\03.mp4",
+    "sampled_frames": 101,
+    "frames_with_person": 101,
+    "detections": 141,
+    "duration_s": 6.69,
+    "fps": 29.75,
+    "resolution": "1280x720"
+  },
+  "S1-adl-04": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\04.mp4",
+    "sampled_frames": 87,
+    "frames_with_person": 87,
+    "detections": 91,
+    "duration_s": 5.81,
+    "fps": 29.26,
+    "resolution": "1280x720"
+  },
+  "S1-adl-05": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\05.mp4",
+    "sampled_frames": 158,
+    "frames_with_person": 145,
+    "detections": 145,
+    "duration_s": 10.55,
+    "fps": 29.78,
+    "resolution": "1280x720"
+  },
+  "S1-adl-06": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\06.mp4",
+    "sampled_frames": 184,
+    "frames_with_person": 184,
+    "detections": 184,
+    "duration_s": 12.23,
+    "fps": 29.77,
+    "resolution": "1280x720"
+  },
+  "S1-adl-07": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\07.mp4",
+    "sampled_frames": 113,
+    "frames_with_person": 113,
+    "detections": 181,
+    "duration_s": 7.54,
+    "fps": 29.72,
+    "resolution": "1280x720"
+  },
+  "S1-adl-08": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\08.mp4",
+    "sampled_frames": 95,
+    "frames_with_person": 95,
+    "detections": 109,
+    "duration_s": 6.29,
+    "fps": 29.73,
+    "resolution": "1280x720"
+  },
+  "S1-adl-09": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\09.mp4",
+    "sampled_frames": 75,
+    "frames_with_person": 75,
+    "detections": 75,
+    "duration_s": 4.99,
+    "fps": 29.44,
+    "resolution": "1280x720"
+  },
+  "S1-adl-10": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\10.mp4",
+    "sampled_frames": 59,
+    "frames_with_person": 59,
+    "detections": 59,
+    "duration_s": 3.92,
+    "fps": 29.33,
+    "resolution": "1280x720"
+  },
+  "S1-adl-11": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\11.mp4",
+    "sampled_frames": 140,
+    "frames_with_person": 140,
+    "detections": 152,
+    "duration_s": 9.31,
+    "fps": 29.74,
+    "resolution": "1280x720"
+  },
+  "S1-adl-12": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\12.mp4",
+    "sampled_frames": 110,
+    "frames_with_person": 110,
+    "detections": 112,
+    "duration_s": 7.33,
+    "fps": 29.74,
+    "resolution": "1280x720"
+  },
+  "S1-adl-13": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\13.mp4",
+    "sampled_frames": 95,
+    "frames_with_person": 95,
+    "detections": 97,
+    "duration_s": 6.31,
+    "fps": 29.66,
+    "resolution": "1280x720"
+  },
+  "S1-adl-14": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\14.mp4",
+    "sampled_frames": 88,
+    "frames_with_person": 88,
+    "detections": 88,
+    "duration_s": 5.86,
+    "fps": 29.53,
+    "resolution": "1280x720"
+  },
+  "S1-adl-15": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\15.mp4",
+    "sampled_frames": 108,
+    "frames_with_person": 108,
+    "detections": 108,
+    "duration_s": 7.17,
+    "fps": 29.57,
+    "resolution": "1280x720"
+  },
+  "S1-adl-16": {
+    "video": "data\\dataset\\adl\\Subject1\\ADL\\16.mp4",
+    "sampled_frames": 53,
+    "frames_with_person": 53,
+    "detections": 53,
+    "duration_s": 3.52,
+    "fps": 29.53,
+    "resolution": "1280x720"
+  },
+  "S2-adl-01": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\01.mp4",
+    "sampled_frames": 171,
+    "frames_with_person": 171,
+    "detections": 213,
+    "duration_s": 11.39,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S2-adl-02": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\02.mp4",
+    "sampled_frames": 177,
+    "frames_with_person": 177,
+    "detections": 285,
+    "duration_s": 11.79,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S2-adl-03": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\03.mp4",
+    "sampled_frames": 179,
+    "frames_with_person": 179,
+    "detections": 264,
+    "duration_s": 11.94,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S2-adl-04": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\04.mp4",
+    "sampled_frames": 118,
+    "frames_with_person": 118,
+    "detections": 118,
+    "duration_s": 7.84,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S2-adl-05": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\05.mp4",
+    "sampled_frames": 163,
+    "frames_with_person": 163,
+    "detections": 321,
+    "duration_s": 10.82,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-adl-06": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\06.mp4",
+    "sampled_frames": 162,
+    "frames_with_person": 162,
+    "detections": 303,
+    "duration_s": 10.75,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S2-adl-07": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\07.mp4",
+    "sampled_frames": 195,
+    "frames_with_person": 195,
+    "detections": 306,
+    "duration_s": 12.99,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-adl-08": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\08.mp4",
+    "sampled_frames": 205,
+    "frames_with_person": 205,
+    "detections": 367,
+    "duration_s": 13.67,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-adl-09": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\09.mp4",
+    "sampled_frames": 165,
+    "frames_with_person": 165,
+    "detections": 241,
+    "duration_s": 10.96,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S2-adl-10": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\10.mp4",
+    "sampled_frames": 114,
+    "frames_with_person": 114,
+    "detections": 168,
+    "duration_s": 7.57,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-adl-11": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\11.mp4",
+    "sampled_frames": 150,
+    "frames_with_person": 150,
+    "detections": 186,
+    "duration_s": 9.99,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S2-adl-12": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\12.mp4",
+    "sampled_frames": 114,
+    "frames_with_person": 114,
+    "detections": 114,
+    "duration_s": 7.6,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S2-adl-13": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\13.mp4",
+    "sampled_frames": 73,
+    "frames_with_person": 73,
+    "detections": 75,
+    "duration_s": 4.85,
+    "fps": 29.91,
+    "resolution": "1280x720"
+  },
+  "S2-adl-14": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\14.mp4",
+    "sampled_frames": 166,
+    "frames_with_person": 164,
+    "detections": 256,
+    "duration_s": 11.06,
+    "fps": 15.01,
+    "resolution": "1280x720"
+  },
+  "S2-adl-15": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\15.mp4",
+    "sampled_frames": 179,
+    "frames_with_person": 176,
+    "detections": 316,
+    "duration_s": 11.92,
+    "fps": 15.02,
+    "resolution": "1280x720"
+  },
+  "S2-adl-16": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\16.mp4",
+    "sampled_frames": 173,
+    "frames_with_person": 168,
+    "detections": 350,
+    "duration_s": 11.54,
+    "fps": 14.99,
+    "resolution": "1280x720"
+  },
+  "S2-adl-17": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\17.mp4",
+    "sampled_frames": 175,
+    "frames_with_person": 175,
+    "detections": 354,
+    "duration_s": 11.67,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S2-adl-18": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\18.mp4",
+    "sampled_frames": 175,
+    "frames_with_person": 175,
+    "detections": 407,
+    "duration_s": 11.67,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S2-adl-19": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\19.mp4",
+    "sampled_frames": 170,
+    "frames_with_person": 170,
+    "detections": 327,
+    "duration_s": 11.33,
+    "fps": 15.01,
+    "resolution": "1280x720"
+  },
+  "S2-adl-20": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\20.mp4",
+    "sampled_frames": 175,
+    "frames_with_person": 174,
+    "detections": 337,
+    "duration_s": 11.67,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S2-adl-21": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\21.mp4",
+    "sampled_frames": 158,
+    "frames_with_person": 158,
+    "detections": 245,
+    "duration_s": 10.53,
+    "fps": 15.01,
+    "resolution": "1280x720"
+  },
+  "S2-adl-22": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\22.mp4",
+    "sampled_frames": 182,
+    "frames_with_person": 163,
+    "detections": 222,
+    "duration_s": 12.13,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S2-adl-23": {
+    "video": "data\\dataset\\adl\\Subject2\\ADL\\23.mp4",
+    "sampled_frames": 109,
+    "frames_with_person": 109,
+    "detections": 190,
+    "duration_s": 7.28,
+    "fps": 14.97,
+    "resolution": "640x480"
+  },
+  "S3-adl-01": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\01.mp4",
+    "sampled_frames": 132,
+    "frames_with_person": 132,
+    "detections": 330,
+    "duration_s": 8.75,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S3-adl-02": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\02.mp4",
+    "sampled_frames": 137,
+    "frames_with_person": 137,
+    "detections": 137,
+    "duration_s": 9.14,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S3-adl-03": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\03.mp4",
+    "sampled_frames": 149,
+    "frames_with_person": 149,
+    "detections": 269,
+    "duration_s": 9.92,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S3-adl-04": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\04.mp4",
+    "sampled_frames": 151,
+    "frames_with_person": 151,
+    "detections": 257,
+    "duration_s": 10.05,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S3-adl-05": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\05.mp4",
+    "sampled_frames": 78,
+    "frames_with_person": 78,
+    "detections": 78,
+    "duration_s": 5.17,
+    "fps": 29.79,
+    "resolution": "1280x720"
+  },
+  "S3-adl-06": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\06.mp4",
+    "sampled_frames": 134,
+    "frames_with_person": 134,
+    "detections": 136,
+    "duration_s": 8.95,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S3-adl-07": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\07.mp4",
+    "sampled_frames": 50,
+    "frames_with_person": 50,
+    "detections": 51,
+    "duration_s": 3.35,
+    "fps": 29.89,
+    "resolution": "1280x720"
+  },
+  "S3-adl-08": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\08.mp4",
+    "sampled_frames": 74,
+    "frames_with_person": 74,
+    "detections": 95,
+    "duration_s": 4.9,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S3-adl-09": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\09.mp4",
+    "sampled_frames": 117,
+    "frames_with_person": 116,
+    "detections": 124,
+    "duration_s": 7.78,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S3-adl-10": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\10.mp4",
+    "sampled_frames": 187,
+    "frames_with_person": 187,
+    "detections": 222,
+    "duration_s": 12.43,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S3-adl-11": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\11.mp4",
+    "sampled_frames": 181,
+    "frames_with_person": 181,
+    "detections": 183,
+    "duration_s": 12.08,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S3-adl-12": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\12.mp4",
+    "sampled_frames": 160,
+    "frames_with_person": 160,
+    "detections": 189,
+    "duration_s": 10.67,
+    "fps": 14.99,
+    "resolution": "1280x720"
+  },
+  "S3-adl-13": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\13.mp4",
+    "sampled_frames": 130,
+    "frames_with_person": 130,
+    "detections": 173,
+    "duration_s": 8.64,
+    "fps": 15.04,
+    "resolution": "1280x720"
+  },
+  "S3-adl-14": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\14.mp4",
+    "sampled_frames": 133,
+    "frames_with_person": 131,
+    "detections": 204,
+    "duration_s": 8.87,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S3-adl-15": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\15.mp4",
+    "sampled_frames": 115,
+    "frames_with_person": 115,
+    "detections": 154,
+    "duration_s": 7.67,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S3-adl-16": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\16.mp4",
+    "sampled_frames": 154,
+    "frames_with_person": 154,
+    "detections": 203,
+    "duration_s": 10.26,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S3-adl-17": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\17.mp4",
+    "sampled_frames": 182,
+    "frames_with_person": 182,
+    "detections": 264,
+    "duration_s": 12.13,
+    "fps": 15.0,
+    "resolution": "1280x720"
+  },
+  "S3-adl-18": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\18.mp4",
+    "sampled_frames": 167,
+    "frames_with_person": 167,
+    "detections": 300,
+    "duration_s": 11.12,
+    "fps": 15.02,
+    "resolution": "640x480"
+  },
+  "S3-adl-19": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\19.mp4",
+    "sampled_frames": 98,
+    "frames_with_person": 98,
+    "detections": 159,
+    "duration_s": 6.51,
+    "fps": 15.05,
+    "resolution": "640x480"
+  },
+  "S3-adl-20": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\20.mp4",
+    "sampled_frames": 141,
+    "frames_with_person": 141,
+    "detections": 258,
+    "duration_s": 9.39,
+    "fps": 15.01,
+    "resolution": "640x480"
+  },
+  "S3-adl-21": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\21.mp4",
+    "sampled_frames": 154,
+    "frames_with_person": 154,
+    "detections": 163,
+    "duration_s": 10.23,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S3-adl-22": {
+    "video": "data\\dataset\\adl\\Subject3\\ADL\\22.mp4",
+    "sampled_frames": 143,
+    "frames_with_person": 143,
+    "detections": 148,
+    "duration_s": 9.49,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S4-adl-01": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\01.mp4",
+    "sampled_frames": 186,
+    "frames_with_person": 186,
+    "detections": 186,
+    "duration_s": 12.4,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-adl-02": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\02.mp4",
+    "sampled_frames": 159,
+    "frames_with_person": 159,
+    "detections": 159,
+    "duration_s": 10.56,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S4-adl-03": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\03.mp4",
+    "sampled_frames": 134,
+    "frames_with_person": 134,
+    "detections": 134,
+    "duration_s": 8.95,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S4-adl-04": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\04.mp4",
+    "sampled_frames": 195,
+    "frames_with_person": 195,
+    "detections": 198,
+    "duration_s": 13.01,
+    "fps": 29.82,
+    "resolution": "1280x720"
+  },
+  "S4-adl-05": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\05.mp4",
+    "sampled_frames": 111,
+    "frames_with_person": 111,
+    "detections": 113,
+    "duration_s": 7.36,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S4-adl-06": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\06.mp4",
+    "sampled_frames": 99,
+    "frames_with_person": 98,
+    "detections": 99,
+    "duration_s": 6.58,
+    "fps": 29.8,
+    "resolution": "1280x720"
+  },
+  "S4-adl-07": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\07.mp4",
+    "sampled_frames": 75,
+    "frames_with_person": 35,
+    "detections": 35,
+    "duration_s": 4.99,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-adl-08": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\08.mp4",
+    "sampled_frames": 185,
+    "frames_with_person": 184,
+    "detections": 184,
+    "duration_s": 12.34,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S4-adl-09": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\09.mp4",
+    "sampled_frames": 182,
+    "frames_with_person": 182,
+    "detections": 182,
+    "duration_s": 12.13,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-adl-10": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\10.mp4",
+    "sampled_frames": 192,
+    "frames_with_person": 183,
+    "detections": 208,
+    "duration_s": 12.8,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-adl-11": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\11.mp4",
+    "sampled_frames": 161,
+    "frames_with_person": 161,
+    "detections": 161,
+    "duration_s": 10.72,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S4-adl-12": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\12.mp4",
+    "sampled_frames": 129,
+    "frames_with_person": 129,
+    "detections": 129,
+    "duration_s": 8.61,
+    "fps": 29.85,
+    "resolution": "1280x720"
+  },
+  "S4-adl-13": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\13.mp4",
+    "sampled_frames": 83,
+    "frames_with_person": 83,
+    "detections": 83,
+    "duration_s": 5.49,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S4-adl-14": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\14.mp4",
+    "sampled_frames": 125,
+    "frames_with_person": 125,
+    "detections": 126,
+    "duration_s": 8.31,
+    "fps": 29.86,
+    "resolution": "1280x720"
+  },
+  "S4-adl-15": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\15.mp4",
+    "sampled_frames": 80,
+    "frames_with_person": 78,
+    "detections": 78,
+    "duration_s": 5.33,
+    "fps": 29.83,
+    "resolution": "1280x720"
+  },
+  "S4-adl-16": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\16.mp4",
+    "sampled_frames": 107,
+    "frames_with_person": 107,
+    "detections": 118,
+    "duration_s": 7.14,
+    "fps": 29.84,
+    "resolution": "1280x720"
+  },
+  "S4-adl-17": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\17.mp4",
+    "sampled_frames": 94,
+    "frames_with_person": 85,
+    "detections": 85,
+    "duration_s": 6.23,
+    "fps": 29.88,
+    "resolution": "1280x720"
+  },
+  "S4-adl-18": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\18.mp4",
+    "sampled_frames": 212,
+    "frames_with_person": 212,
+    "detections": 212,
+    "duration_s": 14.1,
+    "fps": 29.86,
+    "resolution": "640x480"
+  },
+  "S4-adl-19": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\19.mp4",
+    "sampled_frames": 149,
+    "frames_with_person": 149,
+    "detections": 150,
+    "duration_s": 9.91,
+    "fps": 29.88,
+    "resolution": "640x480"
+  },
+  "S4-adl-20": {
+    "video": "data\\dataset\\adl\\Subject4\\ADL\\20.mp4",
+    "sampled_frames": 263,
+    "frames_with_person": 263,
+    "detections": 263,
+    "duration_s": 17.52,
+    "fps": 29.85,
+    "resolution": "640x480"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "samples": 160,
+  "accuracy": 0.89375,
+  "labels": [
+    "normal",
+    "warning",
+    "fall"
+  ],
+  "confusion_matrix_true_rows_predicted_columns": [
+    [
+      74,
+      0,
+      7
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      10,
+      0,
+      69
+    ]
+  ],
+  "per_class": {
+    "normal": {
+      "precision": 0.8809523809523809,
+      "recall": 0.9135802469135802,
+      "f1": 0.896969696969697,
+      "support": 81
+    },
+    "warning": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "support": 0
+    },
+    "fall": {
+      "precision": 0.9078947368421053,
+      "recall": 0.8734177215189873,
+      "f1": 0.8903225806451613,
+      "support": 79
+    }
+  },
+  "limitations": "Sequence-level metrics only. Evaluate event recall, false alarms per hour and detection latency separately. This tool cannot verify train/test subject separation."
+}

@@ -1,0 +1,20 @@
+-r requirements.txt
+
+# ── Computer vision & ML (FYP1 fall-detection engine) ──────────────────────
+opencv-python-headless>=4.10,<5
+torch>=2.0
+torchvision>=0.15
+ultralytics>=8.0        # YOLOv8-Pose
+numpy>=1.24
+scikit-learn>=1.3.0
+tqdm
+
+# ── Optional desktop notification (alert_system.py) ─────────────────────────
+plyer
+
+# -- Fast live inference on Intel CPUs/iGPUs (ai/pose_backend.py; falls back to PyTorch if missing) --
+openvino>=2025.0
+onnxruntime-directml>=1.20; sys_platform == "win32"   # pose model on any DirectX 12 GPU (optional, auto-detected)
+
+# -- PostgreSQL driver (only used when GUARDIAN_DB=postgres; SQLite needs nothing) --
+psycopg[binary]>=3.2

@@ -1,0 +1,819 @@
+{
+  "model_version": "fallnet-v2-cnnlstm-9385bb3524",
+  "architecture": "cnn_lstm",
+  "trained_at": "2026-11-03T14:07:29",
+  "selection": "architecture with highest mean validation macro-F1 across LOSO folds (test folds not used)",
+  "dataset": "GMDCSA-24: 4 subjects, 79 fall + 81 ADL clips (data/dataset)",
+  "protocol": "leave-one-subject-out; early stopping on clip-level validation split of training subjects",
+  "labels": [
+    "normal",
+    "warning",
+    "fall"
+  ],
+  "window_s": 2.0,
+  "seq_len": 30,
+  "sample_hz": 15,
+  "min_history_s": 1.5,
+  "alert_rule": {
+    "confidence": 0.8,
+    "consecutive_frames": 3,
+    "stream_fps": 5
+  },
+  "final_model": {
+    "best_epoch": 12,
+    "val_macro_f1": 0.8748372326505861,
+    "temperature": 0.3646248458420723,
+    "val_window_metrics": {
+      "windows": 711,
+      "accuracy": 0.9535864978902954,
+      "macro_f1": 0.8748372326505861,
+      "expected_calibration_error": 0.017711933990403425,
+      "confusion_matrix_true_rows_pred_cols": [
+        [
+          504,
+          6,
+          9
+        ],
+        [
+          8,
+          28,
+          1
+        ],
+        [
+          1,
+          8,
+          146
+        ]
+      ],
+      "per_class": {
+        "normal": {
+          "precision": 0.9824561403508771,
+          "recall": 0.9710982658959537,
+          "f1": 0.9767441860465116,
+          "support": 519
+        },
+        "warning": {
+          "precision": 0.6666666666666666,
+          "recall": 0.7567567567567568,
+          "f1": 0.7088607594936709,
+          "support": 37
+        },
+        "fall": {
+          "precision": 0.9358974358974359,
+          "recall": 0.9419354838709677,
+          "f1": 0.9389067524115756,
+          "support": 155
+        }
+      },
+      "fall_vs_rest": {
+        "sensitivity": 0.9419354838709677,
+        "specificity": 0.9820143884892086,
+        "precision": 0.9358974358974359,
+        "f1": 0.9389067524115756,
+        "roc_auc": 0.9901601299605476,
+        "average_precision": 0.9843788117230703
+      }
+    },
+    "train_windows": {
+      "normal": 3169,
+      "warning": 185,
+      "fall": 972
+    },
+    "val_windows": {
+      "normal": 519,
+      "warning": 37,
+      "fall": 155
+    }
+  },
+  "classifier_latency_ms_per_window_cpu": 2.8,
+  "hardware": "Intel64 Family 6 Model 142 Stepping 12, GenuineIntel, torch 2.14.1+cpu, 4 threads",
+  "cv": {
+    "lstm": {
+      "mean_val_macro_f1": 0.8575121230768199,
+      "folds": [
+        {
+          "test_subject": 1,
+          "best_epoch": 14,
+          "val_macro_f1": 0.919785805404033,
+          "temperature": 0.28498555471630377,
+          "test_window_macro_f1": 0.820729796604664,
+          "test_fall_f1": 0.8108108108108109,
+          "test_fall_event_recall_5fps": 0.9375,
+          "test_adl_specificity_5fps": 0.8125
+        },
+        {
+          "test_subject": 2,
+          "best_epoch": 15,
+          "val_macro_f1": 0.7591412012644888,
+          "temperature": 0.615560874101945,
+          "test_window_macro_f1": 0.7970372230593225,
+          "test_fall_f1": 0.8775757575757576,
+          "test_fall_event_recall_5fps": 0.88,
+          "test_adl_specificity_5fps": 0.8695652173913043
+        },
+        {
+          "test_subject": 3,
+          "best_epoch": 4,
+          "val_macro_f1": 0.8267112225006962,
+          "temperature": 0.45236786211746477,
+          "test_window_macro_f1": 0.8232939370469091,
+          "test_fall_f1": 0.8108108108108109,
+          "test_fall_event_recall_5fps": 0.8095238095238095,
+          "test_adl_specificity_5fps": 1.0
+        },
+        {
+          "test_subject": 4,
+          "best_epoch": 30,
+          "val_macro_f1": 0.9244102631380616,
+          "temperature": 0.30309494967487866,
+          "test_window_macro_f1": 0.7676813478700586,
+          "test_fall_f1": 0.8,
+          "test_fall_event_recall_5fps": 0.8823529411764706,
+          "test_adl_specificity_5fps": 0.75
+        }
+      ],
+      "window": {
+        "windows": 5037,
+        "accuracy": 0.9037125272979948,
+        "macro_f1": 0.8035242137328114,
+        "expected_calibration_error": 0.03804366868924875,
+        "confusion_matrix_true_rows_pred_cols": [
+          [
+            3454,
+            58,
+            176
+          ],
+          [
+            49,
+            155,
+            18
+          ],
+          [
+            130,
+            54,
+            943
+          ]
+        ],
+        "per_class": {
+          "normal": {
+            "precision": 0.950729424717864,
+            "recall": 0.9365509761388287,
+            "f1": 0.9435869416746346,
+            "support": 3688
+          },
+          "warning": {
+            "precision": 0.5805243445692884,
+            "recall": 0.6981981981981982,
+            "f1": 0.6339468302658486,
+            "support": 222
+          },
+          "fall": {
+            "precision": 0.8293755496921724,
+            "recall": 0.8367346938775511,
+            "f1": 0.8330388692579506,
+            "support": 1127
+          }
+        },
+        "fall_vs_rest": {
+          "sensitivity": 0.8367346938775511,
+          "specificity": 0.950383631713555,
+          "precision": 0.8293755496921724,
+          "f1": 0.8330388692579506,
+          "roc_auc": 0.9338996089929356,
+          "average_precision": 0.8184887143777788
+        }
+      },
+      "event_5fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 69,
+        "fall_event_recall": 0.8734177215189873,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 11,
+        "adl_specificity": 0.8641975308641975,
+        "event_precision": 0.8625,
+        "event_f1": 0.8679245283018868,
+        "false_alarms_per_hour_adl": 52.98225897085976,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.76,
+        "latency_s_p90": 2.212,
+        "latency_s_mean": 1.8499999999999999,
+        "missed_clips": [
+          "S1-fall-01",
+          "S2-fall-08",
+          "S2-fall-11",
+          "S2-fall-18",
+          "S3-fall-06",
+          "S3-fall-09",
+          "S3-fall-13",
+          "S3-fall-16",
+          "S4-fall-09",
+          "S4-fall-10"
+        ],
+        "false_alarm_clips": [
+          "S1-adl-01",
+          "S1-adl-02",
+          "S1-adl-03",
+          "S2-adl-12",
+          "S2-adl-16",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-06",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15"
+        ]
+      },
+      "threshold_sweep_5fps": {
+        "0.5": {
+          "fall_clips_detected": 73,
+          "fall_event_recall": 0.9240506329113924,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8690476190476191,
+          "event_f1": 0.8957055214723927,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.61,
+          "latency_s_p90": 2.05,
+          "latency_s_mean": 1.6908219178082193
+        },
+        "0.6": {
+          "fall_clips_detected": 72,
+          "fall_event_recall": 0.9113924050632911,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8674698795180723,
+          "event_f1": 0.8888888888888888,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.7149999999999999,
+          "latency_s_p90": 2.186,
+          "latency_s_mean": 1.7618055555555556
+        },
+        "0.7": {
+          "fall_clips_detected": 71,
+          "fall_event_recall": 0.8987341772151899,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8658536585365854,
+          "event_f1": 0.8819875776397516,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.75,
+          "latency_s_p90": 2.26,
+          "latency_s_mean": 1.7946478873239435
+        },
+        "0.8": {
+          "fall_clips_detected": 69,
+          "fall_event_recall": 0.8734177215189873,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8625,
+          "event_f1": 0.8679245283018868,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.76,
+          "latency_s_p90": 2.212,
+          "latency_s_mean": 1.8499999999999999
+        },
+        "0.9": {
+          "fall_clips_detected": 66,
+          "fall_event_recall": 0.8354430379746836,
+          "adl_clips_with_false_alarm": 9,
+          "adl_specificity": 0.8888888888888888,
+          "event_precision": 0.88,
+          "event_f1": 0.8571428571428571,
+          "false_alarms_per_hour_adl": 43.34912097615799,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.935,
+          "latency_s_p90": 3.16,
+          "latency_s_mean": 2.0943939393939393
+        }
+      },
+      "event_15fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 75,
+        "fall_event_recall": 0.9493670886075949,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 11,
+        "adl_specificity": 0.8641975308641975,
+        "event_precision": 0.872093023255814,
+        "event_f1": 0.9090909090909091,
+        "false_alarms_per_hour_adl": 52.98225897085976,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.41,
+        "latency_s_p90": 1.9180000000000006,
+        "latency_s_mean": 1.4778666666666669,
+        "missed_clips": [
+          "S2-fall-11",
+          "S3-fall-13",
+          "S3-fall-16",
+          "S4-fall-09"
+        ],
+        "false_alarm_clips": [
+          "S1-adl-01",
+          "S1-adl-02",
+          "S1-adl-03",
+          "S2-adl-12",
+          "S2-adl-16",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-06",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15"
+        ]
+      }
+    },
+    "cnn_lstm": {
+      "mean_val_macro_f1": 0.8730134759543701,
+      "folds": [
+        {
+          "test_subject": 1,
+          "best_epoch": 24,
+          "val_macro_f1": 0.9116268965044098,
+          "temperature": 0.2939008036137456,
+          "test_window_macro_f1": 0.8300510702138372,
+          "test_fall_f1": 0.8484848484848485,
+          "test_fall_event_recall_5fps": 1.0,
+          "test_adl_specificity_5fps": 0.9375
+        },
+        {
+          "test_subject": 2,
+          "best_epoch": 11,
+          "val_macro_f1": 0.7906260148666692,
+          "temperature": 0.46651935863101807,
+          "test_window_macro_f1": 0.7809336151452806,
+          "test_fall_f1": 0.827930174563591,
+          "test_fall_event_recall_5fps": 0.88,
+          "test_adl_specificity_5fps": 0.9130434782608695
+        },
+        {
+          "test_subject": 3,
+          "best_epoch": 6,
+          "val_macro_f1": 0.8486654035560824,
+          "temperature": 0.42533967081820784,
+          "test_window_macro_f1": 0.8042206966692093,
+          "test_fall_f1": 0.8421052631578947,
+          "test_fall_event_recall_5fps": 0.8095238095238095,
+          "test_adl_specificity_5fps": 1.0
+        },
+        {
+          "test_subject": 4,
+          "best_epoch": 19,
+          "val_macro_f1": 0.9411355888903189,
+          "temperature": 0.2939008036137456,
+          "test_window_macro_f1": 0.679280635802375,
+          "test_fall_f1": 0.6666666666666666,
+          "test_fall_event_recall_5fps": 0.8235294117647058,
+          "test_adl_specificity_5fps": 0.8
+        }
+      ],
+      "window": {
+        "windows": 5037,
+        "accuracy": 0.8878300575739527,
+        "macro_f1": 0.7781426613827019,
+        "expected_calibration_error": 0.043275039466288426,
+        "confusion_matrix_true_rows_pred_cols": [
+          [
+            3426,
+            84,
+            178
+          ],
+          [
+            43,
+            147,
+            32
+          ],
+          [
+            189,
+            39,
+            899
+          ]
+        ],
+        "per_class": {
+          "normal": {
+            "precision": 0.9365773646801531,
+            "recall": 0.9289587852494577,
+            "f1": 0.9327525183773482,
+            "support": 3688
+          },
+          "warning": {
+            "precision": 0.5444444444444444,
+            "recall": 0.6621621621621622,
+            "f1": 0.5975609756097561,
+            "support": 222
+          },
+          "fall": {
+            "precision": 0.8106402164111812,
+            "recall": 0.7976929902395741,
+            "f1": 0.8041144901610018,
+            "support": 1127
+          }
+        },
+        "fall_vs_rest": {
+          "sensitivity": 0.7976929902395741,
+          "specificity": 0.9462915601023018,
+          "precision": 0.8106402164111812,
+          "f1": 0.8041144901610018,
+          "roc_auc": 0.9369568621399411,
+          "average_precision": 0.8284041084804302
+        }
+      },
+      "event_5fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 69,
+        "fall_event_recall": 0.8734177215189873,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 7,
+        "adl_specificity": 0.9135802469135802,
+        "event_precision": 0.9078947368421053,
+        "event_f1": 0.8903225806451613,
+        "false_alarms_per_hour_adl": 33.715982981456214,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.71,
+        "latency_s_p90": 2.378,
+        "latency_s_mean": 1.8511594202898556,
+        "missed_clips": [
+          "S2-fall-03",
+          "S2-fall-11",
+          "S2-fall-18",
+          "S3-fall-06",
+          "S3-fall-10",
+          "S3-fall-13",
+          "S3-fall-16",
+          "S4-fall-08",
+          "S4-fall-09",
+          "S4-fall-17"
+        ],
+        "false_alarm_clips": [
+          "S1-adl-02",
+          "S2-adl-12",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15"
+        ]
+      },
+      "threshold_sweep_5fps": {
+        "0.5": {
+          "fall_clips_detected": 73,
+          "fall_event_recall": 0.9240506329113924,
+          "adl_clips_with_false_alarm": 10,
+          "adl_specificity": 0.8765432098765432,
+          "event_precision": 0.8795180722891566,
+          "event_f1": 0.9012345679012346,
+          "false_alarms_per_hour_adl": 48.165689973508876,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.61,
+          "latency_s_p90": 2.289999999999999,
+          "latency_s_mean": 1.7097260273972605
+        },
+        "0.6": {
+          "fall_clips_detected": 73,
+          "fall_event_recall": 0.9240506329113924,
+          "adl_clips_with_false_alarm": 8,
+          "adl_specificity": 0.9012345679012346,
+          "event_precision": 0.9012345679012346,
+          "event_f1": 0.9125,
+          "false_alarms_per_hour_adl": 38.5325519788071,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.61,
+          "latency_s_p90": 2.4299999999999997,
+          "latency_s_mean": 1.74
+        },
+        "0.7": {
+          "fall_clips_detected": 71,
+          "fall_event_recall": 0.8987341772151899,
+          "adl_clips_with_false_alarm": 7,
+          "adl_specificity": 0.9135802469135802,
+          "event_precision": 0.9102564102564102,
+          "event_f1": 0.9044585987261147,
+          "false_alarms_per_hour_adl": 33.715982981456214,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.66,
+          "latency_s_p90": 2.35,
+          "latency_s_mean": 1.7653521126760567
+        },
+        "0.8": {
+          "fall_clips_detected": 69,
+          "fall_event_recall": 0.8734177215189873,
+          "adl_clips_with_false_alarm": 7,
+          "adl_specificity": 0.9135802469135802,
+          "event_precision": 0.9078947368421053,
+          "event_f1": 0.8903225806451613,
+          "false_alarms_per_hour_adl": 33.715982981456214,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.71,
+          "latency_s_p90": 2.378,
+          "latency_s_mean": 1.8511594202898556
+        },
+        "0.9": {
+          "fall_clips_detected": 67,
+          "fall_event_recall": 0.8481012658227848,
+          "adl_clips_with_false_alarm": 7,
+          "adl_specificity": 0.9135802469135802,
+          "event_precision": 0.9054054054054054,
+          "event_f1": 0.8758169934640523,
+          "false_alarms_per_hour_adl": 33.715982981456214,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.76,
+          "latency_s_p90": 2.53,
+          "latency_s_mean": 1.9834328358208952
+        }
+      },
+      "event_15fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 71,
+        "fall_event_recall": 0.8987341772151899,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 8,
+        "adl_specificity": 0.9012345679012346,
+        "event_precision": 0.8987341772151899,
+        "event_f1": 0.8987341772151899,
+        "false_alarms_per_hour_adl": 38.5325519788071,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.36,
+        "latency_s_p90": 1.72,
+        "latency_s_mean": 1.42943661971831,
+        "missed_clips": [
+          "S2-fall-11",
+          "S3-fall-06",
+          "S3-fall-10",
+          "S3-fall-13",
+          "S3-fall-16",
+          "S4-fall-08",
+          "S4-fall-09",
+          "S4-fall-17"
+        ],
+        "false_alarm_clips": [
+          "S1-adl-02",
+          "S2-adl-12",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-06",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15"
+        ]
+      }
+    },
+    "transformer": {
+      "mean_val_macro_f1": 0.8590783677151084,
+      "folds": [
+        {
+          "test_subject": 1,
+          "best_epoch": 11,
+          "val_macro_f1": 0.8825915265944014,
+          "temperature": 0.3938139305593528,
+          "test_window_macro_f1": 0.8138391823140773,
+          "test_fall_f1": 0.8564814814814815,
+          "test_fall_event_recall_5fps": 1.0,
+          "test_adl_specificity_5fps": 1.0
+        },
+        {
+          "test_subject": 2,
+          "best_epoch": 19,
+          "val_macro_f1": 0.7928648694309587,
+          "temperature": 0.5612252840426533,
+          "test_window_macro_f1": 0.7779017881409561,
+          "test_fall_f1": 0.833130328867235,
+          "test_fall_event_recall_5fps": 0.84,
+          "test_adl_specificity_5fps": 0.8260869565217391
+        },
+        {
+          "test_subject": 3,
+          "best_epoch": 10,
+          "val_macro_f1": 0.8491582947152408,
+          "temperature": 0.4386456400806679,
+          "test_window_macro_f1": 0.7810496771281086,
+          "test_fall_f1": 0.8235294117647058,
+          "test_fall_event_recall_5fps": 0.9047619047619048,
+          "test_adl_specificity_5fps": 1.0
+        },
+        {
+          "test_subject": 4,
+          "best_epoch": 22,
+          "val_macro_f1": 0.9116987801198327,
+          "temperature": 0.37603146347962046,
+          "test_window_macro_f1": 0.7540531375503249,
+          "test_fall_f1": 0.7393162393162394,
+          "test_fall_event_recall_5fps": 0.8235294117647058,
+          "test_adl_specificity_5fps": 0.75
+        }
+      ],
+      "window": {
+        "windows": 5037,
+        "accuracy": 0.8927933293627159,
+        "macro_f1": 0.7822343534641939,
+        "expected_calibration_error": 0.02997049100583142,
+        "confusion_matrix_true_rows_pred_cols": [
+          [
+            3424,
+            74,
+            190
+          ],
+          [
+            49,
+            149,
+            24
+          ],
+          [
+            146,
+            57,
+            924
+          ]
+        ],
+        "per_class": {
+          "normal": {
+            "precision": 0.9461177120751589,
+            "recall": 0.928416485900217,
+            "f1": 0.9371835226495142,
+            "support": 3688
+          },
+          "warning": {
+            "precision": 0.5321428571428571,
+            "recall": 0.6711711711711712,
+            "f1": 0.5936254980079682,
+            "support": 222
+          },
+          "fall": {
+            "precision": 0.81195079086116,
+            "recall": 0.8198757763975155,
+            "f1": 0.8158940397350993,
+            "support": 1127
+          }
+        },
+        "fall_vs_rest": {
+          "sensitivity": 0.8198757763975155,
+          "specificity": 0.9452685421994885,
+          "precision": 0.81195079086116,
+          "f1": 0.8158940397350993,
+          "roc_auc": 0.9511463564631902,
+          "average_precision": 0.8544173889395388
+        }
+      },
+      "event_5fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 70,
+        "fall_event_recall": 0.8860759493670886,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 9,
+        "adl_specificity": 0.8888888888888888,
+        "event_precision": 0.8860759493670886,
+        "event_f1": 0.8860759493670886,
+        "false_alarms_per_hour_adl": 43.34912097615799,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.76,
+        "latency_s_p90": 2.323,
+        "latency_s_mean": 1.7994285714285714,
+        "missed_clips": [
+          "S2-fall-01",
+          "S2-fall-07",
+          "S2-fall-11",
+          "S2-fall-18",
+          "S3-fall-10",
+          "S3-fall-16",
+          "S4-fall-06",
+          "S4-fall-09",
+          "S4-fall-10"
+        ],
+        "false_alarm_clips": [
+          "S2-adl-12",
+          "S2-adl-16",
+          "S2-adl-19",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-06",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15"
+        ]
+      },
+      "threshold_sweep_5fps": {
+        "0.5": {
+          "fall_clips_detected": 74,
+          "fall_event_recall": 0.9367088607594937,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8705882352941177,
+          "event_f1": 0.9024390243902439,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.66,
+          "latency_s_p90": 2.12,
+          "latency_s_mean": 1.6837837837837837
+        },
+        "0.6": {
+          "fall_clips_detected": 74,
+          "fall_event_recall": 0.9367088607594937,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8705882352941177,
+          "event_f1": 0.9024390243902439,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.66,
+          "latency_s_p90": 2.12,
+          "latency_s_mean": 1.7171621621621624
+        },
+        "0.7": {
+          "fall_clips_detected": 73,
+          "fall_event_recall": 0.9240506329113924,
+          "adl_clips_with_false_alarm": 11,
+          "adl_specificity": 0.8641975308641975,
+          "event_precision": 0.8690476190476191,
+          "event_f1": 0.8957055214723927,
+          "false_alarms_per_hour_adl": 52.98225897085976,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.72,
+          "latency_s_p90": 2.344,
+          "latency_s_mean": 1.7546575342465753
+        },
+        "0.8": {
+          "fall_clips_detected": 70,
+          "fall_event_recall": 0.8860759493670886,
+          "adl_clips_with_false_alarm": 9,
+          "adl_specificity": 0.8888888888888888,
+          "event_precision": 0.8860759493670886,
+          "event_f1": 0.8860759493670886,
+          "false_alarms_per_hour_adl": 43.34912097615799,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.76,
+          "latency_s_p90": 2.323,
+          "latency_s_mean": 1.7994285714285714
+        },
+        "0.9": {
+          "fall_clips_detected": 68,
+          "fall_event_recall": 0.8607594936708861,
+          "adl_clips_with_false_alarm": 8,
+          "adl_specificity": 0.9012345679012346,
+          "event_precision": 0.8947368421052632,
+          "event_f1": 0.8774193548387097,
+          "false_alarms_per_hour_adl": 38.5325519788071,
+          "fall_clips_with_alarm_before_fall": 1,
+          "latency_s_p50": 1.81,
+          "latency_s_p90": 2.55,
+          "latency_s_mean": 1.8879411764705882
+        }
+      },
+      "event_15fps": {
+        "fall_clips": 79,
+        "fall_clips_detected": 75,
+        "fall_event_recall": 0.9493670886075949,
+        "adl_clips": 81,
+        "adl_clips_with_false_alarm": 8,
+        "adl_specificity": 0.9012345679012346,
+        "event_precision": 0.9036144578313253,
+        "event_f1": 0.9259259259259259,
+        "false_alarms_per_hour_adl": 38.5325519788071,
+        "fall_clips_with_alarm_before_fall": 1,
+        "latency_s_p50": 1.41,
+        "latency_s_p90": 1.8620000000000003,
+        "latency_s_mean": 1.4312,
+        "missed_clips": [
+          "S2-fall-01",
+          "S2-fall-11",
+          "S3-fall-16",
+          "S4-fall-09"
+        ],
+        "false_alarm_clips": [
+          "S2-adl-12",
+          "S2-adl-22",
+          "S4-adl-05",
+          "S4-adl-06",
+          "S4-adl-07",
+          "S4-adl-10",
+          "S4-adl-15",
+          "S4-adl-16"
+        ]
+      }
+    }
+  },
+  "args": {
+    "archs": [
+      "lstm",
+      "cnn_lstm",
+      "transformer"
+    ],
+    "epochs": 60,
+    "patience": 12,
+    "batch_size": 64,
+    "lr": 0.001,
+    "weight_decay": 0.001,
+    "hidden": 64,
+    "gamma": 2.0,
+    "val_frac": 0.15,
+    "alert_conf": 0.8,
+    "alert_frames": 3,
+    "seed": 42,
+    "threads": 4,
+    "jobs": 3,
+    "skip_cv": false,
+    "quick": false
+  },
+  "elapsed_min": 19.3,
+  "weights_file": "weights\\fallnet_v2.pt",
+  "weights_file_sha256": "c17148a6fcab88b54d067a78c087ed49d2b130123d8eacfa7c26c5547d1327ed"
+}
